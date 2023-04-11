@@ -11,6 +11,8 @@ tokens = [
     'COMMA',
     'LBRACKET',
     'RBRACKET',
+    'LBRACE',
+    'RBRACE',
     'LPAREN',
     'RPAREN',
     'PLUS',
@@ -27,15 +29,27 @@ tokens = [
     'CTESTRING',
 ]
 
-#Declarar las keywords
+# Keywords declaration
 reserved = {
-    'if' : 'IF',
-    'else' : 'ELSE',
-    'program' : 'PROGRAM',
-    'var' : 'VAR',
-    'print' : 'PRINT',
-    'int' : 'INT',
-    'float' : 'FLOAT',
+    'parar' : 'PARAR',
+    'opciones' : 'OPCIONES',
+    'opcion' : 'OPCION',
+    'sino' : 'SINO',
+    'constante' : 'CONSTANTE',
+    'entero' : 'ENTERO',
+    'decimal' : 'DECIMAL',
+    'frase' : 'FRASE',
+    'renglon' : 'RENGLON',
+    'sinregresar' : 'SINREGRESAR',
+    'si' : 'SI',
+    'entonces' : 'ENTONCES',
+    'porcada' : 'PORCADA',
+    'mientras' : 'MIENTRAS',
+    'funcion' : 'FUNCION',
+    'regresar' : 'REGRESAR',
+    'tam' : 'TAM',
+    'imprimir' : 'IMPRIMIR',
+    'x' : 'X',
 }
 
 tokens += reserved.values()
@@ -43,8 +57,10 @@ tokens += reserved.values()
 t_COLON = r':'
 t_SEMICOLON = r';'
 t_COMMA = r','
-t_LBRACKET = r'\{'
-t_RBRACKET = r'\}'
+t_LBRACKET = r'\['
+t_RBRACKET = r'\]'
+t_LBRACE = r'\{'
+t_RBRACE = r'\}'
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
 t_PLUS = r'\+'
@@ -53,29 +69,29 @@ t_TIMES = r'\*'
 t_DIVIDE = r'/'
 t_GREATER = r'>'
 t_LESS = r'<'
-t_NOTEQUAL = r'<>'
+t_NOTEQUAL = r'!='
 t_ASSIGN = r'='
 
 # A string containing ignored characters (spaces and tabs)
 t_ignore  = ' \t'
 
 def t_ID(t):
-    r'[a-zA-Z_][a-zA-Z_0-9]*'
+    r'[a-z][a-zA-Z_0-9]*'
     t.type = reserved.get(t.value,'ID')
     return t
 
 def t_CTEF(t):
-    r'\d+\.\d+'
+    r'[-]?\d+\.\d+'
     t.value = float(t.value)
     return t
 
 def t_CTEI(t):
-    r'\d+'
+    r'[-]?\d+'
     t.value = int(t.value)
     return t
 
 def t_CTESTRING(t):
-    r'"[a-zA-Z0-9!@#$%^&*()]*"'
+    r'\".*?\"'
     t.type = 'CTESTRING'
     return t
 
@@ -84,14 +100,14 @@ def t_newline(t):
 
 # Error handling rule
 def t_error(t):
-    print("Illegal character '%s'" % t.value[0])
+    print("Character no válido'%s'" % t.value[0])
     t.lexer.skip(1)
 
 lexer = lex.lex()
 
 #Testear el léxico
 """
-lexer.input('if else print program var print int float 14.5 14 + - * / > = frida_98 "Frida"')
+lexer.input('si sino "" entero decimal 14.5 14 + - * / > = frida_98 "MariaRenee"')
 
 while True:
     tok = lexer.token()
