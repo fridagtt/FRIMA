@@ -118,116 +118,78 @@ while True:
 
 #__________PARSER____________
 
-#Definir las gramáticas
-def p_program(p):
+#Gramaticas FRIMA
+def p_var(p):
     '''
-    program : PROGRAM ID SEMICOLON programT bloque
-    programT : vars
-             | empty
-    '''
-    p[0] = None
-
-def p_vars(p):
-    '''
-    vars : VAR ID varsT COLON tipo SEMICOLON varsF
-    varsT : COMMA ID varsT
-          | empty
-    varsF : ID varsT COLON tipo SEMICOLON varsF
-          | empty
-    '''
-    p[0] = None
-
-def p_tipo(p):
-    '''
-    tipo : INT
-         | FLOAT
-    '''
-    p[0] = None
-
-def p_bloque(p):
-    '''
-    bloque : LBRACKET bloqueT RBRACKET
-    bloqueT : estatuto bloqueT
+    var : varType ID varsCycle SEMICOLON
+    varsCycle : COMMA ID varsCycle
             | empty
+    varType : simple_type
+            | complex_type
     '''
     p[0] = None
 
-def p_estatuto(p):
+def p_arr(p):
     '''
-    estatuto : asignacion
-             | condicion
-             | escritura
+    arr : RENGLON simple_type ID TAM exp SEMICOLON
     '''
     p[0] = None
 
-def p_asignacion(p):
+def p_func(p):
     '''
-    asignacion : ID ASSIGN expresion SEMICOLON
+    func : FUNCION returnType ID LPAREN parameter RPAREN body SEMICOLON 
+    returnType : simple_type | SINREGRESAR
     '''
-    p[0] = None
+    p[0] = None 
 
-def p_escritura(p):
+def p_parameter(p):
     '''
-    escritura : PRINT LBRACKET escrituraT RBRACKET SEMICOLON
-    escrituraT : expresion escrituraF
-               | CTESTRING escrituraF
-    escrituraF : COMMA escrituraT
-               | empty
+    parameter : simple_type ID parameterCycle 
+    parameterCycle : COMMA simple_type ID parameterCycle | empty 
     '''
-    p[0] = None
-
-def p_expresion(p):
-    '''
-    expresion : exp expresionT
-    expresionT : GREATER exp
-               | LESS exp
-               | NOTEQUAL exp
-               | empty
-    '''
-    p[0] = None
-
-def p_condicion(p):
-    '''
-    condicion : IF LPAREN expresion RPAREN bloque condicionT
-    condicionT : ELSE bloque
-               | SEMICOLON
-    '''
-    p[0] = None
+    p[0] = None 
 
 def p_exp(p):
     '''
-    exp : termino expT
+    exp : term expT
     expT : PLUS exp
          | MINUS exp
          | empty
     '''
     p[0] = None
 
-def p_termino(p):
+def p_term(p):
     '''
-    termino : factor terminoT
-    terminoT : TIMES termino
-             | DIVIDE termino
-             | empty
+    term : factor termT
+    termT : TIMES term
+            | DIVIDE term
+            | empty
     '''
     p[0] = None
 
 def p_factor(p):
     '''
-    factor : LPAREN expresion RPAREN
-           | factorT
-    factorT : factorF varcte
-    factorF : PLUS
-            | MINUS
-            | empty
+    factor : numeric | arrPos 
+    numeric: varCTE
+    arrPos : LBRACKET exp RBRACKET 
     '''
-    p[0] = None
+    p[0] = None 
 
-def p_varcte(p):
+def p_varCTE(p):
     '''
-    varcte : ID
-            | CTEI
-            | CTEF
+    varCTE : CTEI | CTEF | ID
+    '''
+    p[0] = None 
+
+def simple_type(p):
+    '''
+    simple_type : ENTERO | DECIMAL
+    '''
+    p[0] = None 
+
+def complex_type(p):
+    '''
+    complex_type : RENGLON | FRASE 
     '''
     p[0] = None
 
@@ -241,7 +203,7 @@ def p_error(p):
     print("Syntax error at token", p.type)
 
 parser = yacc.yacc()
-
+"""
 #Analizar el archivo con los ejemplos
 try:
     file = open("ejemplos.txt", "r")
@@ -251,3 +213,4 @@ try:
         print(f"approved line: {line}")
 except EOFError:
     print('ERROR')
+"""
