@@ -72,7 +72,7 @@ t_LESS = r'<'
 t_NOTEQUAL = r'!='
 t_ASSIGN = r'='
 
-# A string containing ignored characters (spaces and tabs)
+# Ignored characters (spaces and tabs)
 t_ignore  = ' \t'
 
 def t_ID(t):
@@ -94,6 +94,11 @@ def t_CTESTRING(t):
     r'\".*?\"'
     t.type = 'CTESTRING'
     return t
+
+# C or C++ comment (ignore)    
+def t_ccode_comment(t):
+    r'(/\*(.|\n)*?\*/)|(//.*)'
+    pass
 
 def t_newline(t):
     r'\n+'
@@ -194,15 +199,15 @@ def complex_type(p):
     p[0] = None
 
 def p_empty(p):
-    '''
-    empty : 
-    '''
-    p[0] = None
+    'empty :'
+    pass
 
 def p_error(p):
     print("Syntax error at token", p.type)
 
 parser = yacc.yacc()
+
+#Testear el parcer y léxico juntos
 """
 #Analizar el archivo con los ejemplos
 try:
