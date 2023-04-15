@@ -6,7 +6,6 @@ import sys
 
 # Set of token names
 tokens = [
-    'COLON',
     'SEMICOLON',
     'COMMA',
     'LBRACKET',
@@ -22,41 +21,40 @@ tokens = [
     'GREATER',
     'LESS',
     'NOTEQUAL',
+    'EQUAL',
     'ASSIGN',
     'ID',
     'CTEI',
     'CTEF',
+    'CTECHAR',
     'CTESTRING',
+    'ARROW',
 ]
 
 # Keywords declaration
 reserved = {
-    'parar' : 'PARAR',
-    'opciones' : 'OPCIONES',
-    'opcion' : 'OPCION',
-    'sino' : 'SINO',
-    'constante' : 'CONSTANTE',
     'entero' : 'ENTERO',
     'decimal' : 'DECIMAL',
-    'frase' : 'FRASE',
+    'letra' : 'LETRA',
+    'variable' : 'VARIABLE',
     'renglon' : 'RENGLON',
+    'tabla' : 'TABLA',
     'sinregresar' : 'SINREGRESAR',
     'si' : 'SI',
-    'entonces' : 'ENTONCES',
+    'sino' : 'SINO',
     'porcada' : 'PORCADA',
+    'en' : 'EN',
     'mientras' : 'MIENTRAS',
     'funcion' : 'FUNCION',
     'regresar' : 'REGRESAR',
-    'tam' : 'TAM',
     'imprimir' : 'IMPRIMIR',
-    'x' : 'X',
+    'leer' : 'LEER',
 }
 
 tokens += reserved.values()
 
-t_COLON = r':'
-t_SEMICOLON = r';'
-t_COMMA = r','
+t_SEMICOLON = r'\;'
+t_COMMA = r'\,'
 t_LBRACKET = r'\['
 t_RBRACKET = r'\]'
 t_LBRACE = r'\{'
@@ -64,13 +62,15 @@ t_RBRACE = r'\}'
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
 t_PLUS = r'\+'
-t_MINUS = r'-'
+t_MINUS = r'\-'
 t_TIMES = r'\*'
-t_DIVIDE = r'/'
-t_GREATER = r'>'
-t_LESS = r'<'
-t_NOTEQUAL = r'!='
-t_ASSIGN = r'='
+t_DIVIDE = r'\/'
+t_GREATER = r'\>'
+t_LESS = r'\<'
+t_NOTEQUAL = r'\!='
+t_EQUAL = r'\=='
+t_ASSIGN = r'\='
+t_ARROW = r'\->'
 
 # Ignored characters (spaces and tabs)
 t_ignore  = ' \t'
@@ -95,13 +95,20 @@ def t_CTESTRING(t):
     t.type = 'CTESTRING'
     return t
 
-# C or C++ comment (ignore)    
-def t_ccode_comment(t):
+def t_CTECHAR(t):
+    r'\'[0-9A-Za-z*+-/=!¡¿?#$%&|_{}()]\''
+    t.value = str(t.value)
+    return t
+
+# C or C++ comment (ignored characters)    
+def t_code_comment(t):
     r'(/\*(.|\n)*?\*/)|(//.*)'
     pass
 
+# Define a rule so we can track line numbers
 def t_newline(t):
     r'\n+'
+    t.lexer.lineno += len(t.value)
 
 # Error handling rule
 def t_error(t):
@@ -110,49 +117,119 @@ def t_error(t):
 
 lexer = lex.lex()
 
-#Testear el léxico
 """
-lexer.input('si sino "" entero decimal 14.5 14 + - * / > = frida_98 "MariaRenee"')
+#Testing the lexer
+data = '''
+si sino "" entero variable -14.5
+decimal 'a' -> == 14.5 14 -14
+  + - * / > = frida_98 "MariaRenee"
+'''
 
+lexer.input(data)
+
+# Tokenize
 while True:
     tok = lexer.token()
-    if not tok:
-        break
+    if not tok: break # No more input
     print(tok)
 """
 
 #__________PARSER____________
 
-#Gramaticas FRIMA
-def p_var(p):
+#Grammars
+def p_dec_var(p):
     '''
-    var : varType ID varsCycle SEMICOLON
-    varsCycle : COMMA ID varsCycle
-            | empty
-    varType : simple_type
-            | complex_type
+    dec_var : simple_var | array | matrix
     '''
     p[0] = None
 
-def p_arr(p):
+def p_simple_var(p):
     '''
-    arr : RENGLON simple_type ID TAM exp SEMICOLON
+    simple_var : VARIABLE type ARROW ID simpleVarCycle SEMICOLON
+    simpleVarCycle : COMMA ID simpleVarCycle
+                    | empty
     '''
     p[0] = None
 
-def p_func(p):
+def p_array(p):
     '''
-    func : FUNCION returnType ID LPAREN parameter RPAREN body SEMICOLON 
-    returnType : simple_type | SINREGRESAR
+    array : RENGLON type ARROW ID LBRACKET CTEI RBRACKET arrayCycle SEMICOLON
+    arrayCycle : COMMA ID LBRACKET CTEI RBRACKET arrayCycle
+                | empty
     '''
-    p[0] = None 
+    p[0] = None
+
+def p_matrix(p):
+    '''
+    matrix : TABLA type ARROW ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET matrixCycle SEMICOLON
+    matrixCycle : COMMA ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET matrixCycle
+                | empty
+    '''
+    p[0] = None
+
+
+def p_type(p):
+    '''
+    type : ENTERO | DECIMAL | LETRA
+    '''
+    p[0] = None
+
+def p_dec_func(p):
+    '''
+    dec_func : FUNCION type ID LPAREN parameter RPAREN LBRACE dec_var estatutos REGRESAR variable SEMICOLON RBRACE SEMICOLON 
+    '''
+    p[0] = None
 
 def p_parameter(p):
     '''
-    parameter : simple_type ID parameterCycle 
-    parameterCycle : COMMA simple_type ID parameterCycle | empty 
+    parameter : type ID parameterCycle 
+    parameterCycle : COMMA type ID parameterCycle | empty 
     '''
-    p[0] = None 
+    p[0] = None
+
+def p_estatutos(p):
+    '''
+    estatutos : asignar | llamada_func | ciclo_for | ciclo_while | condicion | escribe | leer | func_especiales
+    '''
+    p[0] = None
+
+def p_asignar(p):
+    '''
+    asignar : variable ASSIGN exp SEMICOLON
+    '''
+    p[0] = None
+
+def p_variable(p):
+    '''
+    variable : ID variable_aux
+    variable_aux : LBRACKET exp RBRACKET | LBRACKET exp RBRACKET LBRACKET exp RBRACKET | empty
+    '''
+    p[0] = None
+
+def p_leer(p):
+    '''
+    leer : LEER variable SEMICOLON
+    '''
+    p[0] = None
+
+def p_ciclo_while(p):
+    '''
+    ciclo_while : MIENTRAS LPAREN exp RPAREN LBRACE estatutos RBRACE SEMICOLON
+    '''
+    p[0] = None
+
+def p_ciclo_for(p):
+    '''
+    ciclo_for : PORCADA exp EN exp LBRACE estatutos RBRACE SEMICOLON
+    '''
+    p[0] = None
+
+def p_condicion(p):
+    '''
+    condicion : SI LPAREN exp RPAREN LBRACE estatutos RBRACE condicionCycle SEMICOLON
+    condicionCycle: SINO LBRACE estatutos RBRACE | empty
+    '''
+    p[0] = None
 
 def p_exp(p):
     '''
@@ -174,27 +251,23 @@ def p_term(p):
 
 def p_factor(p):
     '''
-    factor : numeric | arrPos 
-    numeric: varCTE
-    arrPos : LBRACKET exp RBRACKET 
+    factor : CTEI | CTEF 
     '''
     p[0] = None 
 
-def p_varCTE(p):
+def p_llamada_func(p):
     '''
-    varCTE : CTEI | CTEF | ID
-    '''
-    p[0] = None 
-
-def simple_type(p):
-    '''
-    simple_type : ENTERO | DECIMAL
+    llamada_func : ID LPAREN llamadaCYCLE RPAREN SEMICOLON
+    llamadaCYCLE: exp llamadaCYCLE_aux | empty
+    llamadaCYCLE_aux: COMMA exp llamadaCYCLE_aux | empty
     '''
     p[0] = None 
 
-def complex_type(p):
+def p_escribe(p):
     '''
-    complex_type : RENGLON | FRASE 
+    escribe : IMPRIMIR LPAREN escribe_aux RPAREN SEMICOLON
+    escribe_aux: exp escribeCycle | CTESTRING escribeCycle
+    escribeCycle: COMMA escribe_aux | empty
     '''
     p[0] = None
 
