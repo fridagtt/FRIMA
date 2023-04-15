@@ -215,20 +215,23 @@ def p_leer(p):
 
 def p_ciclo_while(p):
     '''
-    ciclo_while : MIENTRAS LPAREN exp RPAREN LBRACE estatutos RBRACE SEMICOLON
+    ciclo_while : MIENTRAS LPAREN exp RPAREN LBRACE estatutos whileCycle RBRACE SEMICOLON
+    whileCycle : estatutos whileCycle | empty
     '''
     p[0] = None
 
 def p_ciclo_for(p):
     '''
-    ciclo_for : PORCADA exp EN exp LBRACE estatutos RBRACE SEMICOLON
+    ciclo_for : PORCADA exp EN exp LBRACE estatutos forCycle RBRACE SEMICOLON
+    forCycle : estatutos forCycle | empty
     '''
     p[0] = None
 
 def p_condicion(p):
     '''
-    condicion : SI LPAREN exp RPAREN LBRACE estatutos RBRACE condicionCycle SEMICOLON
-    condicionCycle: SINO LBRACE estatutos RBRACE | empty
+    condicion : SI LPAREN exp RPAREN LBRACE estatutos condicionCycle RBRACE sinoCondicion SEMICOLON
+    sinoCondicion: SINO LBRACE estatutos condicionCycle RBRACE | empty
+    condicionCycle: estatutos condicionCycle | empty
     '''
     p[0] = None
 
