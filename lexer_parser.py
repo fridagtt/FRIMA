@@ -176,7 +176,8 @@ def p_type(p):
 
 def p_dec_func(p):
     '''
-    dec_func : FUNCION type ID LPAREN parameter RPAREN LBRACE dec_var estatutos REGRESAR variable SEMICOLON RBRACE SEMICOLON 
+    dec_func : FUNCION type ID LPAREN parameter RPAREN LBRACE dec_var estatutos decFuncCycle REGRESAR variable SEMICOLON RBRACE SEMICOLON
+    decFuncCycle : estatutos decFuncCycle | empty 
     '''
     p[0] = None
 
