@@ -33,7 +33,7 @@ El objetivo es acercar al área de programación a gente que no tiene conocimien
 
 -React Native para tenerlo disponible para iOS y Android
 
-<h3> Backend (compiler) </h3>
+<h3> Backend (compilador) </h3>
 
 -Python con PLY
 
