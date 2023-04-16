@@ -17,7 +17,7 @@ El objetivo es acercar al área de programación a gente que no tiene conocimien
 -Generará, compilará y ejecutará archivos 
 
 
-<h2> Principales caracteristicas de semántica </h2> 
+<h2> Principales características de semántica </h2> 
 
 -Se podrán hacer las operaciones aritméticas entre números enteros y decimales.
 
