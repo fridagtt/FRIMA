@@ -44,7 +44,7 @@ Abril 16, 2023
 
 Dentro del repositorio se podrá encontrar en Léxico y Sintaxis de FRIMA. Todo fue hecho con base a los diagramas mostrados a continuación. 
 
-
+![My Image](Diagramas.png)
 
 
 
