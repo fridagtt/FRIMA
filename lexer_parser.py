@@ -20,6 +20,8 @@ tokens = [
     'DIVIDE',
     'GREATER',
     'LESS',
+    'GREATEREQ',
+    'LESSEQ',
     'NOTEQUAL',
     'EQUAL',
     'ASSIGN',
@@ -49,6 +51,8 @@ reserved = {
     'regresar' : 'REGRESAR',
     'imprimir' : 'IMPRIMIR',
     'leer' : 'LEER',
+    'y' : 'y',
+    'o' : 'o',
 }
 
 tokens += reserved.values()
@@ -67,6 +71,8 @@ t_TIMES = r'\*'
 t_DIVIDE = r'\/'
 t_GREATER = r'\>'
 t_LESS = r'\<'
+t_GREATEREQ = r'\>='
+t_LESSEQ = r'\<='
 t_NOTEQUAL = r'\!='
 t_EQUAL = r'\=='
 t_ASSIGN = r'\='
@@ -136,7 +142,7 @@ while True:
 
 #__________PARSER____________
 
-#Grammars
+# Define the grammars
 def p_dec_var(p):
     '''
     dec_var : simple_var | array | matrix
@@ -176,7 +182,8 @@ def p_type(p):
 
 def p_dec_func(p):
     '''
-    dec_func : FUNCION type ID LPAREN parameter RPAREN LBRACE dec_var estatutos decFuncCycle REGRESAR variable SEMICOLON RBRACE SEMICOLON
+    dec_func : FUNCION dec_func_return ID LPAREN parameter RPAREN LBRACE dec_var estatutos decFuncCycle REGRESAR variable SEMICOLON RBRACE SEMICOLON
+    dec_func_return : type | sinregresar
     decFuncCycle : estatutos decFuncCycle | empty 
     '''
     p[0] = None
@@ -255,7 +262,10 @@ def p_term(p):
 
 def p_factor(p):
     '''
-    factor : CTEI | CTEF 
+    factor : factor_constante | factor_variable | factor_expresion
+    factor_constante : CTEI | CTEF
+    factor_variable : ID | ID LBRACKET exp RBRACKET | ID LBRACKET exp RBRACKET LBRACKET exp RBRACKET | ID llamada_func
+    factor_expresion : LPAREN exp RPAREN
     '''
     p[0] = None 
 
@@ -284,9 +294,8 @@ def p_error(p):
 
 parser = yacc.yacc()
 
-#Testear el parcer y léxico juntos
 """
-#Analizar el archivo con los ejemplos
+#Testear el parcer y léxico juntos
 try:
     file = open("ejemplos.txt", "r")
     print(f"PLY LEXER AND PARSER")
