@@ -141,7 +141,7 @@ class SemanticCube:
             'o': 'error',
             '=': 'error',
           },
-            'float': {
+          'float': {
             '+': 'error',
             '-': 'error',
             '*': 'error',
@@ -157,7 +157,7 @@ class SemanticCube:
             '=': 'error',
           },
           'char': {
-            '+': 'char',
+            '+': 'error',
             '-': 'error',
             '*': 'error',
             '/': 'error',
@@ -188,7 +188,7 @@ class SemanticCube:
           },
       },
       'bool': { 
-      'int': {
+        'int': {
             '+': 'error',
             '-': 'error',
             '*': 'error',
@@ -203,7 +203,7 @@ class SemanticCube:
             'o': 'error',
             '=': 'error',
           },
-            'float': {
+          'float': {
             '+': 'error',
             '-': 'error',
             '*': 'error',
@@ -244,7 +244,7 @@ class SemanticCube:
             '<=': 'error',
             '!=': 'bool',
             '==': 'bool',
-            'y': 'bool',
+            'y': 'bool', # duda con Elda -> si no tendremos variables booleanas (ifs)
             'o': 'bool',
             '=': 'bool',
           },
