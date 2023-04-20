@@ -4,20 +4,21 @@ class SymbolTable:
       'dir_functions': {
         'dir_func_names': set(), #set('main')
         'main': {
-            'param_types': [],
-            'return_type': 'void',
-            'variables': {
-                'var_names': set(),
-                'vars_info' : [
-                    {
-                        'name': None,
-                        'return_type': None,
-                        'scope': None, # to which function the variable belongs
-                        'value': None,
-                        'kind': None,
-                    }
-                ],
-            },
+          'param_types': [],
+          'return_type': 'void',
+          'kind': 'np', # np -> nombre de programa
+          'variables': {
+            'var_names': set(),
+            'vars_info' : [
+              {
+                'name': None,
+                'type': None,
+                'scope': None, # to which function the variable belongs
+                'value': None,
+                'kind': None,
+              }
+            ],
+          },
         },
       }
     }
