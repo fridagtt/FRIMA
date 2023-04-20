@@ -16,7 +16,7 @@ class SymbolTable:
                 'scope': None, # to which function the variable belongs
                 'value': None,
                 'kind': None,
-              }
+              },
             ],
           },
         },

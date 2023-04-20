@@ -35,6 +35,8 @@ tokens = [
 
 # Keywords declaration
 reserved = {
+    'principal' : 'PRINCIPAL',
+    'inicio' : 'INICIO',
     'entero' : 'ENTERO',
     'decimal' : 'DECIMAL',
     'letra' : 'LETRA',
@@ -59,6 +61,7 @@ tokens += reserved.values()
 
 t_SEMICOLON = r'\;'
 t_COMMA = r'\,'
+t_COLON = r'\:'
 t_LBRACKET = r'\['
 t_RBRACKET = r'\]'
 t_LBRACE = r'\{'
@@ -142,7 +145,24 @@ while True:
 
 #__________PARSER____________
 
+start = 'programa'
+
 # Define the grammars
+def p_programa(p):
+    '''
+    dec_programa : PROGRAMA ID COLON inicio
+                | PROGRAMA ID COLON dec_var inicio
+                | PROGRAMA ID COLON dec_var dec_func inicio
+                | PROGRAMA ID COLON dec_func inicio
+    '''
+    p[0] = None
+
+def p_inicio(p):
+    '''
+    dec_inicio : INICIO LPAREN RPAREN LBRACE estatutos RBRACE SEMICOLON
+    '''
+p[0] = None
+
 def p_dec_var(p):
     '''
     dec_var : simple_var | array | matrix
@@ -172,7 +192,6 @@ def p_matrix(p):
                 | empty
     '''
     p[0] = None
-
 
 def p_type(p):
     '''
