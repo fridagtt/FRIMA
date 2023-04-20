@@ -13,9 +13,6 @@ class SymbolTable:
               {
                 'name': None,
                 'type': None,
-                #'scope': None, # to which function the variable belongs
-                #'value': None,
-                #'kind': None, no necesario 
               },
             ],
           },
