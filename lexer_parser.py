@@ -6,6 +6,7 @@ import sys
 
 # Set of token names
 tokens = [
+    'COLON',
     'SEMICOLON',
     'COMMA',
     'LBRACKET',
@@ -35,7 +36,7 @@ tokens = [
 
 # Keywords declaration
 reserved = {
-    'principal' : 'PRINCIPAL',
+    'programa' : 'PROGRAMA',
     'inicio' : 'INICIO',
     'entero' : 'ENTERO',
     'decimal' : 'DECIMAL',
@@ -80,9 +81,7 @@ t_NOTEQUAL = r'\!='
 t_EQUAL = r'\=='
 t_ASSIGN = r'\='
 t_ARROW = r'\->'
-
-# Ignored characters (spaces and tabs)
-t_ignore  = ' \t'
+t_ignore  = ' \t' # Ignored characters (spaces and tabs)
 
 def t_ID(t):
     r'[a-z][a-zA-Z_0-9]*'
@@ -117,7 +116,7 @@ def t_code_comment(t):
 # Define a rule so we can track line numbers
 def t_newline(t):
     r'\n+'
-    t.lexer.lineno += len(t.value)
+    t.lexer.lineno += t.value.count("\n")
 
 # Error handling rule
 def t_error(t):
@@ -125,6 +124,7 @@ def t_error(t):
     t.lexer.skip(1)
 
 lexer = lex.lex()
+start = 'programa'
 
 """
 #Testing the lexer
@@ -145,27 +145,27 @@ while True:
 
 #__________PARSER____________
 
-start = 'programa'
-
 # Define the grammars
 def p_programa(p):
     '''
-    dec_programa : PROGRAMA ID COLON inicio
-                | PROGRAMA ID COLON dec_var inicio
-                | PROGRAMA ID COLON dec_var dec_func inicio
-                | PROGRAMA ID COLON dec_func inicio
+    programa : PROGRAMA ID COLON inicio
+            | PROGRAMA ID COLON dec_var inicio
+            | PROGRAMA ID COLON dec_var dec_func inicio
+            | PROGRAMA ID COLON dec_func inicio
     '''
     p[0] = None
 
 def p_inicio(p):
     '''
-    dec_inicio : INICIO LPAREN RPAREN LBRACE estatutos RBRACE SEMICOLON
+    inicio : INICIO LPAREN RPAREN LBRACE estatutos RBRACE SEMICOLON
     '''
-p[0] = None
+    p[0] = None
 
 def p_dec_var(p):
     '''
-    dec_var : simple_var | array | matrix
+    dec_var : simple_var
+            | array
+            | matrix
     '''
     p[0] = None
 
@@ -195,28 +195,40 @@ def p_matrix(p):
 
 def p_type(p):
     '''
-    type : ENTERO | DECIMAL | LETRA
+    type : ENTERO
+        | DECIMAL
+        | LETRA
     '''
     p[0] = None
 
 def p_dec_func(p):
     '''
     dec_func : FUNCION dec_func_return ID LPAREN parameter RPAREN LBRACE dec_var estatutos decFuncCycle REGRESAR variable SEMICOLON RBRACE SEMICOLON
-    dec_func_return : type | sinregresar
-    decFuncCycle : estatutos decFuncCycle | empty 
+    dec_func_return : type
+                    | SINREGRESAR
+    decFuncCycle : estatutos decFuncCycle
+                | empty 
     '''
     p[0] = None
 
 def p_parameter(p):
     '''
     parameter : type ID parameterCycle 
-    parameterCycle : COMMA type ID parameterCycle | empty 
+    parameterCycle : COMMA type ID parameterCycle
+                    | empty 
     '''
     p[0] = None
 
 def p_estatutos(p):
     '''
-    estatutos : asignar | llamada_func | ciclo_for | ciclo_while | condicion | escribe | leer | func_especiales
+    estatutos : asignar
+            | llamada_func
+            | ciclo_for
+            | ciclo_while
+            | condicion
+            | escribe
+            | leer
+            | empty
     '''
     p[0] = None
 
@@ -229,7 +241,9 @@ def p_asignar(p):
 def p_variable(p):
     '''
     variable : ID variable_aux
-    variable_aux : LBRACKET exp RBRACKET | LBRACKET exp RBRACKET LBRACKET exp RBRACKET | empty
+    variable_aux : LBRACKET exp RBRACKET
+                | LBRACKET exp RBRACKET LBRACKET exp RBRACKET
+                | empty
     '''
     p[0] = None
 
@@ -242,22 +256,26 @@ def p_leer(p):
 def p_ciclo_while(p):
     '''
     ciclo_while : MIENTRAS LPAREN exp RPAREN LBRACE estatutos whileCycle RBRACE SEMICOLON
-    whileCycle : estatutos whileCycle | empty
+    whileCycle : estatutos whileCycle
+                | empty
     '''
     p[0] = None
 
 def p_ciclo_for(p):
     '''
     ciclo_for : PORCADA exp EN exp LBRACE estatutos forCycle RBRACE SEMICOLON
-    forCycle : estatutos forCycle | empty
+    forCycle : estatutos forCycle
+            | empty
     '''
     p[0] = None
 
 def p_condicion(p):
     '''
     condicion : SI LPAREN exp RPAREN LBRACE estatutos condicionCycle RBRACE sinoCondicion SEMICOLON
-    sinoCondicion: SINO LBRACE estatutos condicionCycle RBRACE | empty
-    condicionCycle: estatutos condicionCycle | empty
+    condicionCycle : estatutos condicionCycle
+                | empty
+    sinoCondicion : SINO LBRACE estatutos condicionCycle RBRACE
+                | empty
     '''
     p[0] = None
 
@@ -281,9 +299,15 @@ def p_term(p):
 
 def p_factor(p):
     '''
-    factor : factor_constante | factor_variable | factor_expresion
-    factor_constante : CTEI | CTEF
-    factor_variable : ID | ID LBRACKET exp RBRACKET | ID LBRACKET exp RBRACKET LBRACKET exp RBRACKET | ID llamada_func
+    factor : factor_constante
+            | factor_variable
+            | factor_expresion
+    factor_constante : CTEI
+                    | CTEF
+    factor_variable : ID
+                    | ID LBRACKET exp RBRACKET
+                    | ID LBRACKET exp RBRACKET LBRACKET exp RBRACKET
+                    | ID llamada_func
     factor_expresion : LPAREN exp RPAREN
     '''
     p[0] = None 
@@ -291,36 +315,40 @@ def p_factor(p):
 def p_llamada_func(p):
     '''
     llamada_func : ID LPAREN llamadaCYCLE RPAREN SEMICOLON
-    llamadaCYCLE: exp llamadaCYCLE_aux | empty
-    llamadaCYCLE_aux: COMMA exp llamadaCYCLE_aux | empty
+    llamadaCYCLE : exp llamadaCYCLE_aux
+                | empty
+    llamadaCYCLE_aux : COMMA exp llamadaCYCLE_aux
+                    | empty
     '''
     p[0] = None 
 
 def p_escribe(p):
     '''
     escribe : IMPRIMIR LPAREN escribe_aux RPAREN SEMICOLON
-    escribe_aux: exp escribeCycle | CTESTRING escribeCycle
-    escribeCycle: COMMA escribe_aux | empty
+    escribe_aux : exp escribeCycle
+                | CTESTRING escribeCycle
+    escribeCycle : COMMA escribe_aux
+                | empty
     '''
     p[0] = None
 
 def p_empty(p):
-    'empty :'
-    pass
+    '''
+    empty : 
+    '''
+    p[0] = None
 
 def p_error(p):
     print("Syntax error at token", p.type)
 
 parser = yacc.yacc()
 
-"""
-#Testear el parcer y léxico juntos
+#Testear el parser y léxico juntos
 try:
-    file = open("ejemplos.txt", "r")
+    file = open("./tests/examples.txt", "r")
     print(f"PLY LEXER AND PARSER")
-    for line in file:
-        parser.parse(line)
-        print(f"approved line: {line}")
+    archivo = file.read()
+    file.close()
+    parser.parse(archivo)
 except EOFError:
     print('ERROR')
-"""
