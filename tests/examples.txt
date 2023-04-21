@@ -1,5 +1,7 @@
 programa pruebaUno:
 variable entero -> gatos, perros;
+variable decimal -> pluma, pelos;
+variable letra -> a, b, c;
 
 inicio(){
 

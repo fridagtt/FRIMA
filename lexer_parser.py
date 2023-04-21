@@ -150,234 +150,249 @@ while True:
 
 # Define the grammars
 def p_programa(p):
-    '''
-    programa : PROGRAMA ID punto_programa COLON inicio
-            | PROGRAMA ID punto_programa COLON dec_var inicio
-            | PROGRAMA ID punto_programa COLON dec_var dec_func inicio
-            | PROGRAMA ID punto_programa COLON dec_func inicio
-    '''
-    p[0] = None
+  '''
+  programa : PROGRAMA ID punto_programa COLON inicio
+          | PROGRAMA ID punto_programa COLON dec_var_cycle inicio
+          | PROGRAMA ID punto_programa COLON dec_var_cycle dec_func inicio
+          | PROGRAMA ID punto_programa COLON dec_func inicio
+  '''
+  p[0] = None
+
+def p_dec_var_cycle(p):
+  '''
+  dec_var_cycle : dec_var dec_var_cycle
+                | empty
+  '''
 
 def p_punto_programa(p):
-    '''
-	punto_programa : 
-	'''
-    global dir_func, current_func
-    dir_func = SymbolTable()
-    current_func = "programa"
-    dir_func.symbol_table['dir_functions']['dir_func_names'].add("programa")
+  '''
+  punto_programa : 
+  '''
+  global dir_func, current_func
+  dir_func = SymbolTable()
+  current_func = "programa"
+  dir_func.symbol_table['dir_functions']['dir_func_names'].add("programa")
 
 def p_inicio(p):
-    '''
-    inicio : INICIO LPAREN RPAREN LBRACE estatutos RBRACE SEMICOLON
-    '''
-    p[0] = None
+  '''
+  inicio : INICIO LPAREN RPAREN LBRACE estatutos RBRACE SEMICOLON
+  '''
+  p[0] = None
 
 def p_dec_var(p):
-    '''
-    dec_var : simple_var
-            | array
-            | matrix
-    '''
-    p[0] = None
+  '''
+  dec_var : simple_var
+          | array
+          | matrix
+  '''
+  p[0] = None
 
 def p_simple_var(p):
-    '''
-    simple_var : VARIABLE type punto_simple_var ARROW ID simpleVarCycle SEMICOLON
-    simpleVarCycle : COMMA ID simpleVarCycle
-                    | empty
-    '''
-    p[0] = None
+  '''
+  simple_var : VARIABLE type ARROW ID punto_simple_var simpleVarCycle SEMICOLON
+  simpleVarCycle : COMMA ID punto_simple_var simpleVarCycle
+                  | empty
+  '''
+  p[0] = None
 
 def p_punto_simple_var(p):
-    '''
-    punto_simple_var :
-    '''
+  '''
+  punto_simple_var :
+  '''
+  dir_func.add_variable(current_var_type, p[-1], current_func)
+  print("dir_func", dir_func.symbol_table)
 
 def p_type(p):
-    '''
-    type : ENTERO
-        | DECIMAL
-        | LETRA
-    '''
-    p[0] = p[1]
-    global var_type
-	
-    if p[0] == 'entero':
-	    current_var_type = 1
-    elif p[0] == 'decimal':
-	    current_var_type = 2
-    elif p[0] == 'letra':
-	    current_var_type = 3
+  '''
+  type : ENTERO
+      | DECIMAL
+      | LETRA
+  '''
+  p[0] = p[1]
+  global current_var_type
+
+  if p[0] == 'entero':
+    current_var_type = 1
+  elif p[0] == 'decimal':
+    current_var_type = 2
+  elif p[0] == 'letra':
+    current_var_type = 3
 
 def p_array(p):
-    '''
-    array : RENGLON type ARROW ID LBRACKET CTEI RBRACKET arrayCycle SEMICOLON
-    arrayCycle : COMMA ID LBRACKET CTEI RBRACKET arrayCycle
-                | empty
-    '''
-    p[0] = None
+  '''
+  array : RENGLON type ARROW ID LBRACKET CTEI RBRACKET arrayCycle SEMICOLON
+  arrayCycle : COMMA ID LBRACKET CTEI RBRACKET arrayCycle
+              | empty
+  '''
+  p[0] = None
 
 def p_matrix(p):
-    '''
-    matrix : TABLA type ARROW ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET matrixCycle SEMICOLON
-    matrixCycle : COMMA ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET matrixCycle
-                | empty
-    '''
-    p[0] = None
+  '''
+  matrix : TABLA type ARROW ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET matrixCycle SEMICOLON
+  matrixCycle : COMMA ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET matrixCycle
+              | empty
+  '''
+  p[0] = None
 
 def p_dec_func(p):
-    '''
-    dec_func : FUNCION dec_func_return ID LPAREN parameter RPAREN LBRACE dec_var estatutos decFuncCycle REGRESAR variable SEMICOLON RBRACE SEMICOLON
-    dec_func_return : type
-                    | SINREGRESAR
-    decFuncCycle : estatutos decFuncCycle
-                | empty 
-    '''
-    p[0] = None
+  '''
+  dec_func : FUNCION dec_func_return punto_dec_func ID LPAREN parameter RPAREN LBRACE dec_var estatutos decFuncCycle REGRESAR variable SEMICOLON RBRACE SEMICOLON
+  dec_func_return : type
+                  | SINREGRESAR
+  decFuncCycle : estatutos decFuncCycle
+              | empty 
+  '''
+  p[0] = None
+
+def p_punto_dec_func(p):
+  '''
+  punto_dec_func: 
+  '''
+  global func_return_type
+  func_return_type = p[-1]
 
 def p_parameter(p):
-    '''
-    parameter : type ID parameterCycle 
-    parameterCycle : COMMA type ID parameterCycle
-                    | empty 
-    '''
-    p[0] = None
+  '''
+  parameter : type ID parameterCycle 
+  parameterCycle : COMMA type ID parameterCycle
+                  | empty 
+  '''
+  p[0] = None
 
 def p_estatutos(p):
-    '''
-    estatutos : asignar
-            | llamada_func
-            | ciclo_for
-            | ciclo_while
-            | condicion
-            | escribe
-            | leer
-            | empty
-    '''
-    p[0] = None
+  '''
+  estatutos : asignar
+          | llamada_func
+          | ciclo_for
+          | ciclo_while
+          | condicion
+          | escribe
+          | leer
+          | empty
+  '''
+  p[0] = None
 
 def p_asignar(p):
-    '''
-    asignar : variable ASSIGN exp SEMICOLON
-    '''
-    p[0] = None
+  '''
+  asignar : variable ASSIGN exp SEMICOLON
+  '''
+  p[0] = None
 
 def p_variable(p):
-    '''
-    variable : ID variable_aux
-    variable_aux : LBRACKET exp RBRACKET
-                | LBRACKET exp RBRACKET LBRACKET exp RBRACKET
-                | empty
-    '''
-    p[0] = None
+  '''
+  variable : ID variable_aux
+  variable_aux : LBRACKET exp RBRACKET
+              | LBRACKET exp RBRACKET LBRACKET exp RBRACKET
+              | empty
+  '''
+  p[0] = None
 
 def p_leer(p):
-    '''
-    leer : LEER variable SEMICOLON
-    '''
-    p[0] = None
+  '''
+  leer : LEER variable SEMICOLON
+  '''
+  p[0] = None
 
 def p_ciclo_while(p):
-    '''
-    ciclo_while : MIENTRAS LPAREN exp RPAREN LBRACE estatutos whileCycle RBRACE SEMICOLON
-    whileCycle : estatutos whileCycle
-                | empty
-    '''
-    p[0] = None
+  '''
+  ciclo_while : MIENTRAS LPAREN exp RPAREN LBRACE estatutos whileCycle RBRACE SEMICOLON
+  whileCycle : estatutos whileCycle
+              | empty
+  '''
+  p[0] = None
 
 def p_ciclo_for(p):
-    '''
-    ciclo_for : PORCADA exp EN exp LBRACE estatutos forCycle RBRACE SEMICOLON
-    forCycle : estatutos forCycle
-            | empty
-    '''
-    p[0] = None
+  '''
+  ciclo_for : PORCADA exp EN exp LBRACE estatutos forCycle RBRACE SEMICOLON
+  forCycle : estatutos forCycle
+          | empty
+  '''
+  p[0] = None
 
 def p_condicion(p):
-    '''
-    condicion : SI LPAREN exp RPAREN LBRACE estatutos condicionCycle RBRACE sinoCondicion SEMICOLON
-    condicionCycle : estatutos condicionCycle
-                | empty
-    sinoCondicion : SINO LBRACE estatutos condicionCycle RBRACE
-                | empty
-    '''
-    p[0] = None
+  '''
+  condicion : SI LPAREN exp RPAREN LBRACE estatutos condicionCycle RBRACE sinoCondicion SEMICOLON
+  condicionCycle : estatutos condicionCycle
+              | empty
+  sinoCondicion : SINO LBRACE estatutos condicionCycle RBRACE
+              | empty
+  '''
+  p[0] = None
 
 def p_exp(p):
-    '''
-    exp : term expT
-    expT : PLUS exp
-         | MINUS exp
-         | empty
-    '''
-    p[0] = None
+  '''
+  exp : term expT
+  expT : PLUS exp
+        | MINUS exp
+        | empty
+  '''
+  p[0] = None
 
 def p_term(p):
-    '''
-    term : factor termT
-    termT : TIMES term
-            | DIVIDE term
-            | empty
-    '''
-    p[0] = None
+  '''
+  term : factor termT
+  termT : TIMES term
+          | DIVIDE term
+          | empty
+  '''
+  p[0] = None
 
 def p_factor(p):
-    '''
-    factor : factor_constante
-            | factor_variable
-            | factor_expresion
-    factor_constante : CTEI
-                    | CTEF
-    factor_variable : ID
-                    | ID LBRACKET exp RBRACKET
-                    | ID LBRACKET exp RBRACKET LBRACKET exp RBRACKET
-                    | ID llamada_func
-    factor_expresion : LPAREN exp RPAREN
-    '''
-    p[0] = None 
+  '''
+  factor : factor_constante
+          | factor_variable
+          | factor_expresion
+  factor_constante : CTEI
+                  | CTEF
+  factor_variable : ID
+                  | ID LBRACKET exp RBRACKET
+                  | ID LBRACKET exp RBRACKET LBRACKET exp RBRACKET
+                  | ID llamada_func
+  factor_expresion : LPAREN exp RPAREN
+  '''
+  p[0] = None 
 
 def p_llamada_func(p):
-    '''
-    llamada_func : ID LPAREN llamadaCYCLE RPAREN SEMICOLON
-    llamadaCYCLE : exp llamadaCYCLE_aux
-                | empty
-    llamadaCYCLE_aux : COMMA exp llamadaCYCLE_aux
-                    | empty
-    '''
-    p[0] = None 
+  '''
+  llamada_func : ID LPAREN llamadaCYCLE RPAREN SEMICOLON
+  llamadaCYCLE : exp llamadaCYCLE_aux
+              | empty
+  llamadaCYCLE_aux : COMMA exp llamadaCYCLE_aux
+                  | empty
+  '''
+  p[0] = None 
 
 def p_escribe(p):
-    '''
-    escribe : IMPRIMIR LPAREN escribe_aux RPAREN SEMICOLON
-    escribe_aux : exp escribeCycle
-                | CTESTRING escribeCycle
-    escribeCycle : COMMA escribe_aux
-                | empty
-    '''
-    p[0] = None
+  '''
+  escribe : IMPRIMIR LPAREN escribe_aux RPAREN SEMICOLON
+  escribe_aux : exp escribeCycle
+              | CTESTRING escribeCycle
+  escribeCycle : COMMA escribe_aux
+              | empty
+  '''
+  p[0] = None
 
 def p_empty(p):
-    '''
-    empty : 
-    '''
-    pass
+  '''
+  empty : 
+  '''
+  pass
 
 def p_error(p):
-    print("Syntax error at token", p.type)
+  print("Syntax error at token", p.type)
 
 parser = yacc.yacc()
 
 def readFile():
-    #Testear el parser y léxico juntos
-    try:
-        file = open("./tests/examples.txt", "r")
-        print(f"PLY LEXER AND PARSER")
-        archivo = file.read()
-        file.close()
-        parser.parse(archivo)
-    except EOFError:
-        print('ERROR')
+  #Testear el parser y léxico juntos
+  try:
+      file = open("./tests/examples.txt", "r")
+      print(f"PLY LEXER AND PARSER")
+      archivo = file.read()
+      file.close()
+      parser.parse(archivo)
+  except EOFError:
+      print('ERROR')
 
 if __name__ == '__main__':
 	readFile()
