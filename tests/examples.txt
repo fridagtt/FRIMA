@@ -1,4 +1,6 @@
 programa pruebaUno:
 variable entero -> gatos, perros;
 
-inicio(){};
+inicio(){
+
+};

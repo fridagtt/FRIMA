@@ -2,8 +2,8 @@ class SymbolTable:
   def __init__(self):
     self.symbol_table = {
       'dir_functions': {
-        'dir_func_names': set(), #set('main')
-        'main': {
+        'dir_func_names': set(),
+        'programa': {
           'param_types': [],
           'return_type': 'void',
           'kind': 'np', # np -> nombre de programa

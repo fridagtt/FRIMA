@@ -2,6 +2,9 @@ import ply.lex as lex
 import ply.yacc as yacc
 import sys
 
+from utils.symbol_table import *
+from utils.semantic_cube import *
+
 #__________LEXER____________
 
 # Set of token names
@@ -148,12 +151,21 @@ while True:
 # Define the grammars
 def p_programa(p):
     '''
-    programa : PROGRAMA ID COLON inicio
-            | PROGRAMA ID COLON dec_var inicio
-            | PROGRAMA ID COLON dec_var dec_func inicio
-            | PROGRAMA ID COLON dec_func inicio
+    programa : PROGRAMA ID punto_programa COLON inicio
+            | PROGRAMA ID punto_programa COLON dec_var inicio
+            | PROGRAMA ID punto_programa COLON dec_var dec_func inicio
+            | PROGRAMA ID punto_programa COLON dec_func inicio
     '''
     p[0] = None
+
+def p_punto_programa(p):
+    '''
+	punto_programa : 
+	'''
+    global dir_func, current_func
+    dir_func = SymbolTable()
+    current_func = "programa"
+    dir_func.symbol_table['dir_functions']['dir_func_names'].add("programa")
 
 def p_inicio(p):
     '''
@@ -171,11 +183,32 @@ def p_dec_var(p):
 
 def p_simple_var(p):
     '''
-    simple_var : VARIABLE type ARROW ID simpleVarCycle SEMICOLON
+    simple_var : VARIABLE type punto_simple_var ARROW ID simpleVarCycle SEMICOLON
     simpleVarCycle : COMMA ID simpleVarCycle
                     | empty
     '''
     p[0] = None
+
+def p_punto_simple_var(p):
+    '''
+    punto_simple_var :
+    '''
+
+def p_type(p):
+    '''
+    type : ENTERO
+        | DECIMAL
+        | LETRA
+    '''
+    p[0] = p[1]
+    global var_type
+	
+    if p[0] == 'entero':
+	    current_var_type = 1
+    elif p[0] == 'decimal':
+	    current_var_type = 2
+    elif p[0] == 'letra':
+	    current_var_type = 3
 
 def p_array(p):
     '''
@@ -190,14 +223,6 @@ def p_matrix(p):
     matrix : TABLA type ARROW ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET matrixCycle SEMICOLON
     matrixCycle : COMMA ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET matrixCycle
                 | empty
-    '''
-    p[0] = None
-
-def p_type(p):
-    '''
-    type : ENTERO
-        | DECIMAL
-        | LETRA
     '''
     p[0] = None
 
@@ -336,19 +361,23 @@ def p_empty(p):
     '''
     empty : 
     '''
-    p[0] = None
+    pass
 
 def p_error(p):
     print("Syntax error at token", p.type)
 
 parser = yacc.yacc()
 
-#Testear el parser y léxico juntos
-try:
-    file = open("./tests/examples.txt", "r")
-    print(f"PLY LEXER AND PARSER")
-    archivo = file.read()
-    file.close()
-    parser.parse(archivo)
-except EOFError:
-    print('ERROR')
+def readFile():
+    #Testear el parser y léxico juntos
+    try:
+        file = open("./tests/examples.txt", "r")
+        print(f"PLY LEXER AND PARSER")
+        archivo = file.read()
+        file.close()
+        parser.parse(archivo)
+    except EOFError:
+        print('ERROR')
+
+if __name__ == '__main__':
+	readFile()
