@@ -153,14 +153,20 @@ def p_programa(p):
   '''
   programa : PROGRAMA ID punto_programa COLON inicio
           | PROGRAMA ID punto_programa COLON dec_var_cycle inicio
-          | PROGRAMA ID punto_programa COLON dec_var_cycle dec_func inicio
-          | PROGRAMA ID punto_programa COLON dec_func inicio
+          | PROGRAMA ID punto_programa COLON dec_var_cycle dec_func_cycle inicio
+          | PROGRAMA ID punto_programa COLON dec_func_cycle inicio
   '''
   p[0] = None
 
 def p_dec_var_cycle(p):
   '''
   dec_var_cycle : dec_var dec_var_cycle
+                | empty
+  '''
+
+def p_dec_func_cycle(p):
+  '''
+  dec_func_cycle : dec_func dec_func_cycle
                 | empty
   '''
 
@@ -178,6 +184,7 @@ def p_inicio(p):
   inicio : INICIO LPAREN RPAREN LBRACE estatutos RBRACE SEMICOLON
   '''
   p[0] = None
+  print("dir_func", dir_func.symbol_table)
 
 def p_dec_var(p):
   '''
@@ -200,7 +207,6 @@ def p_punto_simple_var(p):
   punto_simple_var :
   '''
   dir_func.add_variable(current_var_type, p[-1], current_func)
-  print("dir_func", dir_func.symbol_table)
 
 def p_type(p):
   '''
@@ -211,53 +217,78 @@ def p_type(p):
   p[0] = p[1]
   global current_var_type
 
-  if p[0] == 'entero':
-    current_var_type = 1
-  elif p[0] == 'decimal':
-    current_var_type = 2
-  elif p[0] == 'letra':
-    current_var_type = 3
+  current_var_type = convert_type(p[0])
 
 def p_array(p):
   '''
-  array : RENGLON type ARROW ID LBRACKET CTEI RBRACKET arrayCycle SEMICOLON
-  arrayCycle : COMMA ID LBRACKET CTEI RBRACKET arrayCycle
+  array : RENGLON type ARROW ID LBRACKET CTEI RBRACKET punto_array arrayCycle SEMICOLON
+  arrayCycle : COMMA ID LBRACKET CTEI RBRACKET punto_array arrayCycle
               | empty
   '''
   p[0] = None
+
+def p_punto_array(p):
+  '''
+  punto_array :
+  '''
+  dir_func.add_variable(current_var_type, p[-4], current_func, 1, p[-2])
 
 def p_matrix(p):
   '''
-  matrix : TABLA type ARROW ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET matrixCycle SEMICOLON
-  matrixCycle : COMMA ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET matrixCycle
+  matrix : TABLA type ARROW ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET punto_matrix matrixCycle SEMICOLON
+  matrixCycle : COMMA ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET punto_matrix matrixCycle
               | empty
   '''
   p[0] = None
 
+def p_punto_matrix(p):
+  '''
+  punto_matrix :
+  '''
+  dir_func.add_variable(current_var_type, p[-7], current_func, 2, (p[-5],p[-2]))
+
 def p_dec_func(p):
   '''
-  dec_func : FUNCION dec_func_return punto_dec_func ID LPAREN parameter RPAREN LBRACE dec_var estatutos decFuncCycle REGRESAR variable SEMICOLON RBRACE SEMICOLON
-  dec_func_return : type
-                  | SINREGRESAR
+  dec_func : FUNCION dec_func_type ID punto_add_func LPAREN parameter RPAREN LBRACE dec_var_cycle estatutos decFuncCycle dec_func_regresar RBRACE SEMICOLON
   decFuncCycle : estatutos decFuncCycle
               | empty 
   '''
-  p[0] = None
+def p_dec_func_regresar(p):
+  '''
+  dec_func_regresar : REGRESAR variable SEMICOLON
+                    | empty
+  '''
+  p[0] = p[1]
 
-def p_punto_dec_func(p):
+def p_dec_func_type(p):
   '''
-  punto_dec_func: 
+  dec_func_type : type
+                | SINREGRESAR
   '''
-  global func_return_type
-  func_return_type = p[-1]
+  p[0] = p[1]
+
+def p_punto_add_func(p):
+    '''
+    punto_add_func :
+    '''
+    global current_func
+    current_func = p[-1]
+    dir_func.add_function(p[-1], convert_type(p[-2]))
 
 def p_parameter(p):
   '''
-  parameter : type ID parameterCycle 
-  parameterCycle : COMMA type ID parameterCycle
+  parameter : type ID punto_parameter parameterCycle
+            | empty
+  parameterCycle : COMMA type ID punto_parameter parameterCycle
                   | empty 
   '''
   p[0] = None
+
+def p_punto_parameter(p):
+  '''
+  punto_parameter :
+  '''
+  dir_func.add_function_params(current_func, convert_type(p[-2]), p[-1])
 
 def p_estatutos(p):
   '''
@@ -382,6 +413,16 @@ def p_error(p):
   print("Syntax error at token", p.type)
 
 parser = yacc.yacc()
+
+def convert_type(type):
+    if type == 'sinregresar':
+      return 0
+    elif type == 'entero':
+      return 1
+    elif type == 'decimal':
+      return 2
+    elif type == 'letra':
+      return 3
 
 def readFile():
   #Testear el parser y léxico juntos
