@@ -4,6 +4,7 @@ import sys
 
 from utils.symbol_table import *
 from utils.semantic_cube import *
+from utils.shared import *
 
 #__________LEXER____________
 
@@ -413,16 +414,6 @@ def p_error(p):
   print("Syntax error at token", p.type)
 
 parser = yacc.yacc()
-
-def convert_type(type):
-    if type == 'sinregresar':
-      return 0
-    elif type == 'entero':
-      return 1
-    elif type == 'decimal':
-      return 2
-    elif type == 'letra':
-      return 3
 
 def readFile():
   #Testear el parser y léxico juntos
