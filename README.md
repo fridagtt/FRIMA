@@ -39,14 +39,14 @@ El objetivo es acercar al área de programación a gente que no tiene conocimien
 
 
 
-<h1>  ${\color{gray} Avance  }$  ${\color{lightgreen} 1  }$</h1> 
+<h1>  ${\color{gray} Avance  }$  ${\color{gray} 1  }$</h1> 
 Abril 16, 2023
 
 Dentro del repositorio se podrá encontrar en Léxico y Sintaxis de FRIMA. Todo fue hecho con base a los diagramas mostrados a continuación. 
 
 ![My Image](Diagramas.png)
 
-<h1>  ${\color{gray} Avance  }$  ${\color{lightgreen} 2  }$</h1> 
+<h1>  ${\color{gray} Avance  }$  ${\color{gray} 2  }$</h1> 
 Abril 23, 2023
 
 Dentro del repositorio se podrá encontrar la semántica básica de variables, la cuál tiene su directorio de procedimientos y tablas de variables. Además, se agregó la semántica básica de expresiones, que esta compuesta por su tabla de consideraciones semánticas es decir, el cubo semántico.
