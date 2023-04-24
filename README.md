@@ -46,6 +46,49 @@ Dentro del repositorio se podrá encontrar en Léxico y Sintaxis de FRIMA. Todo 
 
 ![My Image](Diagramas.png)
 
+<h1>  ${\color{lightgreen} Avance  }$  ${\color{lightgreen} 2  }$</h1> 
+Abril 23, 2023
+
+Dentro del repositorio se podrá encontrar la semántica básica de variables, la cuál tiene su directorio de procedimientos y tablas de variables. Además, se agregó la semántica básica de expresiones, que esta compuesta por su tabla de consideraciones semánticas es decir, el cubo semántico.
+
+A continuación se puede ver una imagen de lo que se detecta al correr el siguiente ejemplo: 
+
+```ruby
+programa pruebaUno:
+variable entero -> gatos, perros;
+variable decimal -> pluma, pelos;
+variable letra -> a, b, c;
+
+renglon entero -> renglonX[2], renglonY[3];
+tabla decimal -> tablaX[2][2], tablaY[3][2];
+
+funcion entero funcion_prueba(){
+   variable entero -> pluma, pelos;
+   tabla entero -> tablaZ[2][2];
+
+   regresar pluma;
+};
+
+funcion entero funcion_prueba_dos(entero ff, decimal jj){
+   variable entero -> pluma, pelos;
+   renglon entero -> renglonX[2], renglonY[3];
+
+   regresar pluma;
+};
+
+funcion sinregresar funcion_prueba_tres(entero ff, decimal jj){
+
+   regresar pluma;
+};
+
+inicio(){
+
+};
+```
+
+![My Image](Avance2.jpeg)
+
+
 
 
 
