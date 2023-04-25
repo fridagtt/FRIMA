@@ -4,6 +4,7 @@ import sys
 
 from utils.symbol_table import *
 from utils.semantic_cube import *
+from utils.quadruples import *
 from utils.shared import *
 
 #__________LEXER____________
