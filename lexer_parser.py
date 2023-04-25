@@ -352,45 +352,102 @@ def p_condicion(p):
   '''
   p[0] = None
 
+  #Operadores logicos y,o
+def p_hyper_exp(p):
+  '''
+  hyper_exp : super_exp hyper_exp_aux
+  '''
+ 
+def p_hyper_exp_aux(p):
+  '''
+  hyper_exp_aux : push_op_logicos super_exp 
+                    | empty
+  '''
+#Operadores relacionales <,>,>=,<=,!=,==
+def p_super_exp(p):
+  '''
+  super_exp : exp super_exp_aux
+  '''
+
+def p_super_exp_aux(p):
+  '''
+   super_exp_aux : push_op_relacionales exp
+                 | empty  
+  '''
+
 def p_exp(p):
   '''
-  exp : term expT
-  expT : PLUS exp
-        | MINUS exp
+  exp : term check_op exp_aux
+  '''
+
+def p_exp_aux(p):
+  '''
+  exp_aux : push_op_exp_masmenos exp
+          | empty
+  '''
+
+def p_push_op_exp_masmenos(p):
+  '''
+  push_op_exp_masmenos : PLUS 
+        | MINUS 
         | empty
   '''
-  p[0] = None
+  p[0] = p[1]
+
 
 def p_term(p):
   '''
-  term : factor termT
-  termT : TIMES term
-          | DIVIDE term
-          | empty
+  term : factor check_op term_aux
   '''
   p[0] = None
+
+def p_term_ax(p):
+  '''
+  term_ax : push_op_exp_pordiv term 
+        | empty
+  '''
+
+def p_push_op_exp_pordiv(p):
+  '''
+  push_op_exp_pordiv : TIMES 
+        | DIVIDE 
+        | empty
+  '''
+  p[0] = p[1]
 
 def p_factor(p):
   '''
   factor : factor_constante
           | factor_variable
           | factor_expresion
-  factor_constante : CTEI
-                  | CTEF
-  factor_variable : ID
-                  | ID LBRACKET exp RBRACKET
-                  | ID LBRACKET exp RBRACKET LBRACKET exp RBRACKET
-                  | ID llamada_func
-  factor_expresion : LPAREN exp RPAREN
   '''
   p[0] = None 
+
+  def p_factor_constante(p) :
+    '''
+    factor_constante : CTEI push_int
+                  | CTEF push_float 
+    '''
+
+  def p_factor_variable(p) : 
+    '''
+    factor_variable : ID push_id
+                  | ID LBRACKET hyper_exp RBRACKET
+                  | ID LBRACKET hyper_exp RBRACKET LBRACKET hyper_exp RBRACKET
+                  | ID llamada_func
+   '''
+    
+  def p_factor_expresion(p) : 
+    '''
+    factor_expresion : LPAREN meter_fondo hyper_exp quitar_fondo RPAREN
+    '''
 
 def p_llamada_func(p):
   '''
   llamada_func : ID LPAREN llamadaCYCLE RPAREN SEMICOLON
-  llamadaCYCLE : exp llamadaCYCLE_aux
+  llamadaCYCLE : hyper_exp llamadaCYCLE_aux
               | empty
-  llamadaCYCLE_aux : COMMA exp llamadaCYCLE_aux
+  llamadaCYCLE_aux : COMMA hyper_exp llamadaCYCLE_aux
                   | empty
   '''
   p[0] = None 
@@ -429,3 +486,5 @@ def readFile():
 
 if __name__ == '__main__':
 	readFile()
+        
+
