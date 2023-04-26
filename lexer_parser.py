@@ -7,6 +7,10 @@ from utils.semantic_cube import *
 from utils.quadruples import *
 from utils.shared import *
 
+stack_de_operadores = deque()
+stack_de_operandos = deque()
+stack_de_tipos = deque()
+
 #__________LEXER____________
 
 # Set of token names
@@ -352,7 +356,7 @@ def p_condicion(p):
   '''
   p[0] = None
 
-  #Operadores logicos y,o
+#Operadores logicos y,o
 def p_hyper_exp(p):
   '''
   hyper_exp : super_exp hyper_exp_aux
@@ -363,6 +367,16 @@ def p_hyper_exp_aux(p):
   hyper_exp_aux : push_op_logicos super_exp 
                     | empty
   '''
+
+def p_push_op_logicos(p):
+  '''
+  push_op_logicos : Y 
+        | O 
+        | empty
+  '''
+  p[0] = p[1]
+  stack_de_operadores.append(p[0])
+
 #Operadores relacionales <,>,>=,<=,!=,==
 def p_super_exp(p):
   '''
@@ -374,6 +388,19 @@ def p_super_exp_aux(p):
    super_exp_aux : push_op_relacionales exp
                  | empty  
   '''
+
+def p_push_op_relacionales(p):
+  '''
+  push_op_relacionales : GREATER
+        | LESS 
+        | GREATEREQ
+        | LESSEQ
+        | NOTEQUAL
+        | EQUAL
+        | empty
+  '''
+  p[0] = p[1]
+  stack_de_operadores.append(p[0])
 
 def p_exp(p):
   '''
@@ -393,7 +420,7 @@ def p_push_op_exp_masmenos(p):
         | empty
   '''
   p[0] = p[1]
-
+  stack_de_operadores.append(p[0])
 
 def p_term(p):
   '''
@@ -414,6 +441,7 @@ def p_push_op_exp_pordiv(p):
         | empty
   '''
   p[0] = p[1]
+  stack_de_operadores.append(p[0])
 
 def p_factor(p):
   '''
@@ -423,24 +451,68 @@ def p_factor(p):
   '''
   p[0] = None 
 
-  def p_factor_constante(p) :
-    '''
-    factor_constante : CTEI push_int
-                  | CTEF push_float 
-    '''
+def p_factor_constante(p) :
+  '''
+  factor_constante : CTEI push_int
+                | CTEF push_float 
+  '''
 
-  def p_factor_variable(p) : 
-    '''
-    factor_variable : ID push_id
-                  | ID LBRACKET hyper_exp RBRACKET
-                  | ID LBRACKET hyper_exp RBRACKET LBRACKET hyper_exp RBRACKET
-                  | ID llamada_func
-   '''
-    
-  def p_factor_expresion(p) : 
-    '''
-    factor_expresion : LPAREN meter_fondo hyper_exp quitar_fondo RPAREN
-    '''
+def p_factor_variable(p) : 
+  '''
+  factor_variable : ID push_id
+                | ID LBRACKET hyper_exp RBRACKET
+                | ID LBRACKET hyper_exp RBRACKET LBRACKET hyper_exp RBRACKET
+                | ID llamada_func
+  '''
+  
+def p_factor_expresion(p) : 
+  '''
+  factor_expresion : LPAREN meter_fondo_falso hyper_exp RPAREN quitar_fondo_falso
+  '''
+
+def p_meter_fondo_falso(p) : 
+  '''
+  meter_fondo_falso :
+  '''
+  stack_de_operadores.append('(')
+
+def p_meter_fondo_falso(p) : 
+  '''
+  quitar_fondo_falso :
+  '''
+  stack_de_operadores.pop()
+
+def p_push_int(p) : 
+  '''
+  push_int :
+  '''
+  global stack_de_operandos, stack_de_tipos
+  if p[-1] != None:
+    stack_de_operandos.append(p[-1])
+    stack_de_tipos.append(1)
+
+def p_push_float(p) : 
+  '''
+  push_float :
+  '''
+  global stack_de_operandos, stack_de_tipos
+  if p[-1] != None:
+    stack_de_operandos.append(p[-1])
+    stack_de_tipos.append(2)
+
+def p_push_id(p) : 
+  '''
+  push_id :
+  '''
+  # Validate if id is within the set of variables of the current function
+  if p[-1] not in dir_func.symbol_table.get_function_variables(current_func):
+    raise Exception("ERRRO: La variable {p[-1]} no está declarada.")
+
+  global stack_de_operandos, stack_de_tipos
+  if p[-1] != None:
+    stack_de_operandos.append(p[-1])
+    id_type = dir_func.symbol_table.get_variable_type(current_func, p[-1])
+    stack_de_tipos.append(id_type)
 
 def p_llamada_func(p):
   '''

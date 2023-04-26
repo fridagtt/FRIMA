@@ -46,5 +46,15 @@ class SymbolTable:
     self.symbol_table["dir_functions"][func_name]["param_types"].append(param_type)
     self.symbol_table["dir_functions"][func_name]["variables"]['var_names'].add(param_name)
     self.symbol_table["dir_functions"][func_name]["variables"]['vars_info'].append({'name': param_name, 'type': param_type})
-    
+  
+  def get_function_variables(self, func_name) -> set():
+    """ Returns function variables """
+    return self.symbol_table["dir_functions"][func_name]["variables"]['var_names']
+
+  def get_variable_type(self, func_name, variable_name) -> int:
+    """ Returns variable type """
+    array_of_variables = self.symbol_table["dir_functions"][func_name]["variables"]['vars_info']
+    variable_object = filter(lambda variable: variable.name == variable_name, array_of_variables)
+    return variable_object.type
+  
   
