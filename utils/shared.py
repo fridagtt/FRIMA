@@ -6,7 +6,7 @@ def convert_type(type):
       return 1
     case 'decimal':
       return 2
-    case 'char':
+    case 'letra':
       return 3
     case '+':
       return 10
@@ -32,11 +32,15 @@ def convert_type(type):
       return 60
     case 'o':
       return 65
-    case 'GOTOF':
+    case '=':
       return 70
-    case 'GOTO':
+    case 'GOTOF':
       return 75
-    case 'GOTOV':
+    case 'GOTO':
       return 80
+    case 'GOTOV':
+      return 85
+    case 'escribe':
+      return 90
     case _:
       return -1

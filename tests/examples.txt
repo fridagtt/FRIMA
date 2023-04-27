@@ -1,5 +1,5 @@
 programa pruebaUno:
-variable entero -> gatos, perros;
+variable entero -> gatos, perros, alumno;
 variable decimal -> pluma, pelos;
 variable letra -> a, b, c;
 
@@ -20,15 +20,16 @@ funcion entero funcion_prueba_dos(entero ff, decimal jj){
    regresar pluma;
 };
 
-funcion sinregresar funcion_prueba_tres(entero ff, decimal jj){
+funcion entero funcion_prueba_tres(){
 
-   variable entero -> gatos, perros;
-   variable decimal -> pluma, pelos;
-   variable decimal-> pp;
+   variable letra -> gatos, perros, pelos;
+   variable letra -> alumno, pluma;
 
-   pp = perros-gatos < gatos y perros*gatos > gatos;
 
-   regresar pluma;
+
+   gatos = perros;
+
+   regresar alumno;
 };
 
 inicio(){

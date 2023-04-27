@@ -318,9 +318,38 @@ def p_estatutos(p):
 
 def p_asignar(p):
   '''
-  asignar : variable ASSIGN hyper_exp SEMICOLON
+  asignar : variable ASSIGN push_op_igual hyper_exp check_op_igual SEMICOLON
   '''
   p[0] = None
+
+def p_push_op_igual(p):
+  '''
+  push_op_igual :
+  '''
+  global stack_de_operadores
+  stack_de_operadores.append(p[-1])
+
+def p_check_op_igual(p):
+  '''
+  check_op_igual :
+  '''
+  global stack_de_operadores, stack_de_operandos, stack_de_tipos, lista_de_cuadruplos
+  top_operador = stack_de_operadores.pop()
+  tipo_operando = stack_de_tipos.pop()
+  operando = stack_de_operandos.pop()
+
+  converted_operador = convert_type(top_operador)
+  assign_variable_type = dir_func.get_variable_type(current_func, p[-4])
+  print ( "Tipo:")
+  print (assign_variable_type)
+
+  operation_type = cubo_semantico.get_type(assign_variable_type, tipo_operando, converted_operador)
+
+  if operation_type == 5:
+    raise Exception("ERROR: Type Mismatch")
+  else:
+    quadruple = Quadruple(converted_operador, operando, None , p[-4])
+    lista_de_cuadruplos.append(quadruple)
 
 def p_variable(p):
   '''
@@ -329,7 +358,7 @@ def p_variable(p):
               | LBRACKET exp RBRACKET LBRACKET exp RBRACKET
               | empty
   '''
-  p[0] = None
+  p[0] = p[1]
 
 def p_leer(p):
   '''
@@ -654,6 +683,11 @@ def p_escribe(p):
               | empty
   '''
   p[0] = None
+
+def p_punto_escribe(p):
+  '''
+  punto_escribe :
+  '''
 
 def p_empty(p):
   '''
