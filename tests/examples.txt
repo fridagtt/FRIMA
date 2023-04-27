@@ -26,8 +26,8 @@ funcion sinregresar funcion_prueba_tres(entero ff, decimal jj){
    variable decimal -> pluma, pelos;
    variable decimal-> pp;
 
-   pp = gatos+pluma*perros;
-   
+   pp = perros-gatos < gatos y perros*gatos > gatos;
+
    regresar pluma;
 };
 

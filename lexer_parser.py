@@ -196,7 +196,8 @@ def p_inicio(p):
   inicio : INICIO LPAREN RPAREN LBRACE estatutos RBRACE SEMICOLON
   '''
   p[0] = None
-  print("dir_func", lista_de_cuadruplos)
+  for quadruple in lista_de_cuadruplos: 
+    print(quadruple) 
 
 def p_dec_var(p):
   '''
@@ -370,9 +371,38 @@ def p_hyper_exp(p):
  
 def p_hyper_exp_aux(p):
   '''
-  hyper_exp_aux : push_op_logicos super_exp 
+  hyper_exp_aux : push_op_logicos super_exp check_op_logicos
                     | empty
   '''
+
+def p_check_op_logicos(p):
+  '''
+  check_op_logicos :
+  '''
+  global stack_de_operadores, stack_de_operandos, stack_de_tipos, lista_de_cuadruplos
+  if len(stack_de_operadores) != 0:
+    top_operador = stack_de_operadores.pop()
+    if top_operador == 'y' or top_operador == 'o':
+      operando_der = stack_de_operandos.pop()
+      operando_izq = stack_de_operandos.pop()
+
+      tipo_operando_der = stack_de_tipos.pop()
+      tipo_operando_izq = stack_de_tipos.pop()
+
+      converted_operador = convert_type(top_operador)
+
+      operation_type = cubo_semantico.get_type(tipo_operando_izq, tipo_operando_der, converted_operador)
+      if operation_type == 5:
+        raise Exception("ERROR: Type Mismatch")
+      else:
+        temporal_variable = None
+        quadruple = Quadruple(converted_operador, operando_izq, operando_der, temporal_variable)
+        lista_de_cuadruplos.append(quadruple)
+        stack_de_operandos.append(temporal_variable)
+        stack_de_tipos.append(operation_type)
+      
+    else:
+      stack_de_operadores.append(top_operador)
 
 def p_push_op_logicos(p):
   '''
@@ -391,9 +421,38 @@ def p_super_exp(p):
 
 def p_super_exp_aux(p):
   '''
-   super_exp_aux : push_op_relacionales exp
-                 | empty  
+  super_exp_aux : push_op_relacionales exp check_op_relacionales
+                | empty
   '''
+
+def p_check_op_relacionales(p):
+  '''
+  check_op_relacionales :
+  '''
+  global stack_de_operadores, stack_de_operandos, stack_de_tipos, lista_de_cuadruplos
+  if len(stack_de_operadores) != 0:
+    top_operador = stack_de_operadores.pop()
+    if top_operador == '>' or top_operador == '<' or top_operador == '<=' or top_operador == '>=' or top_operador == '!=' or top_operador == '==':
+      operando_der = stack_de_operandos.pop()
+      operando_izq = stack_de_operandos.pop()
+
+      tipo_operando_der = stack_de_tipos.pop()
+      tipo_operando_izq = stack_de_tipos.pop()
+
+      converted_operador = convert_type(top_operador)
+
+      operation_type = cubo_semantico.get_type(tipo_operando_izq, tipo_operando_der, converted_operador)
+      if operation_type == 5:
+        raise Exception("ERROR: Type Mismatch")
+      else:
+        temporal_variable = None
+        quadruple = Quadruple(converted_operador, operando_izq, operando_der, temporal_variable)
+        lista_de_cuadruplos.append(quadruple)
+        stack_de_operandos.append(temporal_variable)
+        stack_de_tipos.append(operation_type)
+      
+    else:
+      stack_de_operadores.append(top_operador)
 
 def p_push_op_relacionales(p):
   '''
@@ -432,27 +491,29 @@ def p_check_op_masmenos(p):
   '''
   check_op_masmenos :
   '''
-  global stack_de_operadores, stack_de_operandos, stack_de_tipos
+  global stack_de_operadores, stack_de_operandos, stack_de_tipos, lista_de_cuadruplos
   if len(stack_de_operadores) != 0:
     top_operador = stack_de_operadores.pop()
-    if top_operandor == '+' or top_operandor == '-':
+    if top_operador == '+' or top_operador == '-':
       operando_der = stack_de_operandos.pop()
       operando_izq = stack_de_operandos.pop()
 
       tipo_operando_der = stack_de_tipos.pop()
       tipo_operando_izq = stack_de_tipos.pop()
 
-      operation_type = cubo_semantico.get_type(tipo_operando_izq, tipo_operando_der, top_operandor)
+      converted_operador = convert_type(top_operador)
+      operation_type = cubo_semantico.get_type(tipo_operando_izq, tipo_operando_der, converted_operador)
       if operation_type == 5:
         raise Exception("ERROR: Type Mismatch")
       else:
         temporal_variable = None
-        lista_de_cuadruplos.append(Quadruple(top_operador, operando_izq, operando_der, temporal_value))
-        stack_de_operadores.append(temporal_variable)
+        quadruple = Quadruple(converted_operador, operando_izq, operando_der, temporal_variable)
+        lista_de_cuadruplos.append(quadruple)
+        stack_de_operandos.append(temporal_variable)
         stack_de_tipos.append(operation_type)
       
     else:
-      stack_de_operadores.push(top_operandor)
+      stack_de_operadores.append(top_operador)
 
 def p_term(p):
   '''
@@ -470,27 +531,29 @@ def p_check_op_pordiv(p):
   '''
   check_op_pordiv :
   '''
-  global stack_de_operadores, stack_de_operandos, stack_de_tipos
+  global stack_de_operadores, stack_de_operandos, stack_de_tipos, lista_de_cuadruplos
   if len(stack_de_operadores) != 0:
     top_operador = stack_de_operadores.pop()
-    if top_operandor == '*' or top_operandor == '/':
+    if top_operador == '*' or top_operador == '/':
       operando_der = stack_de_operandos.pop()
       operando_izq = stack_de_operandos.pop()
 
       tipo_operando_der = stack_de_tipos.pop()
       tipo_operando_izq = stack_de_tipos.pop()
 
-      operation_type = cubo_semantico.get_type(tipo_operando_izq, tipo_operando_der, top_operandor)
+      converted_operador = convert_type(top_operador)
+      operation_type = cubo_semantico.get_type(tipo_operando_izq, tipo_operando_der, converted_operador)
       if operation_type == 5:
         raise Exception("ERROR: Type Mismatch")
       else:
         temporal_variable = None
-        lista_de_cuadruplos.append(Quadruple(top_operador, operando_izq, operando_der, temporal_value))
-        stack_de_operadores.append(temporal_variable)
+        quadruple = Quadruple(converted_operador, operando_izq, operando_der, temporal_variable)
+        lista_de_cuadruplos.append(quadruple)
+        stack_de_operandos.append(temporal_variable)
         stack_de_tipos.append(operation_type)
 
     else:
-      stack_de_operadores.push(top_operandor)
+      stack_de_operadores.append(top_operador)
 
 def p_push_op_exp_pordiv(p):
   '''

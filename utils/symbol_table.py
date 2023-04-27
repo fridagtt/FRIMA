@@ -53,9 +53,8 @@ class SymbolTable:
 
   def get_variable_type(self, func_name, variable_name) -> int:
     """ Returns variable type """
-    array_of_variables = self.symbol_table["dir_functions"][func_name]["variables"]['vars_info']
-    variable_object = filter(lambda variable: variable.name == variable_name, array_of_variables)
-    print("variable_object", variable_object)
+    list_of_variables = self.symbol_table["dir_functions"][func_name]["variables"]['vars_info']
+    variable_object = next((variable for variable in list_of_variables if variable['name'] == variable_name),None)
     return variable_object['type']
   
   
