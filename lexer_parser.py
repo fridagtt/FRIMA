@@ -2,14 +2,20 @@ import ply.lex as lex
 import ply.yacc as yacc
 import sys
 
+from collections import deque
+
 from utils.symbol_table import *
 from utils.semantic_cube import *
 from utils.quadruples import *
 from utils.shared import *
 
+# Create global variables
 stack_de_operadores = deque()
 stack_de_operandos = deque()
 stack_de_tipos = deque()
+lista_de_cuadruplos = []
+
+cubo_semantico = SemanticCube()
 
 #__________LEXER____________
 
@@ -63,8 +69,8 @@ reserved = {
     'regresar' : 'REGRESAR',
     'imprimir' : 'IMPRIMIR',
     'leer' : 'LEER',
-    'y' : 'y',
-    'o' : 'o',
+    'y' : 'Y',
+    'o' : 'O',
 }
 
 tokens += reserved.values()
@@ -190,7 +196,7 @@ def p_inicio(p):
   inicio : INICIO LPAREN RPAREN LBRACE estatutos RBRACE SEMICOLON
   '''
   p[0] = None
-  print("dir_func", dir_func.symbol_table)
+  print("dir_func", lista_de_cuadruplos)
 
 def p_dec_var(p):
   '''
@@ -311,7 +317,7 @@ def p_estatutos(p):
 
 def p_asignar(p):
   '''
-  asignar : variable ASSIGN exp SEMICOLON
+  asignar : variable ASSIGN hyper_exp SEMICOLON
   '''
   p[0] = None
 
@@ -404,7 +410,7 @@ def p_push_op_relacionales(p):
 
 def p_exp(p):
   '''
-  exp : term check_op exp_aux
+  exp : term check_op_masmenos exp_aux
   '''
 
 def p_exp_aux(p):
@@ -422,17 +428,69 @@ def p_push_op_exp_masmenos(p):
   p[0] = p[1]
   stack_de_operadores.append(p[0])
 
+def p_check_op_masmenos(p):
+  '''
+  check_op_masmenos :
+  '''
+  global stack_de_operadores, stack_de_operandos, stack_de_tipos
+  if len(stack_de_operadores) != 0:
+    top_operador = stack_de_operadores.pop()
+    if top_operandor == '+' or top_operandor == '-':
+      operando_der = stack_de_operandos.pop()
+      operando_izq = stack_de_operandos.pop()
+
+      tipo_operando_der = stack_de_tipos.pop()
+      tipo_operando_izq = stack_de_tipos.pop()
+
+      operation_type = cubo_semantico.get_type(tipo_operando_izq, tipo_operando_der, top_operandor)
+      if operation_type == 5:
+        raise Exception("ERROR: Type Mismatch")
+      else:
+        temporal_variable = None
+        lista_de_cuadruplos.append(Quadruple(top_operador, operando_izq, operando_der, temporal_value))
+        stack_de_operadores.append(temporal_variable)
+        stack_de_tipos.append(operation_type)
+      
+    else:
+      stack_de_operadores.push(top_operandor)
+
 def p_term(p):
   '''
-  term : factor check_op term_aux
+  term : factor check_op_pordiv term_aux
   '''
   p[0] = None
 
-def p_term_ax(p):
+def p_term_aux(p):
   '''
-  term_ax : push_op_exp_pordiv term 
+  term_aux : push_op_exp_pordiv term 
         | empty
   '''
+
+def p_check_op_pordiv(p):
+  '''
+  check_op_pordiv :
+  '''
+  global stack_de_operadores, stack_de_operandos, stack_de_tipos
+  if len(stack_de_operadores) != 0:
+    top_operador = stack_de_operadores.pop()
+    if top_operandor == '*' or top_operandor == '/':
+      operando_der = stack_de_operandos.pop()
+      operando_izq = stack_de_operandos.pop()
+
+      tipo_operando_der = stack_de_tipos.pop()
+      tipo_operando_izq = stack_de_tipos.pop()
+
+      operation_type = cubo_semantico.get_type(tipo_operando_izq, tipo_operando_der, top_operandor)
+      if operation_type == 5:
+        raise Exception("ERROR: Type Mismatch")
+      else:
+        temporal_variable = None
+        lista_de_cuadruplos.append(Quadruple(top_operador, operando_izq, operando_der, temporal_value))
+        stack_de_operadores.append(temporal_variable)
+        stack_de_tipos.append(operation_type)
+
+    else:
+      stack_de_operadores.push(top_operandor)
 
 def p_push_op_exp_pordiv(p):
   '''
@@ -476,7 +534,7 @@ def p_meter_fondo_falso(p) :
   '''
   stack_de_operadores.append('(')
 
-def p_meter_fondo_falso(p) : 
+def p_quitar_fondo_falso(p) : 
   '''
   quitar_fondo_falso :
   '''
@@ -505,13 +563,13 @@ def p_push_id(p) :
   push_id :
   '''
   # Validate if id is within the set of variables of the current function
-  if p[-1] not in dir_func.symbol_table.get_function_variables(current_func):
+  if p[-1] not in dir_func.get_function_variables(current_func):
     raise Exception("ERRRO: La variable {p[-1]} no está declarada.")
 
   global stack_de_operandos, stack_de_tipos
   if p[-1] != None:
     stack_de_operandos.append(p[-1])
-    id_type = dir_func.symbol_table.get_variable_type(current_func, p[-1])
+    id_type = dir_func.get_variable_type(current_func, p[-1])
     stack_de_tipos.append(id_type)
 
 def p_llamada_func(p):

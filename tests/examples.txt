@@ -22,6 +22,12 @@ funcion entero funcion_prueba_dos(entero ff, decimal jj){
 
 funcion sinregresar funcion_prueba_tres(entero ff, decimal jj){
 
+   variable entero -> gatos, perros;
+   variable decimal -> pluma, pelos;
+   variable decimal-> pp;
+
+   pp = gatos+pluma*perros;
+   
    regresar pluma;
 };
 

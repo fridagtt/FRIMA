@@ -55,6 +55,7 @@ class SymbolTable:
     """ Returns variable type """
     array_of_variables = self.symbol_table["dir_functions"][func_name]["variables"]['vars_info']
     variable_object = filter(lambda variable: variable.name == variable_name, array_of_variables)
-    return variable_object.type
+    print("variable_object", variable_object)
+    return variable_object['type']
   
   
