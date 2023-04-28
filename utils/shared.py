@@ -40,7 +40,7 @@ def convert_type(type):
       return 80
     case 'GOTOV':
       return 85
-    case 'escribe':
+    case 'imprimir':
       return 90
     case _:
       return -1

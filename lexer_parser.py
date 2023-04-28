@@ -422,7 +422,7 @@ def p_check_op_logicos(p):
       if operation_type == 5:
         raise Exception("ERROR: Type Mismatch")
       else:
-        temporal_variable = None
+        temporal_variable = -1
         quadruple = Quadruple(converted_operador, operando_izq, operando_der, temporal_variable)
         lista_de_cuadruplos.append(quadruple)
         stack_de_operandos.append(temporal_variable)
@@ -654,7 +654,7 @@ def p_push_id(p) :
   '''
   # Validate if id is within the set of variables of the current function
   if p[-1] not in dir_func.get_function_variables(current_func):
-    raise Exception("ERRRO: La variable {p[-1]} no está declarada.")
+    raise Exception("ERROR: La variable {} no está declarada.".format(p[-1]))
 
   global stack_de_operandos, stack_de_tipos
   if p[-1] != None:
@@ -675,12 +675,25 @@ def p_llamada_func(p):
 def p_escribe(p):
   '''
   escribe : IMPRIMIR LPAREN escribe_aux RPAREN SEMICOLON
-  escribe_aux : exp escribeCycle
-              | CTESTRING escribeCycle
+  escribe_aux : exp push_imprimir escribeCycle
+              | CTESTRING push_imprimir escribeCycle
   escribeCycle : COMMA escribe_aux
               | empty
   '''
   p[0] = None
+
+def p_push_escribe(p):
+  '''
+  push_imprimir :
+  '''
+  global stack_de_operandos, stack_de_tipos
+  if len(stack_de_operandos) != 0:
+    top_operando = stack_de_operandos.pop()
+    converted_operador = convert_type('imprimir')
+    quadruple = Quadruple(converted_operador, None, None, top_operando)
+    lista_de_cuadruplos.append(quadruple)
+  else:
+    quadruple = Quadruple(converted_operador, None, None, p[-1])
 
 def p_empty(p):
   '''

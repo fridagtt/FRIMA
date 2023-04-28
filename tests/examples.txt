@@ -27,6 +27,8 @@ funcion entero funcion_prueba_tres(){
 
    gatos = perros*gatos+(pelos+perros);
 
+   imprimir(perros,perros*gatos+pelos);
+
    regresar alumno;
 };
 

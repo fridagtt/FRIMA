@@ -128,11 +128,11 @@ Rule 118   llamadaCYCLE -> empty
 Rule 119   llamadaCYCLE_aux -> COMMA hyper_exp llamadaCYCLE_aux
 Rule 120   llamadaCYCLE_aux -> empty
 Rule 121   escribe -> IMPRIMIR LPAREN escribe_aux RPAREN SEMICOLON
-Rule 122   escribe_aux -> exp escribeCycle
-Rule 123   escribe_aux -> CTESTRING escribeCycle
+Rule 122   escribe_aux -> exp push_imprimir escribeCycle
+Rule 123   escribe_aux -> CTESTRING push_imprimir escribeCycle
 Rule 124   escribeCycle -> COMMA escribe_aux
 Rule 125   escribeCycle -> empty
-Rule 126   punto_escribe -> <empty>
+Rule 126   push_imprimir -> <empty>
 Rule 127   empty -> <empty>
 
 Terminals, with rules where they appear
@@ -233,13 +233,13 @@ parameterCycle       : 37 39
 programa             : 0
 punto_add_func       : 29
 punto_array          : 21 22
-punto_escribe        : 
 punto_matrix         : 25 26
 punto_parameter      : 37 39
 punto_programa       : 1 2 3 4
 punto_simple_var     : 14 15
 push_float           : 105
 push_id              : 106
+push_imprimir        : 122 123
 push_int             : 104
 push_op_exp_masmenos : 88
 push_op_exp_pordiv   : 95
@@ -1494,8 +1494,8 @@ state 85
 state 86
 
     (121) escribe -> IMPRIMIR LPAREN . escribe_aux RPAREN SEMICOLON
-    (122) escribe_aux -> . exp escribeCycle
-    (123) escribe_aux -> . CTESTRING escribeCycle
+    (122) escribe_aux -> . exp push_imprimir escribeCycle
+    (123) escribe_aux -> . CTESTRING push_imprimir escribeCycle
     (87) exp -> . term check_op_masmenos exp_aux
     (94) term -> . factor check_op_pordiv term_aux
     (101) factor -> . factor_constante
@@ -2041,29 +2041,23 @@ state 117
 
 state 118
 
-    (122) escribe_aux -> exp . escribeCycle
-    (124) escribeCycle -> . COMMA escribe_aux
-    (125) escribeCycle -> . empty
-    (127) empty -> .
+    (122) escribe_aux -> exp . push_imprimir escribeCycle
+    (126) push_imprimir -> .
 
-    COMMA           shift and go to state 164
-    RPAREN          reduce using rule 127 (empty -> .)
+    COMMA           reduce using rule 126 (push_imprimir -> .)
+    RPAREN          reduce using rule 126 (push_imprimir -> .)
 
-    escribeCycle                   shift and go to state 163
-    empty                          shift and go to state 165
+    push_imprimir                  shift and go to state 163
 
 state 119
 
-    (123) escribe_aux -> CTESTRING . escribeCycle
-    (124) escribeCycle -> . COMMA escribe_aux
-    (125) escribeCycle -> . empty
-    (127) empty -> .
+    (123) escribe_aux -> CTESTRING . push_imprimir escribeCycle
+    (126) push_imprimir -> .
 
-    COMMA           shift and go to state 164
-    RPAREN          reduce using rule 127 (empty -> .)
+    COMMA           reduce using rule 126 (push_imprimir -> .)
+    RPAREN          reduce using rule 126 (push_imprimir -> .)
 
-    escribeCycle                   shift and go to state 166
-    empty                          shift and go to state 165
+    push_imprimir                  shift and go to state 164
 
 state 120
 
@@ -2083,7 +2077,7 @@ state 121
 
     (29) dec_func -> FUNCION dec_func_type ID punto_add_func LPAREN parameter RPAREN . LBRACE dec_var_cycle estatutos decFuncCycle dec_func_regresar RBRACE SEMICOLON
 
-    LBRACE          shift and go to state 167
+    LBRACE          shift and go to state 165
 
 
 state 122
@@ -2094,7 +2088,7 @@ state 122
     COMMA           reduce using rule 41 (punto_parameter -> .)
     RPAREN          reduce using rule 41 (punto_parameter -> .)
 
-    punto_parameter                shift and go to state 168
+    punto_parameter                shift and go to state 166
 
 state 123
 
@@ -2123,7 +2117,7 @@ state 124
     COMMA           reduce using rule 17 (punto_simple_var -> .)
     SEMICOLON       reduce using rule 17 (punto_simple_var -> .)
 
-    punto_simple_var               shift and go to state 169
+    punto_simple_var               shift and go to state 167
 
 state 125
 
@@ -2133,13 +2127,13 @@ state 125
     COMMA           reduce using rule 24 (punto_array -> .)
     SEMICOLON       reduce using rule 24 (punto_array -> .)
 
-    punto_array                    shift and go to state 170
+    punto_array                    shift and go to state 168
 
 state 126
 
     (25) matrix -> TABLA type ARROW ID LBRACKET CTEI RBRACKET . LBRACKET CTEI RBRACKET punto_matrix matrixCycle SEMICOLON
 
-    LBRACKET        shift and go to state 171
+    LBRACKET        shift and go to state 169
 
 
 state 127
@@ -2149,13 +2143,13 @@ state 127
 
     SEMICOLON       reduce using rule 52 (check_op_igual -> .)
 
-    check_op_igual                 shift and go to state 172
+    check_op_igual                 shift and go to state 170
 
 state 128
 
     (116) llamada_func -> ID LPAREN llamadaCYCLE RPAREN . SEMICOLON
 
-    SEMICOLON       shift and go to state 173
+    SEMICOLON       shift and go to state 171
 
 
 state 129
@@ -2188,7 +2182,7 @@ state 130
     ID              shift and go to state 82
     LPAREN          shift and go to state 83
 
-    hyper_exp                      shift and go to state 174
+    hyper_exp                      shift and go to state 172
     super_exp                      shift and go to state 102
     exp                            shift and go to state 103
     term                           shift and go to state 75
@@ -2236,7 +2230,7 @@ state 133
     ID              shift and go to state 82
     LPAREN          shift and go to state 83
 
-    super_exp                      shift and go to state 175
+    super_exp                      shift and go to state 173
     exp                            shift and go to state 103
     term                           shift and go to state 75
     factor                         shift and go to state 76
@@ -2316,7 +2310,7 @@ state 138
     ID              shift and go to state 82
     LPAREN          shift and go to state 83
 
-    exp                            shift and go to state 176
+    exp                            shift and go to state 174
     term                           shift and go to state 75
     factor                         shift and go to state 76
     factor_constante               shift and go to state 77
@@ -2416,14 +2410,14 @@ state 146
 
     ASSIGN          reduce using rule 54 (variable_aux -> LBRACKET exp RBRACKET .)
     SEMICOLON       reduce using rule 54 (variable_aux -> LBRACKET exp RBRACKET .)
-    LBRACKET        shift and go to state 177
+    LBRACKET        shift and go to state 175
 
 
 state 147
 
     (61) ciclo_for -> PORCADA exp EN exp . LBRACE estatutos forCycle RBRACE SEMICOLON
 
-    LBRACE          shift and go to state 178
+    LBRACE          shift and go to state 176
 
 
 state 148
@@ -2471,7 +2465,7 @@ state 149
     ID              shift and go to state 82
     LPAREN          shift and go to state 83
 
-    exp                            shift and go to state 179
+    exp                            shift and go to state 177
     term                           shift and go to state 75
     factor                         shift and go to state 76
     factor_constante               shift and go to state 77
@@ -2578,7 +2572,7 @@ state 154
     ID              shift and go to state 82
     LPAREN          shift and go to state 83
 
-    term                           shift and go to state 180
+    term                           shift and go to state 178
     factor                         shift and go to state 76
     factor_constante               shift and go to state 77
     factor_variable                shift and go to state 78
@@ -2645,91 +2639,64 @@ state 158
     (107) factor_variable -> ID LBRACKET hyper_exp . RBRACKET
     (108) factor_variable -> ID LBRACKET hyper_exp . RBRACKET LBRACKET hyper_exp RBRACKET
 
-    RBRACKET        shift and go to state 181
+    RBRACKET        shift and go to state 179
 
 
 state 159
 
     (110) factor_expresion -> LPAREN meter_fondo_falso hyper_exp . RPAREN quitar_fondo_falso
 
-    RPAREN          shift and go to state 182
+    RPAREN          shift and go to state 180
 
 
 state 160
 
     (58) ciclo_while -> MIENTRAS LPAREN exp RPAREN . LBRACE estatutos whileCycle RBRACE SEMICOLON
 
-    LBRACE          shift and go to state 183
+    LBRACE          shift and go to state 181
 
 
 state 161
 
     (64) condicion -> SI LPAREN exp RPAREN . LBRACE estatutos condicionCycle RBRACE sinoCondicion SEMICOLON
 
-    LBRACE          shift and go to state 184
+    LBRACE          shift and go to state 182
 
 
 state 162
 
     (121) escribe -> IMPRIMIR LPAREN escribe_aux RPAREN . SEMICOLON
 
-    SEMICOLON       shift and go to state 185
+    SEMICOLON       shift and go to state 183
 
 
 state 163
 
-    (122) escribe_aux -> exp escribeCycle .
+    (122) escribe_aux -> exp push_imprimir . escribeCycle
+    (124) escribeCycle -> . COMMA escribe_aux
+    (125) escribeCycle -> . empty
+    (127) empty -> .
 
-    RPAREN          reduce using rule 122 (escribe_aux -> exp escribeCycle .)
+    COMMA           shift and go to state 185
+    RPAREN          reduce using rule 127 (empty -> .)
 
+    escribeCycle                   shift and go to state 184
+    empty                          shift and go to state 186
 
 state 164
 
-    (124) escribeCycle -> COMMA . escribe_aux
-    (122) escribe_aux -> . exp escribeCycle
-    (123) escribe_aux -> . CTESTRING escribeCycle
-    (87) exp -> . term check_op_masmenos exp_aux
-    (94) term -> . factor check_op_pordiv term_aux
-    (101) factor -> . factor_constante
-    (102) factor -> . factor_variable
-    (103) factor -> . factor_expresion
-    (104) factor_constante -> . CTEI push_int
-    (105) factor_constante -> . CTEF push_float
-    (106) factor_variable -> . ID push_id
-    (107) factor_variable -> . ID LBRACKET hyper_exp RBRACKET
-    (108) factor_variable -> . ID LBRACKET hyper_exp RBRACKET LBRACKET hyper_exp RBRACKET
-    (109) factor_variable -> . ID llamada_func
-    (110) factor_expresion -> . LPAREN meter_fondo_falso hyper_exp RPAREN quitar_fondo_falso
+    (123) escribe_aux -> CTESTRING push_imprimir . escribeCycle
+    (124) escribeCycle -> . COMMA escribe_aux
+    (125) escribeCycle -> . empty
+    (127) empty -> .
 
-    CTESTRING       shift and go to state 119
-    CTEI            shift and go to state 80
-    CTEF            shift and go to state 81
-    ID              shift and go to state 82
-    LPAREN          shift and go to state 83
+    COMMA           shift and go to state 185
+    RPAREN          reduce using rule 127 (empty -> .)
 
-    escribe_aux                    shift and go to state 186
-    exp                            shift and go to state 118
-    term                           shift and go to state 75
-    factor                         shift and go to state 76
-    factor_constante               shift and go to state 77
-    factor_variable                shift and go to state 78
-    factor_expresion               shift and go to state 79
+    escribeCycle                   shift and go to state 187
+    empty                          shift and go to state 186
 
 state 165
-
-    (125) escribeCycle -> empty .
-
-    RPAREN          reduce using rule 125 (escribeCycle -> empty .)
-
-
-state 166
-
-    (123) escribe_aux -> CTESTRING escribeCycle .
-
-    RPAREN          reduce using rule 123 (escribe_aux -> CTESTRING escribeCycle .)
-
-
-state 167
 
     (29) dec_func -> FUNCION dec_func_type ID punto_add_func LPAREN parameter RPAREN LBRACE . dec_var_cycle estatutos decFuncCycle dec_func_regresar RBRACE SEMICOLON
     (5) dec_var_cycle -> . dec_var dec_var_cycle
@@ -2754,27 +2721,27 @@ state 167
     RENGLON         shift and go to state 18
     TABLA           shift and go to state 19
 
-    dec_var_cycle                  shift and go to state 187
+    dec_var_cycle                  shift and go to state 188
     dec_var                        shift and go to state 10
     empty                          shift and go to state 26
     simple_var                     shift and go to state 13
     array                          shift and go to state 14
     matrix                         shift and go to state 15
 
-state 168
+state 166
 
     (37) parameter -> type ID punto_parameter . parameterCycle
     (39) parameterCycle -> . COMMA type ID punto_parameter parameterCycle
     (40) parameterCycle -> . empty
     (127) empty -> .
 
-    COMMA           shift and go to state 189
+    COMMA           shift and go to state 190
     RPAREN          reduce using rule 127 (empty -> .)
 
-    parameterCycle                 shift and go to state 188
-    empty                          shift and go to state 190
+    parameterCycle                 shift and go to state 189
+    empty                          shift and go to state 191
 
-state 169
+state 167
 
     (15) simpleVarCycle -> COMMA ID punto_simple_var . simpleVarCycle
     (15) simpleVarCycle -> . COMMA ID punto_simple_var simpleVarCycle
@@ -2784,37 +2751,37 @@ state 169
     COMMA           shift and go to state 93
     SEMICOLON       reduce using rule 127 (empty -> .)
 
-    simpleVarCycle                 shift and go to state 191
+    simpleVarCycle                 shift and go to state 192
     empty                          shift and go to state 94
 
-state 170
+state 168
 
     (21) array -> RENGLON type ARROW ID LBRACKET CTEI RBRACKET punto_array . arrayCycle SEMICOLON
     (22) arrayCycle -> . COMMA ID LBRACKET CTEI RBRACKET punto_array arrayCycle
     (23) arrayCycle -> . empty
     (127) empty -> .
 
-    COMMA           shift and go to state 193
+    COMMA           shift and go to state 194
     SEMICOLON       reduce using rule 127 (empty -> .)
 
-    arrayCycle                     shift and go to state 192
-    empty                          shift and go to state 194
+    arrayCycle                     shift and go to state 193
+    empty                          shift and go to state 195
 
-state 171
+state 169
 
     (25) matrix -> TABLA type ARROW ID LBRACKET CTEI RBRACKET LBRACKET . CTEI RBRACKET punto_matrix matrixCycle SEMICOLON
 
-    CTEI            shift and go to state 195
+    CTEI            shift and go to state 196
 
 
-state 172
+state 170
 
     (50) asignar -> variable ASSIGN push_op_igual hyper_exp check_op_igual . SEMICOLON
 
-    SEMICOLON       shift and go to state 196
+    SEMICOLON       shift and go to state 197
 
 
-state 173
+state 171
 
     (116) llamada_func -> ID LPAREN llamadaCYCLE RPAREN SEMICOLON .
 
@@ -2849,7 +2816,7 @@ state 173
     REGRESAR        reduce using rule 116 (llamada_func -> ID LPAREN llamadaCYCLE RPAREN SEMICOLON .)
 
 
-state 174
+state 172
 
     (119) llamadaCYCLE_aux -> COMMA hyper_exp . llamadaCYCLE_aux
     (119) llamadaCYCLE_aux -> . COMMA hyper_exp llamadaCYCLE_aux
@@ -2859,10 +2826,10 @@ state 174
     COMMA           shift and go to state 130
     RPAREN          reduce using rule 127 (empty -> .)
 
-    llamadaCYCLE_aux               shift and go to state 197
+    llamadaCYCLE_aux               shift and go to state 198
     empty                          shift and go to state 131
 
-state 175
+state 173
 
     (70) hyper_exp_aux -> push_op_logicos super_exp . check_op_logicos
     (72) check_op_logicos -> .
@@ -2872,9 +2839,9 @@ state 175
     SEMICOLON       reduce using rule 72 (check_op_logicos -> .)
     RBRACKET        reduce using rule 72 (check_op_logicos -> .)
 
-    check_op_logicos               shift and go to state 198
+    check_op_logicos               shift and go to state 199
 
-state 176
+state 174
 
     (77) super_exp_aux -> push_op_relacionales exp . check_op_relacionales
     (79) check_op_relacionales -> .
@@ -2890,9 +2857,9 @@ state 176
     SEMICOLON       reduce using rule 79 (check_op_relacionales -> .)
     RBRACKET        reduce using rule 79 (check_op_relacionales -> .)
 
-    check_op_relacionales          shift and go to state 199
+    check_op_relacionales          shift and go to state 200
 
-state 177
+state 175
 
     (55) variable_aux -> LBRACKET exp RBRACKET LBRACKET . exp RBRACKET
     (87) exp -> . term check_op_masmenos exp_aux
@@ -2913,14 +2880,14 @@ state 177
     ID              shift and go to state 82
     LPAREN          shift and go to state 83
 
-    exp                            shift and go to state 200
+    exp                            shift and go to state 201
     term                           shift and go to state 75
     factor                         shift and go to state 76
     factor_constante               shift and go to state 77
     factor_variable                shift and go to state 78
     factor_expresion               shift and go to state 79
 
-state 178
+state 176
 
     (61) ciclo_for -> PORCADA exp EN exp LBRACE . estatutos forCycle RBRACE SEMICOLON
     (42) estatutos -> . asignar
@@ -2962,7 +2929,7 @@ state 178
   ! IMPRIMIR        [ reduce using rule 127 (empty -> .) ]
   ! LEER            [ reduce using rule 127 (empty -> .) ]
 
-    estatutos                      shift and go to state 201
+    estatutos                      shift and go to state 202
     asignar                        shift and go to state 49
     llamada_func                   shift and go to state 50
     ciclo_for                      shift and go to state 51
@@ -2973,7 +2940,7 @@ state 178
     empty                          shift and go to state 56
     variable                       shift and go to state 57
 
-state 179
+state 177
 
     (88) exp_aux -> push_op_exp_masmenos exp .
 
@@ -2997,7 +2964,7 @@ state 179
     LBRACE          reduce using rule 88 (exp_aux -> push_op_exp_masmenos exp .)
 
 
-state 180
+state 178
 
     (95) term_aux -> push_op_exp_pordiv term .
 
@@ -3023,7 +2990,7 @@ state 180
     LBRACE          reduce using rule 95 (term_aux -> push_op_exp_pordiv term .)
 
 
-state 181
+state 179
 
     (107) factor_variable -> ID LBRACKET hyper_exp RBRACKET .
     (108) factor_variable -> ID LBRACKET hyper_exp RBRACKET . LBRACKET hyper_exp RBRACKET
@@ -3050,10 +3017,10 @@ state 181
     RBRACKET        reduce using rule 107 (factor_variable -> ID LBRACKET hyper_exp RBRACKET .)
     SEMICOLON       reduce using rule 107 (factor_variable -> ID LBRACKET hyper_exp RBRACKET .)
     LBRACE          reduce using rule 107 (factor_variable -> ID LBRACKET hyper_exp RBRACKET .)
-    LBRACKET        shift and go to state 202
+    LBRACKET        shift and go to state 203
 
 
-state 182
+state 180
 
     (110) factor_expresion -> LPAREN meter_fondo_falso hyper_exp RPAREN . quitar_fondo_falso
     (112) quitar_fondo_falso -> .
@@ -3081,64 +3048,11 @@ state 182
     SEMICOLON       reduce using rule 112 (quitar_fondo_falso -> .)
     LBRACE          reduce using rule 112 (quitar_fondo_falso -> .)
 
-    quitar_fondo_falso             shift and go to state 203
+    quitar_fondo_falso             shift and go to state 204
 
-state 183
+state 181
 
     (58) ciclo_while -> MIENTRAS LPAREN exp RPAREN LBRACE . estatutos whileCycle RBRACE SEMICOLON
-    (42) estatutos -> . asignar
-    (43) estatutos -> . llamada_func
-    (44) estatutos -> . ciclo_for
-    (45) estatutos -> . ciclo_while
-    (46) estatutos -> . condicion
-    (47) estatutos -> . escribe
-    (48) estatutos -> . leer
-    (49) estatutos -> . empty
-    (50) asignar -> . variable ASSIGN push_op_igual hyper_exp check_op_igual SEMICOLON
-    (116) llamada_func -> . ID LPAREN llamadaCYCLE RPAREN SEMICOLON
-    (61) ciclo_for -> . PORCADA exp EN exp LBRACE estatutos forCycle RBRACE SEMICOLON
-    (58) ciclo_while -> . MIENTRAS LPAREN exp RPAREN LBRACE estatutos whileCycle RBRACE SEMICOLON
-    (64) condicion -> . SI LPAREN exp RPAREN LBRACE estatutos condicionCycle RBRACE sinoCondicion SEMICOLON
-    (121) escribe -> . IMPRIMIR LPAREN escribe_aux RPAREN SEMICOLON
-    (57) leer -> . LEER variable SEMICOLON
-    (127) empty -> .
-    (53) variable -> . ID variable_aux
-
-  ! shift/reduce conflict for ID resolved as shift
-  ! shift/reduce conflict for PORCADA resolved as shift
-  ! shift/reduce conflict for MIENTRAS resolved as shift
-  ! shift/reduce conflict for SI resolved as shift
-  ! shift/reduce conflict for IMPRIMIR resolved as shift
-  ! shift/reduce conflict for LEER resolved as shift
-    ID              shift and go to state 58
-    PORCADA         shift and go to state 59
-    MIENTRAS        shift and go to state 60
-    SI              shift and go to state 61
-    IMPRIMIR        shift and go to state 62
-    LEER            shift and go to state 63
-    RBRACE          reduce using rule 127 (empty -> .)
-
-  ! ID              [ reduce using rule 127 (empty -> .) ]
-  ! PORCADA         [ reduce using rule 127 (empty -> .) ]
-  ! MIENTRAS        [ reduce using rule 127 (empty -> .) ]
-  ! SI              [ reduce using rule 127 (empty -> .) ]
-  ! IMPRIMIR        [ reduce using rule 127 (empty -> .) ]
-  ! LEER            [ reduce using rule 127 (empty -> .) ]
-
-    estatutos                      shift and go to state 204
-    asignar                        shift and go to state 49
-    llamada_func                   shift and go to state 50
-    ciclo_for                      shift and go to state 51
-    ciclo_while                    shift and go to state 52
-    condicion                      shift and go to state 53
-    escribe                        shift and go to state 54
-    leer                           shift and go to state 55
-    empty                          shift and go to state 56
-    variable                       shift and go to state 57
-
-state 184
-
-    (64) condicion -> SI LPAREN exp RPAREN LBRACE . estatutos condicionCycle RBRACE sinoCondicion SEMICOLON
     (42) estatutos -> . asignar
     (43) estatutos -> . llamada_func
     (44) estatutos -> . ciclo_for
@@ -3189,7 +3103,60 @@ state 184
     empty                          shift and go to state 56
     variable                       shift and go to state 57
 
-state 185
+state 182
+
+    (64) condicion -> SI LPAREN exp RPAREN LBRACE . estatutos condicionCycle RBRACE sinoCondicion SEMICOLON
+    (42) estatutos -> . asignar
+    (43) estatutos -> . llamada_func
+    (44) estatutos -> . ciclo_for
+    (45) estatutos -> . ciclo_while
+    (46) estatutos -> . condicion
+    (47) estatutos -> . escribe
+    (48) estatutos -> . leer
+    (49) estatutos -> . empty
+    (50) asignar -> . variable ASSIGN push_op_igual hyper_exp check_op_igual SEMICOLON
+    (116) llamada_func -> . ID LPAREN llamadaCYCLE RPAREN SEMICOLON
+    (61) ciclo_for -> . PORCADA exp EN exp LBRACE estatutos forCycle RBRACE SEMICOLON
+    (58) ciclo_while -> . MIENTRAS LPAREN exp RPAREN LBRACE estatutos whileCycle RBRACE SEMICOLON
+    (64) condicion -> . SI LPAREN exp RPAREN LBRACE estatutos condicionCycle RBRACE sinoCondicion SEMICOLON
+    (121) escribe -> . IMPRIMIR LPAREN escribe_aux RPAREN SEMICOLON
+    (57) leer -> . LEER variable SEMICOLON
+    (127) empty -> .
+    (53) variable -> . ID variable_aux
+
+  ! shift/reduce conflict for ID resolved as shift
+  ! shift/reduce conflict for PORCADA resolved as shift
+  ! shift/reduce conflict for MIENTRAS resolved as shift
+  ! shift/reduce conflict for SI resolved as shift
+  ! shift/reduce conflict for IMPRIMIR resolved as shift
+  ! shift/reduce conflict for LEER resolved as shift
+    ID              shift and go to state 58
+    PORCADA         shift and go to state 59
+    MIENTRAS        shift and go to state 60
+    SI              shift and go to state 61
+    IMPRIMIR        shift and go to state 62
+    LEER            shift and go to state 63
+    RBRACE          reduce using rule 127 (empty -> .)
+
+  ! ID              [ reduce using rule 127 (empty -> .) ]
+  ! PORCADA         [ reduce using rule 127 (empty -> .) ]
+  ! MIENTRAS        [ reduce using rule 127 (empty -> .) ]
+  ! SI              [ reduce using rule 127 (empty -> .) ]
+  ! IMPRIMIR        [ reduce using rule 127 (empty -> .) ]
+  ! LEER            [ reduce using rule 127 (empty -> .) ]
+
+    estatutos                      shift and go to state 206
+    asignar                        shift and go to state 49
+    llamada_func                   shift and go to state 50
+    ciclo_for                      shift and go to state 51
+    ciclo_while                    shift and go to state 52
+    condicion                      shift and go to state 53
+    escribe                        shift and go to state 54
+    leer                           shift and go to state 55
+    empty                          shift and go to state 56
+    variable                       shift and go to state 57
+
+state 183
 
     (121) escribe -> IMPRIMIR LPAREN escribe_aux RPAREN SEMICOLON .
 
@@ -3203,14 +3170,60 @@ state 185
     REGRESAR        reduce using rule 121 (escribe -> IMPRIMIR LPAREN escribe_aux RPAREN SEMICOLON .)
 
 
+state 184
+
+    (122) escribe_aux -> exp push_imprimir escribeCycle .
+
+    RPAREN          reduce using rule 122 (escribe_aux -> exp push_imprimir escribeCycle .)
+
+
+state 185
+
+    (124) escribeCycle -> COMMA . escribe_aux
+    (122) escribe_aux -> . exp push_imprimir escribeCycle
+    (123) escribe_aux -> . CTESTRING push_imprimir escribeCycle
+    (87) exp -> . term check_op_masmenos exp_aux
+    (94) term -> . factor check_op_pordiv term_aux
+    (101) factor -> . factor_constante
+    (102) factor -> . factor_variable
+    (103) factor -> . factor_expresion
+    (104) factor_constante -> . CTEI push_int
+    (105) factor_constante -> . CTEF push_float
+    (106) factor_variable -> . ID push_id
+    (107) factor_variable -> . ID LBRACKET hyper_exp RBRACKET
+    (108) factor_variable -> . ID LBRACKET hyper_exp RBRACKET LBRACKET hyper_exp RBRACKET
+    (109) factor_variable -> . ID llamada_func
+    (110) factor_expresion -> . LPAREN meter_fondo_falso hyper_exp RPAREN quitar_fondo_falso
+
+    CTESTRING       shift and go to state 119
+    CTEI            shift and go to state 80
+    CTEF            shift and go to state 81
+    ID              shift and go to state 82
+    LPAREN          shift and go to state 83
+
+    escribe_aux                    shift and go to state 207
+    exp                            shift and go to state 118
+    term                           shift and go to state 75
+    factor                         shift and go to state 76
+    factor_constante               shift and go to state 77
+    factor_variable                shift and go to state 78
+    factor_expresion               shift and go to state 79
+
 state 186
 
-    (124) escribeCycle -> COMMA escribe_aux .
+    (125) escribeCycle -> empty .
 
-    RPAREN          reduce using rule 124 (escribeCycle -> COMMA escribe_aux .)
+    RPAREN          reduce using rule 125 (escribeCycle -> empty .)
 
 
 state 187
+
+    (123) escribe_aux -> CTESTRING push_imprimir escribeCycle .
+
+    RPAREN          reduce using rule 123 (escribe_aux -> CTESTRING push_imprimir escribeCycle .)
+
+
+state 188
 
     (29) dec_func -> FUNCION dec_func_type ID punto_add_func LPAREN parameter RPAREN LBRACE dec_var_cycle . estatutos decFuncCycle dec_func_regresar RBRACE SEMICOLON
     (42) estatutos -> . asignar
@@ -3253,7 +3266,7 @@ state 187
   ! IMPRIMIR        [ reduce using rule 127 (empty -> .) ]
   ! LEER            [ reduce using rule 127 (empty -> .) ]
 
-    estatutos                      shift and go to state 206
+    estatutos                      shift and go to state 208
     asignar                        shift and go to state 49
     llamada_func                   shift and go to state 50
     ciclo_for                      shift and go to state 51
@@ -3264,14 +3277,14 @@ state 187
     empty                          shift and go to state 56
     variable                       shift and go to state 57
 
-state 188
+state 189
 
     (37) parameter -> type ID punto_parameter parameterCycle .
 
     RPAREN          reduce using rule 37 (parameter -> type ID punto_parameter parameterCycle .)
 
 
-state 189
+state 190
 
     (39) parameterCycle -> COMMA . type ID punto_parameter parameterCycle
     (18) type -> . ENTERO
@@ -3282,51 +3295,51 @@ state 189
     DECIMAL         shift and go to state 32
     LETRA           shift and go to state 33
 
-    type                           shift and go to state 207
+    type                           shift and go to state 209
 
-state 190
+state 191
 
     (40) parameterCycle -> empty .
 
     RPAREN          reduce using rule 40 (parameterCycle -> empty .)
 
 
-state 191
+state 192
 
     (15) simpleVarCycle -> COMMA ID punto_simple_var simpleVarCycle .
 
     SEMICOLON       reduce using rule 15 (simpleVarCycle -> COMMA ID punto_simple_var simpleVarCycle .)
 
 
-state 192
+state 193
 
     (21) array -> RENGLON type ARROW ID LBRACKET CTEI RBRACKET punto_array arrayCycle . SEMICOLON
 
-    SEMICOLON       shift and go to state 208
-
-
-state 193
-
-    (22) arrayCycle -> COMMA . ID LBRACKET CTEI RBRACKET punto_array arrayCycle
-
-    ID              shift and go to state 209
+    SEMICOLON       shift and go to state 210
 
 
 state 194
+
+    (22) arrayCycle -> COMMA . ID LBRACKET CTEI RBRACKET punto_array arrayCycle
+
+    ID              shift and go to state 211
+
+
+state 195
 
     (23) arrayCycle -> empty .
 
     SEMICOLON       reduce using rule 23 (arrayCycle -> empty .)
 
 
-state 195
+state 196
 
     (25) matrix -> TABLA type ARROW ID LBRACKET CTEI RBRACKET LBRACKET CTEI . RBRACKET punto_matrix matrixCycle SEMICOLON
 
-    RBRACKET        shift and go to state 210
+    RBRACKET        shift and go to state 212
 
 
-state 196
+state 197
 
     (50) asignar -> variable ASSIGN push_op_igual hyper_exp check_op_igual SEMICOLON .
 
@@ -3340,14 +3353,14 @@ state 196
     REGRESAR        reduce using rule 50 (asignar -> variable ASSIGN push_op_igual hyper_exp check_op_igual SEMICOLON .)
 
 
-state 197
+state 198
 
     (119) llamadaCYCLE_aux -> COMMA hyper_exp llamadaCYCLE_aux .
 
     RPAREN          reduce using rule 119 (llamadaCYCLE_aux -> COMMA hyper_exp llamadaCYCLE_aux .)
 
 
-state 198
+state 199
 
     (70) hyper_exp_aux -> push_op_logicos super_exp check_op_logicos .
 
@@ -3357,7 +3370,7 @@ state 198
     RBRACKET        reduce using rule 70 (hyper_exp_aux -> push_op_logicos super_exp check_op_logicos .)
 
 
-state 199
+state 200
 
     (77) super_exp_aux -> push_op_relacionales exp check_op_relacionales .
 
@@ -3373,14 +3386,14 @@ state 199
     RBRACKET        reduce using rule 77 (super_exp_aux -> push_op_relacionales exp check_op_relacionales .)
 
 
-state 200
+state 201
 
     (55) variable_aux -> LBRACKET exp RBRACKET LBRACKET exp . RBRACKET
 
-    RBRACKET        shift and go to state 211
+    RBRACKET        shift and go to state 213
 
 
-state 201
+state 202
 
     (61) ciclo_for -> PORCADA exp EN exp LBRACE estatutos . forCycle RBRACE SEMICOLON
     (62) forCycle -> . estatutos forCycle
@@ -3424,9 +3437,9 @@ state 201
   ! IMPRIMIR        [ reduce using rule 127 (empty -> .) ]
   ! LEER            [ reduce using rule 127 (empty -> .) ]
 
-    estatutos                      shift and go to state 212
-    forCycle                       shift and go to state 213
-    empty                          shift and go to state 214
+    estatutos                      shift and go to state 214
+    forCycle                       shift and go to state 215
+    empty                          shift and go to state 216
     asignar                        shift and go to state 49
     llamada_func                   shift and go to state 50
     ciclo_for                      shift and go to state 51
@@ -3436,7 +3449,7 @@ state 201
     leer                           shift and go to state 55
     variable                       shift and go to state 57
 
-state 202
+state 203
 
     (108) factor_variable -> ID LBRACKET hyper_exp RBRACKET LBRACKET . hyper_exp RBRACKET
     (69) hyper_exp -> . super_exp hyper_exp_aux
@@ -3459,7 +3472,7 @@ state 202
     ID              shift and go to state 82
     LPAREN          shift and go to state 83
 
-    hyper_exp                      shift and go to state 215
+    hyper_exp                      shift and go to state 217
     super_exp                      shift and go to state 102
     exp                            shift and go to state 103
     term                           shift and go to state 75
@@ -3468,7 +3481,7 @@ state 202
     factor_variable                shift and go to state 78
     factor_expresion               shift and go to state 79
 
-state 203
+state 204
 
     (110) factor_expresion -> LPAREN meter_fondo_falso hyper_exp RPAREN quitar_fondo_falso .
 
@@ -3496,7 +3509,7 @@ state 203
     LBRACE          reduce using rule 110 (factor_expresion -> LPAREN meter_fondo_falso hyper_exp RPAREN quitar_fondo_falso .)
 
 
-state 204
+state 205
 
     (58) ciclo_while -> MIENTRAS LPAREN exp RPAREN LBRACE estatutos . whileCycle RBRACE SEMICOLON
     (59) whileCycle -> . estatutos whileCycle
@@ -3540,9 +3553,9 @@ state 204
   ! IMPRIMIR        [ reduce using rule 127 (empty -> .) ]
   ! LEER            [ reduce using rule 127 (empty -> .) ]
 
-    estatutos                      shift and go to state 216
-    whileCycle                     shift and go to state 217
-    empty                          shift and go to state 218
+    estatutos                      shift and go to state 218
+    whileCycle                     shift and go to state 219
+    empty                          shift and go to state 220
     asignar                        shift and go to state 49
     llamada_func                   shift and go to state 50
     ciclo_for                      shift and go to state 51
@@ -3552,7 +3565,7 @@ state 204
     leer                           shift and go to state 55
     variable                       shift and go to state 57
 
-state 205
+state 206
 
     (64) condicion -> SI LPAREN exp RPAREN LBRACE estatutos . condicionCycle RBRACE sinoCondicion SEMICOLON
     (65) condicionCycle -> . estatutos condicionCycle
@@ -3596,9 +3609,9 @@ state 205
   ! IMPRIMIR        [ reduce using rule 127 (empty -> .) ]
   ! LEER            [ reduce using rule 127 (empty -> .) ]
 
-    estatutos                      shift and go to state 219
-    condicionCycle                 shift and go to state 220
-    empty                          shift and go to state 221
+    estatutos                      shift and go to state 221
+    condicionCycle                 shift and go to state 222
+    empty                          shift and go to state 223
     asignar                        shift and go to state 49
     llamada_func                   shift and go to state 50
     ciclo_for                      shift and go to state 51
@@ -3608,7 +3621,14 @@ state 205
     leer                           shift and go to state 55
     variable                       shift and go to state 57
 
-state 206
+state 207
+
+    (124) escribeCycle -> COMMA escribe_aux .
+
+    RPAREN          reduce using rule 124 (escribeCycle -> COMMA escribe_aux .)
+
+
+state 208
 
     (29) dec_func -> FUNCION dec_func_type ID punto_add_func LPAREN parameter RPAREN LBRACE dec_var_cycle estatutos . decFuncCycle dec_func_regresar RBRACE SEMICOLON
     (30) decFuncCycle -> . estatutos decFuncCycle
@@ -3653,9 +3673,9 @@ state 206
   ! IMPRIMIR        [ reduce using rule 127 (empty -> .) ]
   ! LEER            [ reduce using rule 127 (empty -> .) ]
 
-    estatutos                      shift and go to state 222
-    decFuncCycle                   shift and go to state 223
-    empty                          shift and go to state 224
+    estatutos                      shift and go to state 224
+    decFuncCycle                   shift and go to state 225
+    empty                          shift and go to state 226
     asignar                        shift and go to state 49
     llamada_func                   shift and go to state 50
     ciclo_for                      shift and go to state 51
@@ -3665,14 +3685,14 @@ state 206
     leer                           shift and go to state 55
     variable                       shift and go to state 57
 
-state 207
+state 209
 
     (39) parameterCycle -> COMMA type . ID punto_parameter parameterCycle
 
-    ID              shift and go to state 225
+    ID              shift and go to state 227
 
 
-state 208
+state 210
 
     (21) array -> RENGLON type ARROW ID LBRACKET CTEI RBRACKET punto_array arrayCycle SEMICOLON .
 
@@ -3691,14 +3711,14 @@ state 208
     RBRACE          reduce using rule 21 (array -> RENGLON type ARROW ID LBRACKET CTEI RBRACKET punto_array arrayCycle SEMICOLON .)
 
 
-state 209
+state 211
 
     (22) arrayCycle -> COMMA ID . LBRACKET CTEI RBRACKET punto_array arrayCycle
 
-    LBRACKET        shift and go to state 226
+    LBRACKET        shift and go to state 228
 
 
-state 210
+state 212
 
     (25) matrix -> TABLA type ARROW ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET . punto_matrix matrixCycle SEMICOLON
     (28) punto_matrix -> .
@@ -3706,9 +3726,9 @@ state 210
     COMMA           reduce using rule 28 (punto_matrix -> .)
     SEMICOLON       reduce using rule 28 (punto_matrix -> .)
 
-    punto_matrix                   shift and go to state 227
+    punto_matrix                   shift and go to state 229
 
-state 211
+state 213
 
     (55) variable_aux -> LBRACKET exp RBRACKET LBRACKET exp RBRACKET .
 
@@ -3716,7 +3736,7 @@ state 211
     SEMICOLON       reduce using rule 55 (variable_aux -> LBRACKET exp RBRACKET LBRACKET exp RBRACKET .)
 
 
-state 212
+state 214
 
     (62) forCycle -> estatutos . forCycle
     (62) forCycle -> . estatutos forCycle
@@ -3760,9 +3780,9 @@ state 212
   ! IMPRIMIR        [ reduce using rule 127 (empty -> .) ]
   ! LEER            [ reduce using rule 127 (empty -> .) ]
 
-    estatutos                      shift and go to state 212
-    forCycle                       shift and go to state 228
-    empty                          shift and go to state 214
+    estatutos                      shift and go to state 214
+    forCycle                       shift and go to state 230
+    empty                          shift and go to state 216
     asignar                        shift and go to state 49
     llamada_func                   shift and go to state 50
     ciclo_for                      shift and go to state 51
@@ -3772,14 +3792,14 @@ state 212
     leer                           shift and go to state 55
     variable                       shift and go to state 57
 
-state 213
+state 215
 
     (61) ciclo_for -> PORCADA exp EN exp LBRACE estatutos forCycle . RBRACE SEMICOLON
 
-    RBRACE          shift and go to state 229
+    RBRACE          shift and go to state 231
 
 
-state 214
+state 216
 
     (63) forCycle -> empty .
     (49) estatutos -> empty .
@@ -3796,14 +3816,14 @@ state 214
   ! RBRACE          [ reduce using rule 63 (forCycle -> empty .) ]
 
 
-state 215
+state 217
 
     (108) factor_variable -> ID LBRACKET hyper_exp RBRACKET LBRACKET hyper_exp . RBRACKET
 
-    RBRACKET        shift and go to state 230
+    RBRACKET        shift and go to state 232
 
 
-state 216
+state 218
 
     (59) whileCycle -> estatutos . whileCycle
     (59) whileCycle -> . estatutos whileCycle
@@ -3847,9 +3867,9 @@ state 216
   ! IMPRIMIR        [ reduce using rule 127 (empty -> .) ]
   ! LEER            [ reduce using rule 127 (empty -> .) ]
 
-    estatutos                      shift and go to state 216
-    whileCycle                     shift and go to state 231
-    empty                          shift and go to state 218
+    estatutos                      shift and go to state 218
+    whileCycle                     shift and go to state 233
+    empty                          shift and go to state 220
     asignar                        shift and go to state 49
     llamada_func                   shift and go to state 50
     ciclo_for                      shift and go to state 51
@@ -3859,14 +3879,14 @@ state 216
     leer                           shift and go to state 55
     variable                       shift and go to state 57
 
-state 217
+state 219
 
     (58) ciclo_while -> MIENTRAS LPAREN exp RPAREN LBRACE estatutos whileCycle . RBRACE SEMICOLON
 
-    RBRACE          shift and go to state 232
+    RBRACE          shift and go to state 234
 
 
-state 218
+state 220
 
     (60) whileCycle -> empty .
     (49) estatutos -> empty .
@@ -3883,7 +3903,7 @@ state 218
   ! RBRACE          [ reduce using rule 60 (whileCycle -> empty .) ]
 
 
-state 219
+state 221
 
     (65) condicionCycle -> estatutos . condicionCycle
     (65) condicionCycle -> . estatutos condicionCycle
@@ -3927,9 +3947,9 @@ state 219
   ! IMPRIMIR        [ reduce using rule 127 (empty -> .) ]
   ! LEER            [ reduce using rule 127 (empty -> .) ]
 
-    estatutos                      shift and go to state 219
-    condicionCycle                 shift and go to state 233
-    empty                          shift and go to state 221
+    estatutos                      shift and go to state 221
+    condicionCycle                 shift and go to state 235
+    empty                          shift and go to state 223
     asignar                        shift and go to state 49
     llamada_func                   shift and go to state 50
     ciclo_for                      shift and go to state 51
@@ -3939,14 +3959,14 @@ state 219
     leer                           shift and go to state 55
     variable                       shift and go to state 57
 
-state 220
+state 222
 
     (64) condicion -> SI LPAREN exp RPAREN LBRACE estatutos condicionCycle . RBRACE sinoCondicion SEMICOLON
 
-    RBRACE          shift and go to state 234
+    RBRACE          shift and go to state 236
 
 
-state 221
+state 223
 
     (66) condicionCycle -> empty .
     (49) estatutos -> empty .
@@ -3963,7 +3983,7 @@ state 221
   ! RBRACE          [ reduce using rule 66 (condicionCycle -> empty .) ]
 
 
-state 222
+state 224
 
     (30) decFuncCycle -> estatutos . decFuncCycle
     (30) decFuncCycle -> . estatutos decFuncCycle
@@ -4008,9 +4028,9 @@ state 222
   ! IMPRIMIR        [ reduce using rule 127 (empty -> .) ]
   ! LEER            [ reduce using rule 127 (empty -> .) ]
 
-    estatutos                      shift and go to state 222
-    decFuncCycle                   shift and go to state 235
-    empty                          shift and go to state 224
+    estatutos                      shift and go to state 224
+    decFuncCycle                   shift and go to state 237
+    empty                          shift and go to state 226
     asignar                        shift and go to state 49
     llamada_func                   shift and go to state 50
     ciclo_for                      shift and go to state 51
@@ -4020,20 +4040,20 @@ state 222
     leer                           shift and go to state 55
     variable                       shift and go to state 57
 
-state 223
+state 225
 
     (29) dec_func -> FUNCION dec_func_type ID punto_add_func LPAREN parameter RPAREN LBRACE dec_var_cycle estatutos decFuncCycle . dec_func_regresar RBRACE SEMICOLON
     (32) dec_func_regresar -> . REGRESAR variable SEMICOLON
     (33) dec_func_regresar -> . empty
     (127) empty -> .
 
-    REGRESAR        shift and go to state 237
+    REGRESAR        shift and go to state 239
     RBRACE          reduce using rule 127 (empty -> .)
 
-    dec_func_regresar              shift and go to state 236
-    empty                          shift and go to state 238
+    dec_func_regresar              shift and go to state 238
+    empty                          shift and go to state 240
 
-state 224
+state 226
 
     (31) decFuncCycle -> empty .
     (49) estatutos -> empty .
@@ -4053,7 +4073,7 @@ state 224
   ! RBRACE          [ reduce using rule 49 (estatutos -> empty .) ]
 
 
-state 225
+state 227
 
     (39) parameterCycle -> COMMA type ID . punto_parameter parameterCycle
     (41) punto_parameter -> .
@@ -4061,43 +4081,43 @@ state 225
     COMMA           reduce using rule 41 (punto_parameter -> .)
     RPAREN          reduce using rule 41 (punto_parameter -> .)
 
-    punto_parameter                shift and go to state 239
+    punto_parameter                shift and go to state 241
 
-state 226
+state 228
 
     (22) arrayCycle -> COMMA ID LBRACKET . CTEI RBRACKET punto_array arrayCycle
 
-    CTEI            shift and go to state 240
+    CTEI            shift and go to state 242
 
 
-state 227
+state 229
 
     (25) matrix -> TABLA type ARROW ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET punto_matrix . matrixCycle SEMICOLON
     (26) matrixCycle -> . COMMA ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET punto_matrix matrixCycle
     (27) matrixCycle -> . empty
     (127) empty -> .
 
-    COMMA           shift and go to state 242
+    COMMA           shift and go to state 244
     SEMICOLON       reduce using rule 127 (empty -> .)
 
-    matrixCycle                    shift and go to state 241
-    empty                          shift and go to state 243
+    matrixCycle                    shift and go to state 243
+    empty                          shift and go to state 245
 
-state 228
+state 230
 
     (62) forCycle -> estatutos forCycle .
 
     RBRACE          reduce using rule 62 (forCycle -> estatutos forCycle .)
 
 
-state 229
+state 231
 
     (61) ciclo_for -> PORCADA exp EN exp LBRACE estatutos forCycle RBRACE . SEMICOLON
 
-    SEMICOLON       shift and go to state 244
+    SEMICOLON       shift and go to state 246
 
 
-state 230
+state 232
 
     (108) factor_variable -> ID LBRACKET hyper_exp RBRACKET LBRACKET hyper_exp RBRACKET .
 
@@ -4125,41 +4145,41 @@ state 230
     LBRACE          reduce using rule 108 (factor_variable -> ID LBRACKET hyper_exp RBRACKET LBRACKET hyper_exp RBRACKET .)
 
 
-state 231
+state 233
 
     (59) whileCycle -> estatutos whileCycle .
 
     RBRACE          reduce using rule 59 (whileCycle -> estatutos whileCycle .)
 
 
-state 232
+state 234
 
     (58) ciclo_while -> MIENTRAS LPAREN exp RPAREN LBRACE estatutos whileCycle RBRACE . SEMICOLON
 
-    SEMICOLON       shift and go to state 245
+    SEMICOLON       shift and go to state 247
 
 
-state 233
+state 235
 
     (65) condicionCycle -> estatutos condicionCycle .
 
     RBRACE          reduce using rule 65 (condicionCycle -> estatutos condicionCycle .)
 
 
-state 234
+state 236
 
     (64) condicion -> SI LPAREN exp RPAREN LBRACE estatutos condicionCycle RBRACE . sinoCondicion SEMICOLON
     (67) sinoCondicion -> . SINO LBRACE estatutos condicionCycle RBRACE
     (68) sinoCondicion -> . empty
     (127) empty -> .
 
-    SINO            shift and go to state 247
+    SINO            shift and go to state 249
     SEMICOLON       reduce using rule 127 (empty -> .)
 
-    sinoCondicion                  shift and go to state 246
-    empty                          shift and go to state 248
+    sinoCondicion                  shift and go to state 248
+    empty                          shift and go to state 250
 
-state 235
+state 237
 
     (30) decFuncCycle -> estatutos decFuncCycle .
 
@@ -4167,71 +4187,71 @@ state 235
     RBRACE          reduce using rule 30 (decFuncCycle -> estatutos decFuncCycle .)
 
 
-state 236
+state 238
 
     (29) dec_func -> FUNCION dec_func_type ID punto_add_func LPAREN parameter RPAREN LBRACE dec_var_cycle estatutos decFuncCycle dec_func_regresar . RBRACE SEMICOLON
 
-    RBRACE          shift and go to state 249
+    RBRACE          shift and go to state 251
 
 
-state 237
+state 239
 
     (32) dec_func_regresar -> REGRESAR . variable SEMICOLON
     (53) variable -> . ID variable_aux
 
     ID              shift and go to state 88
 
-    variable                       shift and go to state 250
+    variable                       shift and go to state 252
 
-state 238
+state 240
 
     (33) dec_func_regresar -> empty .
 
     RBRACE          reduce using rule 33 (dec_func_regresar -> empty .)
 
 
-state 239
+state 241
 
     (39) parameterCycle -> COMMA type ID punto_parameter . parameterCycle
     (39) parameterCycle -> . COMMA type ID punto_parameter parameterCycle
     (40) parameterCycle -> . empty
     (127) empty -> .
 
-    COMMA           shift and go to state 189
+    COMMA           shift and go to state 190
     RPAREN          reduce using rule 127 (empty -> .)
 
-    parameterCycle                 shift and go to state 251
-    empty                          shift and go to state 190
-
-state 240
-
-    (22) arrayCycle -> COMMA ID LBRACKET CTEI . RBRACKET punto_array arrayCycle
-
-    RBRACKET        shift and go to state 252
-
-
-state 241
-
-    (25) matrix -> TABLA type ARROW ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET punto_matrix matrixCycle . SEMICOLON
-
-    SEMICOLON       shift and go to state 253
-
+    parameterCycle                 shift and go to state 253
+    empty                          shift and go to state 191
 
 state 242
 
-    (26) matrixCycle -> COMMA . ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET punto_matrix matrixCycle
+    (22) arrayCycle -> COMMA ID LBRACKET CTEI . RBRACKET punto_array arrayCycle
 
-    ID              shift and go to state 254
+    RBRACKET        shift and go to state 254
 
 
 state 243
+
+    (25) matrix -> TABLA type ARROW ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET punto_matrix matrixCycle . SEMICOLON
+
+    SEMICOLON       shift and go to state 255
+
+
+state 244
+
+    (26) matrixCycle -> COMMA . ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET punto_matrix matrixCycle
+
+    ID              shift and go to state 256
+
+
+state 245
 
     (27) matrixCycle -> empty .
 
     SEMICOLON       reduce using rule 27 (matrixCycle -> empty .)
 
 
-state 244
+state 246
 
     (61) ciclo_for -> PORCADA exp EN exp LBRACE estatutos forCycle RBRACE SEMICOLON .
 
@@ -4245,7 +4265,7 @@ state 244
     REGRESAR        reduce using rule 61 (ciclo_for -> PORCADA exp EN exp LBRACE estatutos forCycle RBRACE SEMICOLON .)
 
 
-state 245
+state 247
 
     (58) ciclo_while -> MIENTRAS LPAREN exp RPAREN LBRACE estatutos whileCycle RBRACE SEMICOLON .
 
@@ -4259,49 +4279,49 @@ state 245
     REGRESAR        reduce using rule 58 (ciclo_while -> MIENTRAS LPAREN exp RPAREN LBRACE estatutos whileCycle RBRACE SEMICOLON .)
 
 
-state 246
+state 248
 
     (64) condicion -> SI LPAREN exp RPAREN LBRACE estatutos condicionCycle RBRACE sinoCondicion . SEMICOLON
 
-    SEMICOLON       shift and go to state 255
+    SEMICOLON       shift and go to state 257
 
 
-state 247
+state 249
 
     (67) sinoCondicion -> SINO . LBRACE estatutos condicionCycle RBRACE
 
-    LBRACE          shift and go to state 256
+    LBRACE          shift and go to state 258
 
 
-state 248
+state 250
 
     (68) sinoCondicion -> empty .
 
     SEMICOLON       reduce using rule 68 (sinoCondicion -> empty .)
 
 
-state 249
+state 251
 
     (29) dec_func -> FUNCION dec_func_type ID punto_add_func LPAREN parameter RPAREN LBRACE dec_var_cycle estatutos decFuncCycle dec_func_regresar RBRACE . SEMICOLON
 
-    SEMICOLON       shift and go to state 257
+    SEMICOLON       shift and go to state 259
 
 
-state 250
+state 252
 
     (32) dec_func_regresar -> REGRESAR variable . SEMICOLON
 
-    SEMICOLON       shift and go to state 258
+    SEMICOLON       shift and go to state 260
 
 
-state 251
+state 253
 
     (39) parameterCycle -> COMMA type ID punto_parameter parameterCycle .
 
     RPAREN          reduce using rule 39 (parameterCycle -> COMMA type ID punto_parameter parameterCycle .)
 
 
-state 252
+state 254
 
     (22) arrayCycle -> COMMA ID LBRACKET CTEI RBRACKET . punto_array arrayCycle
     (24) punto_array -> .
@@ -4309,9 +4329,9 @@ state 252
     COMMA           reduce using rule 24 (punto_array -> .)
     SEMICOLON       reduce using rule 24 (punto_array -> .)
 
-    punto_array                    shift and go to state 259
+    punto_array                    shift and go to state 261
 
-state 253
+state 255
 
     (25) matrix -> TABLA type ARROW ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET punto_matrix matrixCycle SEMICOLON .
 
@@ -4330,14 +4350,14 @@ state 253
     RBRACE          reduce using rule 25 (matrix -> TABLA type ARROW ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET punto_matrix matrixCycle SEMICOLON .)
 
 
-state 254
+state 256
 
     (26) matrixCycle -> COMMA ID . LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET punto_matrix matrixCycle
 
-    LBRACKET        shift and go to state 260
+    LBRACKET        shift and go to state 262
 
 
-state 255
+state 257
 
     (64) condicion -> SI LPAREN exp RPAREN LBRACE estatutos condicionCycle RBRACE sinoCondicion SEMICOLON .
 
@@ -4351,7 +4371,7 @@ state 255
     REGRESAR        reduce using rule 64 (condicion -> SI LPAREN exp RPAREN LBRACE estatutos condicionCycle RBRACE sinoCondicion SEMICOLON .)
 
 
-state 256
+state 258
 
     (67) sinoCondicion -> SINO LBRACE . estatutos condicionCycle RBRACE
     (42) estatutos -> . asignar
@@ -4393,7 +4413,7 @@ state 256
   ! IMPRIMIR        [ reduce using rule 127 (empty -> .) ]
   ! LEER            [ reduce using rule 127 (empty -> .) ]
 
-    estatutos                      shift and go to state 261
+    estatutos                      shift and go to state 263
     asignar                        shift and go to state 49
     llamada_func                   shift and go to state 50
     ciclo_for                      shift and go to state 51
@@ -4404,7 +4424,7 @@ state 256
     empty                          shift and go to state 56
     variable                       shift and go to state 57
 
-state 257
+state 259
 
     (29) dec_func -> FUNCION dec_func_type ID punto_add_func LPAREN parameter RPAREN LBRACE dec_var_cycle estatutos decFuncCycle dec_func_regresar RBRACE SEMICOLON .
 
@@ -4412,34 +4432,34 @@ state 257
     INICIO          reduce using rule 29 (dec_func -> FUNCION dec_func_type ID punto_add_func LPAREN parameter RPAREN LBRACE dec_var_cycle estatutos decFuncCycle dec_func_regresar RBRACE SEMICOLON .)
 
 
-state 258
+state 260
 
     (32) dec_func_regresar -> REGRESAR variable SEMICOLON .
 
     RBRACE          reduce using rule 32 (dec_func_regresar -> REGRESAR variable SEMICOLON .)
 
 
-state 259
+state 261
 
     (22) arrayCycle -> COMMA ID LBRACKET CTEI RBRACKET punto_array . arrayCycle
     (22) arrayCycle -> . COMMA ID LBRACKET CTEI RBRACKET punto_array arrayCycle
     (23) arrayCycle -> . empty
     (127) empty -> .
 
-    COMMA           shift and go to state 193
+    COMMA           shift and go to state 194
     SEMICOLON       reduce using rule 127 (empty -> .)
 
-    arrayCycle                     shift and go to state 262
-    empty                          shift and go to state 194
+    arrayCycle                     shift and go to state 264
+    empty                          shift and go to state 195
 
-state 260
+state 262
 
     (26) matrixCycle -> COMMA ID LBRACKET . CTEI RBRACKET LBRACKET CTEI RBRACKET punto_matrix matrixCycle
 
-    CTEI            shift and go to state 263
+    CTEI            shift and go to state 265
 
 
-state 261
+state 263
 
     (67) sinoCondicion -> SINO LBRACE estatutos . condicionCycle RBRACE
     (65) condicionCycle -> . estatutos condicionCycle
@@ -4483,9 +4503,9 @@ state 261
   ! IMPRIMIR        [ reduce using rule 127 (empty -> .) ]
   ! LEER            [ reduce using rule 127 (empty -> .) ]
 
-    estatutos                      shift and go to state 219
-    condicionCycle                 shift and go to state 264
-    empty                          shift and go to state 221
+    estatutos                      shift and go to state 221
+    condicionCycle                 shift and go to state 266
+    empty                          shift and go to state 223
     asignar                        shift and go to state 49
     llamada_func                   shift and go to state 50
     ciclo_for                      shift and go to state 51
@@ -4495,56 +4515,56 @@ state 261
     leer                           shift and go to state 55
     variable                       shift and go to state 57
 
-state 262
+state 264
 
     (22) arrayCycle -> COMMA ID LBRACKET CTEI RBRACKET punto_array arrayCycle .
 
     SEMICOLON       reduce using rule 22 (arrayCycle -> COMMA ID LBRACKET CTEI RBRACKET punto_array arrayCycle .)
 
 
-state 263
+state 265
 
     (26) matrixCycle -> COMMA ID LBRACKET CTEI . RBRACKET LBRACKET CTEI RBRACKET punto_matrix matrixCycle
 
-    RBRACKET        shift and go to state 265
-
-
-state 264
-
-    (67) sinoCondicion -> SINO LBRACE estatutos condicionCycle . RBRACE
-
-    RBRACE          shift and go to state 266
-
-
-state 265
-
-    (26) matrixCycle -> COMMA ID LBRACKET CTEI RBRACKET . LBRACKET CTEI RBRACKET punto_matrix matrixCycle
-
-    LBRACKET        shift and go to state 267
+    RBRACKET        shift and go to state 267
 
 
 state 266
+
+    (67) sinoCondicion -> SINO LBRACE estatutos condicionCycle . RBRACE
+
+    RBRACE          shift and go to state 268
+
+
+state 267
+
+    (26) matrixCycle -> COMMA ID LBRACKET CTEI RBRACKET . LBRACKET CTEI RBRACKET punto_matrix matrixCycle
+
+    LBRACKET        shift and go to state 269
+
+
+state 268
 
     (67) sinoCondicion -> SINO LBRACE estatutos condicionCycle RBRACE .
 
     SEMICOLON       reduce using rule 67 (sinoCondicion -> SINO LBRACE estatutos condicionCycle RBRACE .)
 
 
-state 267
+state 269
 
     (26) matrixCycle -> COMMA ID LBRACKET CTEI RBRACKET LBRACKET . CTEI RBRACKET punto_matrix matrixCycle
 
-    CTEI            shift and go to state 268
+    CTEI            shift and go to state 270
 
 
-state 268
+state 270
 
     (26) matrixCycle -> COMMA ID LBRACKET CTEI RBRACKET LBRACKET CTEI . RBRACKET punto_matrix matrixCycle
 
-    RBRACKET        shift and go to state 269
+    RBRACKET        shift and go to state 271
 
 
-state 269
+state 271
 
     (26) matrixCycle -> COMMA ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET . punto_matrix matrixCycle
     (28) punto_matrix -> .
@@ -4552,22 +4572,22 @@ state 269
     COMMA           reduce using rule 28 (punto_matrix -> .)
     SEMICOLON       reduce using rule 28 (punto_matrix -> .)
 
-    punto_matrix                   shift and go to state 270
+    punto_matrix                   shift and go to state 272
 
-state 270
+state 272
 
     (26) matrixCycle -> COMMA ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET punto_matrix . matrixCycle
     (26) matrixCycle -> . COMMA ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET punto_matrix matrixCycle
     (27) matrixCycle -> . empty
     (127) empty -> .
 
-    COMMA           shift and go to state 242
+    COMMA           shift and go to state 244
     SEMICOLON       reduce using rule 127 (empty -> .)
 
-    matrixCycle                    shift and go to state 271
-    empty                          shift and go to state 243
+    matrixCycle                    shift and go to state 273
+    empty                          shift and go to state 245
 
-state 271
+state 273
 
     (26) matrixCycle -> COMMA ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET punto_matrix matrixCycle .
 
@@ -4580,42 +4600,36 @@ WARNING: shift/reduce conflict for INICIO in state 5 resolved as shift
 WARNING: shift/reduce conflict for FUNCION in state 5 resolved as shift
 WARNING: shift/reduce conflict for INICIO in state 7 resolved as shift
 WARNING: shift/reduce conflict for ID in state 82 resolved as shift
-WARNING: shift/reduce conflict for ID in state 178 resolved as shift
-WARNING: shift/reduce conflict for PORCADA in state 178 resolved as shift
-WARNING: shift/reduce conflict for MIENTRAS in state 178 resolved as shift
-WARNING: shift/reduce conflict for SI in state 178 resolved as shift
-WARNING: shift/reduce conflict for IMPRIMIR in state 178 resolved as shift
-WARNING: shift/reduce conflict for LEER in state 178 resolved as shift
-WARNING: shift/reduce conflict for ID in state 183 resolved as shift
-WARNING: shift/reduce conflict for PORCADA in state 183 resolved as shift
-WARNING: shift/reduce conflict for MIENTRAS in state 183 resolved as shift
-WARNING: shift/reduce conflict for SI in state 183 resolved as shift
-WARNING: shift/reduce conflict for IMPRIMIR in state 183 resolved as shift
-WARNING: shift/reduce conflict for LEER in state 183 resolved as shift
-WARNING: shift/reduce conflict for ID in state 184 resolved as shift
-WARNING: shift/reduce conflict for PORCADA in state 184 resolved as shift
-WARNING: shift/reduce conflict for MIENTRAS in state 184 resolved as shift
-WARNING: shift/reduce conflict for SI in state 184 resolved as shift
-WARNING: shift/reduce conflict for IMPRIMIR in state 184 resolved as shift
-WARNING: shift/reduce conflict for LEER in state 184 resolved as shift
-WARNING: shift/reduce conflict for ID in state 187 resolved as shift
-WARNING: shift/reduce conflict for PORCADA in state 187 resolved as shift
-WARNING: shift/reduce conflict for MIENTRAS in state 187 resolved as shift
-WARNING: shift/reduce conflict for SI in state 187 resolved as shift
-WARNING: shift/reduce conflict for IMPRIMIR in state 187 resolved as shift
-WARNING: shift/reduce conflict for LEER in state 187 resolved as shift
-WARNING: shift/reduce conflict for ID in state 201 resolved as shift
-WARNING: shift/reduce conflict for PORCADA in state 201 resolved as shift
-WARNING: shift/reduce conflict for MIENTRAS in state 201 resolved as shift
-WARNING: shift/reduce conflict for SI in state 201 resolved as shift
-WARNING: shift/reduce conflict for IMPRIMIR in state 201 resolved as shift
-WARNING: shift/reduce conflict for LEER in state 201 resolved as shift
-WARNING: shift/reduce conflict for ID in state 204 resolved as shift
-WARNING: shift/reduce conflict for PORCADA in state 204 resolved as shift
-WARNING: shift/reduce conflict for MIENTRAS in state 204 resolved as shift
-WARNING: shift/reduce conflict for SI in state 204 resolved as shift
-WARNING: shift/reduce conflict for IMPRIMIR in state 204 resolved as shift
-WARNING: shift/reduce conflict for LEER in state 204 resolved as shift
+WARNING: shift/reduce conflict for ID in state 176 resolved as shift
+WARNING: shift/reduce conflict for PORCADA in state 176 resolved as shift
+WARNING: shift/reduce conflict for MIENTRAS in state 176 resolved as shift
+WARNING: shift/reduce conflict for SI in state 176 resolved as shift
+WARNING: shift/reduce conflict for IMPRIMIR in state 176 resolved as shift
+WARNING: shift/reduce conflict for LEER in state 176 resolved as shift
+WARNING: shift/reduce conflict for ID in state 181 resolved as shift
+WARNING: shift/reduce conflict for PORCADA in state 181 resolved as shift
+WARNING: shift/reduce conflict for MIENTRAS in state 181 resolved as shift
+WARNING: shift/reduce conflict for SI in state 181 resolved as shift
+WARNING: shift/reduce conflict for IMPRIMIR in state 181 resolved as shift
+WARNING: shift/reduce conflict for LEER in state 181 resolved as shift
+WARNING: shift/reduce conflict for ID in state 182 resolved as shift
+WARNING: shift/reduce conflict for PORCADA in state 182 resolved as shift
+WARNING: shift/reduce conflict for MIENTRAS in state 182 resolved as shift
+WARNING: shift/reduce conflict for SI in state 182 resolved as shift
+WARNING: shift/reduce conflict for IMPRIMIR in state 182 resolved as shift
+WARNING: shift/reduce conflict for LEER in state 182 resolved as shift
+WARNING: shift/reduce conflict for ID in state 188 resolved as shift
+WARNING: shift/reduce conflict for PORCADA in state 188 resolved as shift
+WARNING: shift/reduce conflict for MIENTRAS in state 188 resolved as shift
+WARNING: shift/reduce conflict for SI in state 188 resolved as shift
+WARNING: shift/reduce conflict for IMPRIMIR in state 188 resolved as shift
+WARNING: shift/reduce conflict for LEER in state 188 resolved as shift
+WARNING: shift/reduce conflict for ID in state 202 resolved as shift
+WARNING: shift/reduce conflict for PORCADA in state 202 resolved as shift
+WARNING: shift/reduce conflict for MIENTRAS in state 202 resolved as shift
+WARNING: shift/reduce conflict for SI in state 202 resolved as shift
+WARNING: shift/reduce conflict for IMPRIMIR in state 202 resolved as shift
+WARNING: shift/reduce conflict for LEER in state 202 resolved as shift
 WARNING: shift/reduce conflict for ID in state 205 resolved as shift
 WARNING: shift/reduce conflict for PORCADA in state 205 resolved as shift
 WARNING: shift/reduce conflict for MIENTRAS in state 205 resolved as shift
@@ -4628,42 +4642,48 @@ WARNING: shift/reduce conflict for MIENTRAS in state 206 resolved as shift
 WARNING: shift/reduce conflict for SI in state 206 resolved as shift
 WARNING: shift/reduce conflict for IMPRIMIR in state 206 resolved as shift
 WARNING: shift/reduce conflict for LEER in state 206 resolved as shift
-WARNING: shift/reduce conflict for ID in state 212 resolved as shift
-WARNING: shift/reduce conflict for PORCADA in state 212 resolved as shift
-WARNING: shift/reduce conflict for MIENTRAS in state 212 resolved as shift
-WARNING: shift/reduce conflict for SI in state 212 resolved as shift
-WARNING: shift/reduce conflict for IMPRIMIR in state 212 resolved as shift
-WARNING: shift/reduce conflict for LEER in state 212 resolved as shift
-WARNING: shift/reduce conflict for ID in state 216 resolved as shift
-WARNING: shift/reduce conflict for PORCADA in state 216 resolved as shift
-WARNING: shift/reduce conflict for MIENTRAS in state 216 resolved as shift
-WARNING: shift/reduce conflict for SI in state 216 resolved as shift
-WARNING: shift/reduce conflict for IMPRIMIR in state 216 resolved as shift
-WARNING: shift/reduce conflict for LEER in state 216 resolved as shift
-WARNING: shift/reduce conflict for ID in state 219 resolved as shift
-WARNING: shift/reduce conflict for PORCADA in state 219 resolved as shift
-WARNING: shift/reduce conflict for MIENTRAS in state 219 resolved as shift
-WARNING: shift/reduce conflict for SI in state 219 resolved as shift
-WARNING: shift/reduce conflict for IMPRIMIR in state 219 resolved as shift
-WARNING: shift/reduce conflict for LEER in state 219 resolved as shift
-WARNING: shift/reduce conflict for ID in state 222 resolved as shift
-WARNING: shift/reduce conflict for PORCADA in state 222 resolved as shift
-WARNING: shift/reduce conflict for MIENTRAS in state 222 resolved as shift
-WARNING: shift/reduce conflict for SI in state 222 resolved as shift
-WARNING: shift/reduce conflict for IMPRIMIR in state 222 resolved as shift
-WARNING: shift/reduce conflict for LEER in state 222 resolved as shift
-WARNING: shift/reduce conflict for ID in state 256 resolved as shift
-WARNING: shift/reduce conflict for PORCADA in state 256 resolved as shift
-WARNING: shift/reduce conflict for MIENTRAS in state 256 resolved as shift
-WARNING: shift/reduce conflict for SI in state 256 resolved as shift
-WARNING: shift/reduce conflict for IMPRIMIR in state 256 resolved as shift
-WARNING: shift/reduce conflict for LEER in state 256 resolved as shift
-WARNING: shift/reduce conflict for ID in state 261 resolved as shift
-WARNING: shift/reduce conflict for PORCADA in state 261 resolved as shift
-WARNING: shift/reduce conflict for MIENTRAS in state 261 resolved as shift
-WARNING: shift/reduce conflict for SI in state 261 resolved as shift
-WARNING: shift/reduce conflict for IMPRIMIR in state 261 resolved as shift
-WARNING: shift/reduce conflict for LEER in state 261 resolved as shift
+WARNING: shift/reduce conflict for ID in state 208 resolved as shift
+WARNING: shift/reduce conflict for PORCADA in state 208 resolved as shift
+WARNING: shift/reduce conflict for MIENTRAS in state 208 resolved as shift
+WARNING: shift/reduce conflict for SI in state 208 resolved as shift
+WARNING: shift/reduce conflict for IMPRIMIR in state 208 resolved as shift
+WARNING: shift/reduce conflict for LEER in state 208 resolved as shift
+WARNING: shift/reduce conflict for ID in state 214 resolved as shift
+WARNING: shift/reduce conflict for PORCADA in state 214 resolved as shift
+WARNING: shift/reduce conflict for MIENTRAS in state 214 resolved as shift
+WARNING: shift/reduce conflict for SI in state 214 resolved as shift
+WARNING: shift/reduce conflict for IMPRIMIR in state 214 resolved as shift
+WARNING: shift/reduce conflict for LEER in state 214 resolved as shift
+WARNING: shift/reduce conflict for ID in state 218 resolved as shift
+WARNING: shift/reduce conflict for PORCADA in state 218 resolved as shift
+WARNING: shift/reduce conflict for MIENTRAS in state 218 resolved as shift
+WARNING: shift/reduce conflict for SI in state 218 resolved as shift
+WARNING: shift/reduce conflict for IMPRIMIR in state 218 resolved as shift
+WARNING: shift/reduce conflict for LEER in state 218 resolved as shift
+WARNING: shift/reduce conflict for ID in state 221 resolved as shift
+WARNING: shift/reduce conflict for PORCADA in state 221 resolved as shift
+WARNING: shift/reduce conflict for MIENTRAS in state 221 resolved as shift
+WARNING: shift/reduce conflict for SI in state 221 resolved as shift
+WARNING: shift/reduce conflict for IMPRIMIR in state 221 resolved as shift
+WARNING: shift/reduce conflict for LEER in state 221 resolved as shift
+WARNING: shift/reduce conflict for ID in state 224 resolved as shift
+WARNING: shift/reduce conflict for PORCADA in state 224 resolved as shift
+WARNING: shift/reduce conflict for MIENTRAS in state 224 resolved as shift
+WARNING: shift/reduce conflict for SI in state 224 resolved as shift
+WARNING: shift/reduce conflict for IMPRIMIR in state 224 resolved as shift
+WARNING: shift/reduce conflict for LEER in state 224 resolved as shift
+WARNING: shift/reduce conflict for ID in state 258 resolved as shift
+WARNING: shift/reduce conflict for PORCADA in state 258 resolved as shift
+WARNING: shift/reduce conflict for MIENTRAS in state 258 resolved as shift
+WARNING: shift/reduce conflict for SI in state 258 resolved as shift
+WARNING: shift/reduce conflict for IMPRIMIR in state 258 resolved as shift
+WARNING: shift/reduce conflict for LEER in state 258 resolved as shift
+WARNING: shift/reduce conflict for ID in state 263 resolved as shift
+WARNING: shift/reduce conflict for PORCADA in state 263 resolved as shift
+WARNING: shift/reduce conflict for MIENTRAS in state 263 resolved as shift
+WARNING: shift/reduce conflict for SI in state 263 resolved as shift
+WARNING: shift/reduce conflict for IMPRIMIR in state 263 resolved as shift
+WARNING: shift/reduce conflict for LEER in state 263 resolved as shift
 WARNING: reduce/reduce conflict in state 11 resolved using rule (dec_var_cycle -> empty)
 WARNING: rejected rule (dec_func_cycle -> empty) in state 11
 WARNING: reduce/reduce conflict in state 139 resolved using rule (super_exp_aux -> empty)
@@ -4672,14 +4692,14 @@ WARNING: reduce/reduce conflict in state 150 resolved using rule (exp_aux -> emp
 WARNING: rejected rule (push_op_exp_masmenos -> empty) in state 150
 WARNING: reduce/reduce conflict in state 155 resolved using rule (term_aux -> empty)
 WARNING: rejected rule (push_op_exp_pordiv -> empty) in state 155
-WARNING: reduce/reduce conflict in state 214 resolved using rule (estatutos -> empty)
-WARNING: rejected rule (forCycle -> empty) in state 214
-WARNING: reduce/reduce conflict in state 218 resolved using rule (estatutos -> empty)
-WARNING: rejected rule (whileCycle -> empty) in state 218
-WARNING: reduce/reduce conflict in state 221 resolved using rule (estatutos -> empty)
-WARNING: rejected rule (condicionCycle -> empty) in state 221
-WARNING: reduce/reduce conflict in state 224 resolved using rule (decFuncCycle -> empty)
-WARNING: rejected rule (estatutos -> empty) in state 224
+WARNING: reduce/reduce conflict in state 216 resolved using rule (estatutos -> empty)
+WARNING: rejected rule (forCycle -> empty) in state 216
+WARNING: reduce/reduce conflict in state 220 resolved using rule (estatutos -> empty)
+WARNING: rejected rule (whileCycle -> empty) in state 220
+WARNING: reduce/reduce conflict in state 223 resolved using rule (estatutos -> empty)
+WARNING: rejected rule (condicionCycle -> empty) in state 223
+WARNING: reduce/reduce conflict in state 226 resolved using rule (decFuncCycle -> empty)
+WARNING: rejected rule (estatutos -> empty) in state 226
 WARNING: Rule (push_op_relacionales -> empty) is never reduced
 WARNING: Rule (push_op_exp_masmenos -> empty) is never reduced
 WARNING: Rule (push_op_exp_pordiv -> empty) is never reduced
