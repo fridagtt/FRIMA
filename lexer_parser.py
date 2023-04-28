@@ -653,7 +653,7 @@ def p_push_id(p) :
   push_id :
   '''
   # Validate if id is within the set of variables of the current function
-  if p[-1] not in dir_func.get_function_variables(current_func):
+  if not dir_func.is_variable_declared(current_func, p[-1]):
     raise Exception("ERROR: La variable {} no está declarada.".format(p[-1]))
 
   global stack_de_operandos, stack_de_tipos

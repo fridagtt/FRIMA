@@ -22,10 +22,10 @@ funcion entero funcion_prueba_dos(entero ff, decimal jj){
 
 funcion entero funcion_prueba_tres(){
 
-   variable decimal -> gatos, perros, pelos;
+   variable decimal -> gatos, perros, pelos, pajaros;
    variable entero -> alumno, pluma;
 
-   gatos = perros*gatos+(pelos+perros);
+   gatos = pajaros*gatos+(pelos+perros);
 
    imprimir(perros,perros*gatos+pelos);
 

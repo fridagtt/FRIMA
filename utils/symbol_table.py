@@ -53,8 +53,21 @@ class SymbolTable:
 
   def get_variable_type(self, func_name, variable_name) -> int:
     """ Returns variable type """
-    list_of_variables = self.symbol_table["dir_functions"][func_name]["variables"]['vars_info']
-    variable_object = next((variable for variable in list_of_variables if variable['name'] == variable_name),None)
-    return variable_object['type']
-  
+    set_of_variables = self.get_function_variables(func_name)
+    if variable_name in set_of_variables:
+        list_of_variables = self.symbol_table["dir_functions"][func_name]["variables"]['vars_info']
+        variable_object = next((variable for variable in list_of_variables if variable['name'] == variable_name),None)
+        return variable_object['type']
+    else:
+        list_of_variables = self.symbol_table["dir_functions"]['programa']["variables"]['vars_info']
+        variable_object = next((variable for variable in list_of_variables if variable['name'] == variable_name),None)
+        return variable_object['type']
+
+  def is_variable_declared(self, func_name, variable_name) -> bool:
+    """ Returns if variable is neither declared within the local or global scope """
+    set_of_variables = self.get_function_variables(func_name)
+    if variable_name not in set_of_variables:
+        return variable_name in self.get_function_variables('programa')
+    else:
+        return True
   
