@@ -278,5 +278,4 @@ class SemanticCube:
 
   def get_type(self, leftType, rightType, op):
     """ Returns the data type expected from performing the operation """
-    print (leftType,rightType,op)
     return self.semantic_cube[leftType][rightType][op]

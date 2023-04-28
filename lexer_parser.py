@@ -340,8 +340,6 @@ def p_check_op_igual(p):
 
   converted_operador = convert_type(top_operador)
   assign_variable_type = dir_func.get_variable_type(current_func, p[-4])
-  print ( "Tipo:")
-  print (assign_variable_type)
 
   operation_type = cubo_semantico.get_type(assign_variable_type, tipo_operando, converted_operador)
 
@@ -683,11 +681,6 @@ def p_escribe(p):
               | empty
   '''
   p[0] = None
-
-def p_punto_escribe(p):
-  '''
-  punto_escribe :
-  '''
 
 def p_empty(p):
   '''
