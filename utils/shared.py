@@ -1,4 +1,13 @@
 def convert_type(type):
+  """Returns the numeric value of the string received
+
+    Parameters:
+    type (string): String to be converted into a number
+
+    Returns:
+    int: numeric value of the string
+
+   """
   match type:
     case 'sinregresar':
       return 0

@@ -5,5 +5,6 @@ class Quadruple:
     self.rightOperand = rightOperand
     self.result = result
   
-  def __repr__(self): 
+  def __repr__(self):
+    """ Used for debugging how the quadruples are being formed """
     return f"{self.operator} {self.leftOperand} {self.rightOperand} {self.result}" 

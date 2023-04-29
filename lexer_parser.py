@@ -14,7 +14,6 @@ stack_de_operadores = deque()
 stack_de_operandos = deque()
 stack_de_tipos = deque()
 lista_de_cuadruplos = []
-
 cubo_semantico = SemanticCube()
 
 #__________LEXER____________
@@ -141,8 +140,8 @@ def t_error(t):
 lexer = lex.lex()
 start = 'programa'
 
-"""
 #Testing the lexer
+"""
 data = '''
 si sino "" entero variable -14.5
 decimal 'a' -> == 14.5 14 -14
@@ -160,7 +159,9 @@ while True:
 
 #__________PARSER____________
 
-# Define the grammars
+# Definition of the grammars
+
+# Start of the program
 def p_programa(p):
   '''
   programa : PROGRAMA ID punto_programa COLON inicio
@@ -182,6 +183,7 @@ def p_dec_func_cycle(p):
                 | empty
   '''
 
+# Creates the symbol table with its default body and adds the function "programa" to the set of functions.
 def p_punto_programa(p):
   '''
   punto_programa : 
@@ -215,6 +217,7 @@ def p_simple_var(p):
   '''
   p[0] = None
 
+# Adds variables to the variable table of the corresponding function.
 def p_punto_simple_var(p):
   '''
   punto_simple_var :
@@ -280,6 +283,8 @@ def p_dec_func_type(p):
   '''
   p[0] = p[1]
 
+# Adds function to the function's directory.
+# Updates current_func pointer as we are accessing a new function.
 def p_punto_add_func(p):
     '''
     punto_add_func :
@@ -297,6 +302,7 @@ def p_parameter(p):
   '''
   p[0] = None
 
+# Adds parameter to the variable table of the current function.
 def p_punto_parameter(p):
   '''
   punto_parameter :
@@ -310,7 +316,7 @@ def p_estatutos(p):
           | ciclo_for
           | ciclo_while
           | condicion
-          | escribe
+          | imprimir
           | leer
           | empty
   '''
@@ -322,6 +328,7 @@ def p_asignar(p):
   '''
   p[0] = None
 
+# Push the "=" operator to the stack of operators.
 def p_push_op_igual(p):
   '''
   push_op_igual :
@@ -329,6 +336,7 @@ def p_push_op_igual(p):
   global stack_de_operadores
   stack_de_operadores.append(p[-1])
 
+# Creates the quadruple for the assignation process.
 def p_check_op_igual(p):
   '''
   check_op_igual :
@@ -342,7 +350,7 @@ def p_check_op_igual(p):
   assign_variable_type = dir_func.get_variable_type(current_func, p[-4])
 
   operation_type = cubo_semantico.get_type(assign_variable_type, tipo_operando, converted_operador)
-
+  # Raise exception if the operation between the two types is not valid.
   if operation_type == 5:
     raise Exception("ERROR: Type Mismatch")
   else:
@@ -390,7 +398,7 @@ def p_condicion(p):
   '''
   p[0] = None
 
-#Operadores logicos y,o
+# Logic operators: and, or
 def p_hyper_exp(p):
   '''
   hyper_exp : super_exp hyper_exp_aux
@@ -402,6 +410,8 @@ def p_hyper_exp_aux(p):
                     | empty
   '''
 
+# When there's a logical operator to be solved within the stack
+# of operators, it creates a Quadruple for it.
 def p_check_op_logicos(p):
   '''
   check_op_logicos :
@@ -419,6 +429,7 @@ def p_check_op_logicos(p):
       converted_operador = convert_type(top_operador)
 
       operation_type = cubo_semantico.get_type(tipo_operando_izq, tipo_operando_der, converted_operador)
+      # Raise exception if the operation between the two types is not valid.
       if operation_type == 5:
         raise Exception("ERROR: Type Mismatch")
       else:
@@ -431,16 +442,16 @@ def p_check_op_logicos(p):
     else:
       stack_de_operadores.append(top_operador)
 
+# Push of logical operators to the stack of operators.
 def p_push_op_logicos(p):
   '''
   push_op_logicos : Y 
         | O 
         | empty
   '''
-  p[0] = p[1]
-  stack_de_operadores.append(p[0])
+  stack_de_operadores.append(p[1])
 
-#Operadores relacionales <,>,>=,<=,!=,==
+# Relational operators: <,>,>=,<=,!=,==
 def p_super_exp(p):
   '''
   super_exp : exp super_exp_aux
@@ -452,6 +463,8 @@ def p_super_exp_aux(p):
                 | empty
   '''
 
+# When there's a relational operator to be solved within the stack
+# of operators, it creates a Quadruple for it.
 def p_check_op_relacionales(p):
   '''
   check_op_relacionales :
@@ -469,6 +482,7 @@ def p_check_op_relacionales(p):
       converted_operador = convert_type(top_operador)
 
       operation_type = cubo_semantico.get_type(tipo_operando_izq, tipo_operando_der, converted_operador)
+      # Raise exception if the operation between the two types is not valid.
       if operation_type == 5:
         raise Exception("ERROR: Type Mismatch")
       else:
@@ -481,6 +495,7 @@ def p_check_op_relacionales(p):
     else:
       stack_de_operadores.append(top_operador)
 
+# Push of relational operators to the stack of operators.
 def p_push_op_relacionales(p):
   '''
   push_op_relacionales : GREATER
@@ -491,9 +506,9 @@ def p_push_op_relacionales(p):
         | EQUAL
         | empty
   '''
-  p[0] = p[1]
-  stack_de_operadores.append(p[0])
+  stack_de_operadores.append(p[1])
 
+# Start of the arithmetic operators
 def p_exp(p):
   '''
   exp : term check_op_masmenos exp_aux
@@ -505,15 +520,17 @@ def p_exp_aux(p):
           | empty
   '''
 
+# Push of arithmetic operators: +, -
 def p_push_op_exp_masmenos(p):
   '''
   push_op_exp_masmenos : PLUS 
         | MINUS 
         | empty
   '''
-  p[0] = p[1]
-  stack_de_operadores.append(p[0])
+  stack_de_operadores.append(p[1])
 
+# When there's a minus or plus operator to be solved within the stack
+# of operators, it creates a Quadruple for it.
 def p_check_op_masmenos(p):
   '''
   check_op_masmenos :
@@ -530,6 +547,7 @@ def p_check_op_masmenos(p):
 
       converted_operador = convert_type(top_operador)
       operation_type = cubo_semantico.get_type(tipo_operando_izq, tipo_operando_der, converted_operador)
+      # Raise exception if the operation between the two types is not valid.
       if operation_type == 5:
         raise Exception("ERROR: Type Mismatch")
       else:
@@ -554,6 +572,8 @@ def p_term_aux(p):
         | empty
   '''
 
+# When there's a times or division operator to be solved within the stack
+# of operators, it creates a Quadruple for it.
 def p_check_op_pordiv(p):
   '''
   check_op_pordiv :
@@ -570,6 +590,7 @@ def p_check_op_pordiv(p):
 
       converted_operador = convert_type(top_operador)
       operation_type = cubo_semantico.get_type(tipo_operando_izq, tipo_operando_der, converted_operador)
+      # Raise exception if the operation between the two types is not valid.
       if operation_type == 5:
         raise Exception("ERROR: Type Mismatch")
       else:
@@ -582,14 +603,14 @@ def p_check_op_pordiv(p):
     else:
       stack_de_operadores.append(top_operador)
 
+# Push of arithmetic operators: *, /
 def p_push_op_exp_pordiv(p):
   '''
   push_op_exp_pordiv : TIMES 
         | DIVIDE 
         | empty
   '''
-  p[0] = p[1]
-  stack_de_operadores.append(p[0])
+  stack_de_operadores.append(p[1])
 
 def p_factor(p):
   '''
@@ -597,14 +618,16 @@ def p_factor(p):
           | factor_variable
           | factor_expresion
   '''
-  p[0] = None 
+  p[0] = p[1] 
 
+# Constant values
 def p_factor_constante(p) :
   '''
   factor_constante : CTEI push_int
                 | CTEF push_float 
   '''
 
+# Normal IDs, arrays, matrix, or returned values of functions.
 def p_factor_variable(p) : 
   '''
   factor_variable : ID push_id
@@ -612,24 +635,28 @@ def p_factor_variable(p) :
                 | ID LBRACKET hyper_exp RBRACKET LBRACKET hyper_exp RBRACKET
                 | ID llamada_func
   '''
-  
+
+# Arithmetic expressions within parenthesis.
 def p_factor_expresion(p) : 
   '''
   factor_expresion : LPAREN meter_fondo_falso hyper_exp RPAREN quitar_fondo_falso
   '''
 
+# Push of a parenthesis to simulate the false bottom
 def p_meter_fondo_falso(p) : 
   '''
   meter_fondo_falso :
   '''
   stack_de_operadores.append('(')
 
+# Removal of the false bottom
 def p_quitar_fondo_falso(p) : 
   '''
   quitar_fondo_falso :
   '''
   stack_de_operadores.pop()
 
+# Push of INT constants
 def p_push_int(p) : 
   '''
   push_int :
@@ -639,6 +666,7 @@ def p_push_int(p) :
     stack_de_operandos.append(p[-1])
     stack_de_tipos.append(1)
 
+# Push of FLOAT constants
 def p_push_float(p) : 
   '''
   push_float :
@@ -648,13 +676,14 @@ def p_push_float(p) :
     stack_de_operandos.append(p[-1])
     stack_de_tipos.append(2)
 
+# Push of IDs
 def p_push_id(p) : 
   '''
   push_id :
   '''
-  # Validate if id is within the set of variables of the current function
+  # Validate if the id exists either locally or globally
   if not dir_func.is_variable_declared(current_func, p[-1]):
-    raise Exception("ERROR: La variable {} no está declarada.".format(p[-1]))
+    raise Exception(f"ERROR: La variable {p[-1]} no está declarada.")
 
   global stack_de_operandos, stack_de_tipos
   if p[-1] != None:
@@ -672,24 +701,27 @@ def p_llamada_func(p):
   '''
   p[0] = None 
 
-def p_escribe(p):
+def p_imprimir(p):
   '''
-  escribe : IMPRIMIR LPAREN escribe_aux RPAREN SEMICOLON
-  escribe_aux : exp push_imprimir escribeCycle
-              | CTESTRING push_imprimir escribeCycle
-  escribeCycle : COMMA escribe_aux
+  imprimir : IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON
+  imprimir_aux : exp push_imprimir imprimirCycle
+              | CTESTRING push_imprimir imprimirCycle
+  imprimirCycle : COMMA imprimir_aux
               | empty
   '''
   p[0] = None
 
-def p_push_escribe(p):
+# It created a Quadruple for the print instruction. If there's something left within the
+# stack of operands it will pop it out from the stack and to store it as the result of the quadruple.
+# if not, it will only print the variable sent.
+def p_push_imprimir(p):
   '''
   push_imprimir :
   '''
   global stack_de_operandos, stack_de_tipos
+  converted_operador = convert_type('imprimir')
   if len(stack_de_operandos) != 0:
     top_operando = stack_de_operandos.pop()
-    converted_operador = convert_type('imprimir')
     quadruple = Quadruple(converted_operador, None, None, top_operando)
     lista_de_cuadruplos.append(quadruple)
   else:
