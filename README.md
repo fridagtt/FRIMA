@@ -93,9 +93,8 @@ inicio(){
 <h1>  ${\color{gray} Avance  }$  ${\color{gray} 3  }$</h1> 
 Abril 30, 2023
 
-En este avance se puede ver el desarrollo de la semántica, se agregaron los diagramas de expresiones y su código correspondiente al igual que el de los estatutos lineales. 
+Desarrollo de la semántica para la creación de cuádruplos para las expresiones lineales y estatutos lineales. Se agregaron y modificaron los respectivos diagramas que se pueden ver a continuación:
 
-A continuación estan los diagramas actualizados:
 
 ![My Image](ActualizacionDiagramas.jpg)
 
