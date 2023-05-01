@@ -90,6 +90,14 @@ inicio(){
 
 
 
+<h1>  ${\color{gray} Avance  }$  ${\color{gray} 3  }$</h1> 
+Abril 30, 2023
+
+En este avance se puede ver el desarrollo de la semántica, se agregaron los diagramas de expresiones y su código correspondiente al igual que el de los estatutos lineales. 
+
+A continuación estan los diagramas actualizados:
+
+![My Image](ActualizacionDiagramas.jpg)
 
 
 
