@@ -93,7 +93,7 @@ inicio(){
 <h1>  ${\color{gray} Avance  }$  ${\color{gray} 3  }$</h1> 
 Abril 30, 2023
 
-Desarrollo de la semántica para la creación de cuádruplos para las expresiones lineales y estatutos lineales. Se agregaron y modificaron los respectivos diagramas que se pueden ver a continuación:
+Desarrollo de la semántica para la creación de cuádruplos para las expresiones aritmeticas y estatutos lineales. Se agregaron y modificaron los respectivos diagramas que se pueden ver a continuación:
 
 
 ![My Image](ActualizacionDiagramas.jpg)
