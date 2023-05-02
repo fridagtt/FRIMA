@@ -16,6 +16,7 @@ stack_de_tipos = deque()
 stack_de_saltos = deque()
 lista_de_cuadruplos = []
 cubo_semantico = SemanticCube()
+vControl = None
 
 #__________LEXER____________
 
@@ -63,7 +64,7 @@ reserved = {
     'si' : 'SI',
     'sino' : 'SINO',
     'porcada' : 'PORCADA',
-    'en' : 'EN',
+    'hasta' : 'HASTA',
     'mientras' : 'MIENTRAS',
     'funcion' : 'FUNCION',
     'regresar' : 'REGRESAR',
@@ -422,9 +423,77 @@ def p_punto_fin_while(p):
 
 def p_ciclo_for(p):
   '''
-  ciclo_for : PORCADA exp EN exp LBRACE estatutos_aux RBRACE SEMICOLON
+  ciclo_for : PORCADA ID punto_existe_id ASSIGN hyper_exp punto_valida_int HASTA hyper_exp punto_valida_exp LBRACE estatutos_aux RBRACE SEMICOLON
   '''
   p[0] = None
+
+def punto_existe_id(p):
+  '''
+  punto_existe_id : 
+  '''
+   # Validate if the id exists either locally or globally
+  if not dir_func.is_variable_declared(current_func, p[-1]):
+    raise Exception(f"ERROR: La variable {p[-1]} no está declarada.")
+  else:
+    stack_de_operandos.append(p[-1])
+  
+def punto_valida_int(p):
+  '''
+  punto_valida_id : 
+  '''
+  #Validate if the hyper_exp is equal to an integer number
+  global stack_de_operadores, stack_de_operandos, stack_de_tipos, lista_de_cuadruplos
+  top_operador = stack_de_operadores.pop()
+  tipo_exp = stack_de_tipos.pop()
+
+  converted_operador = convert_type(top_operador)
+  assign_variable_type = dir_func.get_variable_type(current_func, p[-4])
+
+  if tipo_exp != 1 and assign_variable_type != 1:
+    raise Exception(f"ERROR: Type Mismatch. El ID y su valor deben ser enteros") 
+  else: 
+    operando_exp = stack_de_operandos.pop()
+    vControl = stack_de_operandos.pop()
+    quadruple = Quadruple(converted_operador, operando_exp, None , vControl)
+    lista_de_cuadruplos.append(quadruple.transform_quadruple())
+
+def punto_valida_exp(p):
+  '''
+  punto_valida_exp : 
+  '''
+  tipo_exp = stack_de_tipos.pop()
+  if tipo_exp != 1:
+        raise Exception(f"ERROR: Type Mismatch. El valor de la expresion debe ser entera") 
+  else: 
+    operando_exp = stack_de_operandos.pop()
+    vFinal = operando_exp
+    quadruple = Quadruple(70,operando_exp,None,vFinal)
+    lista_de_cuadruplos.append(quadruple.transform_quadruple())
+
+    quadruple2 = Quadruple(35,vControl,vFinal,None) #Pendiente el resultado en lugar de None
+    lista_de_cuadruplos.append(quadruple2.transform_quadruple())
+
+    stack_de_saltos.append(len(lista_de_cuadruplos)-1)
+    quadruple_goto = Quadruple(75,None,None,None) #El segundo none es el valor que esta en Quadruple2
+    lista_de_cuadruplos.append(quadruple_goto.transform_quadruple())
+    stack_de_saltos.append(len(lista_de_cuadruplos)-1)
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def p_condicion(p):
   '''
@@ -467,7 +536,6 @@ def p_punto_sino(p):
   '''
   global stack_de_saltos, lista_de_cuadruplos
   false = stack_de_saltos.pop()
-  retorno = stack_de_saltos.pop()
   quadruple = Quadruple(80, None, None, None)
   lista_de_cuadruplos.append(quadruple.transform_quadruple())
   lista_de_cuadruplos = fill(false, len(lista_de_cuadruplos), lista_de_cuadruplos)
