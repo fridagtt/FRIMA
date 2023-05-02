@@ -13,6 +13,7 @@ from utils.shared import *
 stack_de_operadores = deque()
 stack_de_operandos = deque()
 stack_de_tipos = deque()
+stack_de_saltos = deque()
 lista_de_cuadruplos = []
 cubo_semantico = SemanticCube()
 
@@ -195,7 +196,7 @@ def p_punto_programa(p):
 
 def p_inicio(p):
   '''
-  inicio : INICIO LPAREN RPAREN LBRACE estatutos RBRACE SEMICOLON
+  inicio : INICIO LPAREN RPAREN LBRACE estatutos_aux RBRACE SEMICOLON
   '''
   p[0] = None
   for quadruple in lista_de_cuadruplos: 
@@ -265,10 +266,9 @@ def p_punto_matrix(p):
 
 def p_dec_func(p):
   '''
-  dec_func : FUNCION dec_func_type ID punto_add_func LPAREN parameter RPAREN LBRACE dec_var_cycle estatutos decFuncCycle dec_func_regresar RBRACE SEMICOLON
-  decFuncCycle : estatutos decFuncCycle
-              | empty 
+  dec_func : FUNCION dec_func_type ID punto_add_func LPAREN parameter RPAREN LBRACE dec_var_cycle estatutos_aux dec_func_regresar RBRACE SEMICOLON
   '''
+
 def p_dec_func_regresar(p):
   '''
   dec_func_regresar : REGRESAR variable SEMICOLON
@@ -318,9 +318,14 @@ def p_estatutos(p):
           | condicion
           | imprimir
           | leer
-          | empty
   '''
   p[0] = None
+
+def p_estatutos_aux(p):
+	'''
+	estatutos_aux : estatutos estatutos_aux
+						    | empty
+	'''
 
 def p_asignar(p):
   '''
@@ -355,7 +360,7 @@ def p_check_op_igual(p):
     raise Exception("ERROR: Type Mismatch")
   else:
     quadruple = Quadruple(converted_operador, operando, None , p[-4])
-    lista_de_cuadruplos.append(quadruple)
+    lista_de_cuadruplos.append(quadruple.transform_quadruple())
 
 def p_variable(p):
   '''
@@ -374,29 +379,98 @@ def p_leer(p):
 
 def p_ciclo_while(p):
   '''
-  ciclo_while : MIENTRAS LPAREN exp RPAREN LBRACE estatutos whileCycle RBRACE SEMICOLON
-  whileCycle : estatutos whileCycle
-              | empty
+  ciclo_while : MIENTRAS punto_inicio_while LPAREN hyper_exp RPAREN punto_medio_while LBRACE estatutos_aux RBRACE punto_fin_while SEMICOLON
   '''
   p[0] = None
 
+# Save the starting point of the comparison to come back and re-evaluate.
+def p_punto_inicio_while(p):
+  '''
+  punto_inicio_while :
+  '''
+  global stack_de_saltos
+  stack_de_saltos.append(len(lista_de_cuadruplos))
+
+# Validate if the result of the expression is a boolean. If it's not raise an exception.
+# It if is a boolean create a GOTOF quadruple with its 4th position empty, and add
+# its position within the array to the stack of jumps.
+def p_punto_medio_while(p):
+  '''
+  punto_medio_while :
+  '''
+  global stack_de_tipos, stack_de_saltos, lista_de_cuadruplos
+  top_tipos = stack_de_tipos.pop()
+  if(top_tipos != 4):
+    raise Exception("ERROR: Type mismatch. Se espera una condición.")
+  else:
+    result = stack_de_operandos.pop()
+    quadruple = Quadruple(75, result, None, None)
+    lista_de_cuadruplos.append(quadruple.transform_quadruple())
+    stack_de_saltos.append((len(lista_de_cuadruplos) - 1))
+
+# Complete the missing GOTOF qudadruple, generate a GOTO quadruple with the return position as ts 4th position.
+def p_punto_fin_while(p):
+  '''
+  punto_fin_while :
+  '''
+  global stack_de_saltos, lista_de_cuadruplos
+  false = stack_de_saltos.pop()
+  retorno = stack_de_saltos.pop()
+  quadruple = Quadruple(80, None, None, retorno)
+  lista_de_cuadruplos.append(quadruple.transform_quadruple())
+  lista_de_cuadruplos = fill(false, len(lista_de_cuadruplos), lista_de_cuadruplos)
+
 def p_ciclo_for(p):
   '''
-  ciclo_for : PORCADA exp EN exp LBRACE estatutos forCycle RBRACE SEMICOLON
-  forCycle : estatutos forCycle
-          | empty
+  ciclo_for : PORCADA exp EN exp LBRACE estatutos_aux RBRACE SEMICOLON
   '''
   p[0] = None
 
 def p_condicion(p):
   '''
-  condicion : SI LPAREN exp RPAREN LBRACE estatutos condicionCycle RBRACE sinoCondicion SEMICOLON
-  condicionCycle : estatutos condicionCycle
-              | empty
-  sinoCondicion : SINO LBRACE estatutos condicionCycle RBRACE
+  condicion : SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos_aux RBRACE punto_fin_si sinoCondicion SEMICOLON
+  sinoCondicion : SINO punto_sino LBRACE estatutos_aux RBRACE
               | empty
   '''
   p[0] = None
+
+# Validate if the result of the expression is a boolean. If it's not raise an exception.
+# It if is a boolean create a GOTOF quadruple with its 4th position empty, and add
+# its position within the array to the stack of jumps.
+def p_punto_si(p):
+  '''
+  punto_si : 
+  '''
+  global stack_de_tipos, stack_de_saltos, lista_de_cuadruplos
+  top_tipos = stack_de_tipos.pop()
+  if(top_tipos != 4):
+    raise Exception("ERROR: Type mismatch. Se espera una condición.")
+  else:
+    result = stack_de_operandos.pop()
+    quadruple = Quadruple(75, result, None, None)
+    lista_de_cuadruplos.append(quadruple.transform_quadruple())
+    stack_de_saltos.append((len(lista_de_cuadruplos) - 1))
+
+# Complete the missing GOTOF(if) or GOTO(if-else) quadruple.
+def p_punto_fin_si(p):
+  '''
+  punto_fin_si :
+  '''
+  global stack_de_saltos, lista_de_cuadruplos
+  end = stack_de_saltos.pop()
+  lista_de_cuadruplos = fill(end, len(lista_de_cuadruplos), lista_de_cuadruplos)
+
+# Complete the missing GOTOF qudadruple, generate a GOTO quadruple, and its position to the stack of jumps.
+def p_punto_sino(p):
+  '''
+  punto_sino :
+  '''
+  global stack_de_saltos, lista_de_cuadruplos
+  false = stack_de_saltos.pop()
+  retorno = stack_de_saltos.pop()
+  quadruple = Quadruple(80, None, None, None)
+  lista_de_cuadruplos.append(quadruple.transform_quadruple())
+  lista_de_cuadruplos = fill(false, len(lista_de_cuadruplos), lista_de_cuadruplos)
 
 # Logic operators: and, or
 def p_hyper_exp(p):
@@ -407,7 +481,7 @@ def p_hyper_exp(p):
 def p_hyper_exp_aux(p):
   '''
   hyper_exp_aux : push_op_logicos super_exp check_op_logicos
-                    | empty
+                | empty
   '''
 
 # When there's a logical operator to be solved within the stack
@@ -435,7 +509,7 @@ def p_check_op_logicos(p):
       else:
         temporal_variable = -1
         quadruple = Quadruple(converted_operador, operando_izq, operando_der, temporal_variable)
-        lista_de_cuadruplos.append(quadruple)
+        lista_de_cuadruplos.append(quadruple.transform_quadruple())
         stack_de_operandos.append(temporal_variable)
         stack_de_tipos.append(operation_type)
       
@@ -488,7 +562,7 @@ def p_check_op_relacionales(p):
       else:
         temporal_variable = None
         quadruple = Quadruple(converted_operador, operando_izq, operando_der, temporal_variable)
-        lista_de_cuadruplos.append(quadruple)
+        lista_de_cuadruplos.append(quadruple.transform_quadruple())
         stack_de_operandos.append(temporal_variable)
         stack_de_tipos.append(operation_type)
       
@@ -553,7 +627,7 @@ def p_check_op_masmenos(p):
       else:
         temporal_variable = None
         quadruple = Quadruple(converted_operador, operando_izq, operando_der, temporal_variable)
-        lista_de_cuadruplos.append(quadruple)
+        lista_de_cuadruplos.append(quadruple.transform_quadruple())
         stack_de_operandos.append(temporal_variable)
         stack_de_tipos.append(operation_type)
       
@@ -596,7 +670,7 @@ def p_check_op_pordiv(p):
       else:
         temporal_variable = None
         quadruple = Quadruple(converted_operador, operando_izq, operando_der, temporal_variable)
-        lista_de_cuadruplos.append(quadruple)
+        lista_de_cuadruplos.append(quadruple.transform_quadruple())
         stack_de_operandos.append(temporal_variable)
         stack_de_tipos.append(operation_type)
 
@@ -723,9 +797,10 @@ def p_push_imprimir(p):
   if len(stack_de_operandos) != 0:
     top_operando = stack_de_operandos.pop()
     quadruple = Quadruple(converted_operador, None, None, top_operando)
-    lista_de_cuadruplos.append(quadruple)
+    lista_de_cuadruplos.append(quadruple.transform_quadruple())
   else:
     quadruple = Quadruple(converted_operador, None, None, p[-1])
+    lista_de_cuadruplos.append(quadruple.transform_quadruple())
 
 def p_empty(p):
   '''

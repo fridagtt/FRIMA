@@ -25,9 +25,11 @@ funcion entero funcion_prueba_tres(){
    variable decimal -> gatos, perros, pelos, pajaros;
    variable entero -> alumno, pluma;
 
-   gatos = pajaros*gatos+(pelos+perros);
-
-   imprimir(perros,perros*gatos+pelos);
+   mientras(pajaros > alumno * perros) {
+      pajaros = pajaros - pluma;
+      imprimir(perros*gatos+pelos);
+   };
+   perros = perros + pajaros;
 
    regresar alumno;
 };
