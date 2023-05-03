@@ -21,9 +21,15 @@ funcion entero funcion_prueba_dos(entero ff, decimal jj){
 };
 
 funcion entero prueba_si(){
+
+   si (pluma > pelos) {
+      pluma = pluma + pelos;
+   };
+
+   regresar pelos; 
+
 };
   
-
 inicio(){
 
 };

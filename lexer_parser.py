@@ -427,7 +427,7 @@ def p_ciclo_for(p):
   '''
   p[0] = None
 
-def punto_existe_id(p):
+def p_punto_existe_id(p):
   '''
   punto_existe_id : 
   '''
@@ -437,9 +437,9 @@ def punto_existe_id(p):
   else:
     stack_de_operandos.append(p[-1])
   
-def punto_valida_int(p):
+def p_punto_valida_int(p):
   '''
-  punto_valida_id : 
+  punto_valida_int : 
   '''
   #Validate if the hyper_exp is equal to an integer number
   global stack_de_operadores, stack_de_operandos, stack_de_tipos, lista_de_cuadruplos
@@ -457,7 +457,7 @@ def punto_valida_int(p):
     quadruple = Quadruple(converted_operador, operando_exp, None , vControl)
     lista_de_cuadruplos.append(quadruple.transform_quadruple())
 
-def punto_valida_exp(p):
+def p_punto_valida_exp(p):
   '''
   punto_valida_exp : 
   '''
@@ -481,7 +481,7 @@ def punto_valida_exp(p):
   
 def p_punto_termina_for(p):
   '''
-  punto_termina_for : 
+  p_punto_termina_for : 
   '''
   global stack_de_operandos, stack_de_tipos, lista_de_cuadruplos
 
@@ -494,9 +494,6 @@ def p_punto_termina_for(p):
   lista_de_cuadruplos.append(quadruple2.transform_quadruple())
   lista_de_cuadruplos = fill(fin, len(lista_de_cuadruplos), lista_de_cuadruplos)
   
-
-
-
 def p_condicion(p):
   '''
   condicion : SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos_aux RBRACE punto_fin_si sinoCondicion SEMICOLON
