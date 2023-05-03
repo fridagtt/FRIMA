@@ -20,16 +20,16 @@ funcion entero funcion_prueba_dos(entero ff, decimal jj){
    regresar pluma;
 };
 
-funcion entero prueba_si(){
+funcion entero prueba_si_while() {
 
-   si (pluma > pelos) {
-      pluma = pluma + pelos;
+   si (pluma > perros) {
+      mientras (pluma < perros) {
+         pluma = pluma + gatos; 
+      };
    };
 
-   regresar pelos; 
-
 };
-  
+
 inicio(){
 
 };

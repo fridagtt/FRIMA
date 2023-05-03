@@ -353,10 +353,14 @@ def p_check_op_igual(p):
   operando = stack_de_operandos.pop()
 
   converted_operador = convert_type(top_operador)
+  # Validate if the variable to assign exists either locally or globally
+  if not dir_func.is_variable_declared(current_func, p[-4]):
+    raise Exception(f"ERROR: La variable {p[-4]} no está declarada.")
+
   assign_variable_type = dir_func.get_variable_type(current_func, p[-4])
 
   operation_type = cubo_semantico.get_type(assign_variable_type, tipo_operando, converted_operador)
-  # Raise exception if the operation between the two types is not valid.
+  # Raise exception if the assignation between the two types is not valid.
   if operation_type == 5:
     raise Exception("ERROR: Type Mismatch")
   else:
@@ -389,7 +393,7 @@ def p_punto_inicio_while(p):
   '''
   punto_inicio_while :
   '''
-  global stack_de_saltos
+  global stack_de_saltos, lista_de_cuadruplos
   stack_de_saltos.append(len(lista_de_cuadruplos))
 
 # Validate if the result of the expression is a boolean. If it's not raise an exception.
@@ -431,7 +435,7 @@ def p_punto_existe_id(p):
   '''
   punto_existe_id : 
   '''
-   # Validate if the id exists either locally or globally
+  # Validate if the id exists either locally or globally
   if not dir_func.is_variable_declared(current_func, p[-1]):
     raise Exception(f"ERROR: La variable {p[-1]} no está declarada.")
   else:
@@ -464,7 +468,7 @@ def p_punto_valida_exp(p):
   global stack_de_operandos, stack_de_tipos, lista_de_cuadruplos
   tipo_exp = stack_de_tipos.pop()
   if tipo_exp != 1:
-        raise Exception(f"ERROR: Type Mismatch. El valor de la expresion debe ser entera") 
+    raise Exception(f"ERROR: Type Mismatch. El valor de la expresion debe ser entera") 
   else: 
     operando_exp = stack_de_operandos.pop()
     vFinal = operando_exp
@@ -481,7 +485,7 @@ def p_punto_valida_exp(p):
   
 def p_punto_termina_for(p):
   '''
-  p_punto_termina_for : 
+  punto_termina_for : 
   '''
   global stack_de_operandos, stack_de_tipos, lista_de_cuadruplos
 
@@ -496,9 +500,8 @@ def p_punto_termina_for(p):
   
 def p_condicion(p):
   '''
-  condicion : SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos_aux RBRACE punto_fin_si sinoCondicion SEMICOLON
-  sinoCondicion : SINO punto_sino LBRACE estatutos_aux RBRACE
-              | empty
+  condicion : SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos_aux RBRACE punto_fin_si SEMICOLON
+            | SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos_aux RBRACE SINO punto_sino LBRACE estatutos_aux RBRACE punto_fin_si SEMICOLON
   '''
   p[0] = None
 
@@ -537,6 +540,7 @@ def p_punto_sino(p):
   false = stack_de_saltos.pop()
   quadruple = Quadruple(80, None, None, None)
   lista_de_cuadruplos.append(quadruple.transform_quadruple())
+  stack_de_saltos.append(len(lista_de_cuadruplos)-1)
   lista_de_cuadruplos = fill(false, len(lista_de_cuadruplos), lista_de_cuadruplos)
 
 # Logic operators: and, or
