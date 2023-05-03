@@ -20,19 +20,9 @@ funcion entero funcion_prueba_dos(entero ff, decimal jj){
    regresar pluma;
 };
 
-funcion entero funcion_prueba_tres(){
-
-   variable decimal -> gatos, perros, pelos, pajaros;
-   variable entero -> alumno, pluma;
-
-   mientras(pajaros > alumno * perros) {
-      pajaros = pajaros - pluma;
-      imprimir(perros*gatos+pelos);
-   };
-   perros = perros + pajaros;
-
-   regresar alumno;
+funcion entero prueba_si(){
 };
+  
 
 inicio(){
 

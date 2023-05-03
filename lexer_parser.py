@@ -423,7 +423,7 @@ def p_punto_fin_while(p):
 
 def p_ciclo_for(p):
   '''
-  ciclo_for : PORCADA ID punto_existe_id ASSIGN hyper_exp punto_valida_int HASTA hyper_exp punto_valida_exp LBRACE estatutos_aux RBRACE SEMICOLON
+  ciclo_for : PORCADA ID punto_existe_id ASSIGN hyper_exp punto_valida_int HASTA hyper_exp punto_valida_exp LBRACE estatutos_aux RBRACE punto_termina_for SEMICOLON
   '''
   p[0] = None
 
@@ -461,6 +461,7 @@ def punto_valida_exp(p):
   '''
   punto_valida_exp : 
   '''
+  global stack_de_operandos, stack_de_tipos, lista_de_cuadruplos
   tipo_exp = stack_de_tipos.pop()
   if tipo_exp != 1:
         raise Exception(f"ERROR: Type Mismatch. El valor de la expresion debe ser entera") 
@@ -477,21 +478,22 @@ def punto_valida_exp(p):
     quadruple_goto = Quadruple(75,None,None,None) #El segundo none es el valor que esta en Quadruple2
     lista_de_cuadruplos.append(quadruple_goto.transform_quadruple())
     stack_de_saltos.append(len(lista_de_cuadruplos)-1)
+  
+def p_punto_termina_for(p):
+  '''
+  punto_termina_for : 
+  '''
+  global stack_de_operandos, stack_de_tipos, lista_de_cuadruplos
 
-    
+  quadruple = Quadruple(10,vControl,1,vControl) # El uno tiene que ir en la tabla como constante y el segundo vControl es dirección de mememoria
+  lista_de_cuadruplos.append(quadruple.transform_quadruple())
 
-
-
-
-
-
-
-
-
-
-
-
-
+  fin = stack_de_saltos.pop()
+  retorno = stack_de_saltos.pop()
+  quadruple2 = Quadruple(80,None,None,retorno)
+  lista_de_cuadruplos.append(quadruple2.transform_quadruple())
+  lista_de_cuadruplos = fill(fin, len(lista_de_cuadruplos), lista_de_cuadruplos)
+  
 
 
 
