@@ -1,7 +1,5 @@
 import ply.lex as lex
 import ply.yacc as yacc
-import sys
-
 from collections import deque
 
 from utils.symbol_table import *
@@ -10,13 +8,15 @@ from utils.quadruples import *
 from utils.shared import *
 
 # Create global variables
+cubo_semantico = SemanticCube()
+
 stack_de_operadores = deque()
 stack_de_operandos = deque()
 stack_de_tipos = deque()
 stack_de_saltos = deque()
+
 lista_de_cuadruplos = []
-cubo_semantico = SemanticCube()
-vControl = None
+vControl = current_func = current_var_type = None
 
 #__________LEXER____________
 
@@ -50,7 +50,7 @@ tokens = [
     'ARROW',
 ]
 
-# Keywords declaration
+# Keywords' declaration
 reserved = {
     'programa' : 'PROGRAMA',
     'inicio' : 'INICIO',
@@ -134,15 +134,14 @@ def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
 
-# Error handling rule
+# Error handling rule for lexer
 def t_error(t):
     print("Character no válido'%s'" % t.value[0])
     t.lexer.skip(1)
 
 lexer = lex.lex()
-start = 'programa'
 
-#Testing the lexer
+# Segment for testing the lexer
 """
 data = '''
 si sino "" entero variable -14.5
@@ -161,9 +160,10 @@ while True:
 
 #__________PARSER____________
 
-# Definition of the grammars
-
 # Start of the program
+start = 'programa'
+
+# Definition of the grammars
 def p_programa(p):
   '''
   programa : PROGRAMA ID punto_programa COLON inicio
@@ -173,59 +173,49 @@ def p_programa(p):
   '''
   p[0] = None
 
+# Creates the symbol table with its default structure and adds the function "programa" to the set of functions.
+def p_punto_programa(p):
+  '''
+  punto_programa : 
+  '''
+  global dir_func, current_func
+  dir_func = SymbolTable() # Create symbol table
+  current_func = "programa" # Sets global scope
+  dir_func.symbol_table['dir_functions']['dir_func_names'].add("programa")
+
+def p_inicio(p):
+  '''
+  inicio : INICIO LPAREN RPAREN LBRACE estatutosCycle RBRACE SEMICOLON
+  '''
+  p[0] = None
+  for quadruple in lista_de_cuadruplos: 
+    print(quadruple) 
+
+# Allows multiple declaration of variables
 def p_dec_var_cycle(p):
   '''
   dec_var_cycle : dec_var dec_var_cycle
                 | empty
   '''
 
+# Allows multiple declaration of functions
 def p_dec_func_cycle(p):
   '''
   dec_func_cycle : dec_func dec_func_cycle
                 | empty
   '''
 
-# Creates the symbol table with its default body and adds the function "programa" to the set of functions.
-def p_punto_programa(p):
-  '''
-  punto_programa : 
-  '''
-  global dir_func, current_func
-  dir_func = SymbolTable()
-  current_func = "programa"
-  dir_func.symbol_table['dir_functions']['dir_func_names'].add("programa")
-
-def p_inicio(p):
-  '''
-  inicio : INICIO LPAREN RPAREN LBRACE estatutos_aux RBRACE SEMICOLON
-  '''
-  p[0] = None
-  for quadruple in lista_de_cuadruplos: 
-    print(quadruple) 
-
+# Types of variable declarations
 def p_dec_var(p):
   '''
   dec_var : simple_var
           | array
           | matrix
   '''
-  p[0] = None
+  p[0] = p[1]
 
-def p_simple_var(p):
-  '''
-  simple_var : VARIABLE type ARROW ID punto_simple_var simpleVarCycle SEMICOLON
-  simpleVarCycle : COMMA ID punto_simple_var simpleVarCycle
-                  | empty
-  '''
-  p[0] = None
-
-# Adds variables to the variable table of the corresponding function.
-def p_punto_simple_var(p):
-  '''
-  punto_simple_var :
-  '''
-  dir_func.add_variable(current_var_type, p[-1], current_func)
-
+# Types of variables. It converts the type of the variable from a string to a number
+# and saves it within current_var_type.
 def p_type(p):
   '''
   type : ENTERO
@@ -235,8 +225,25 @@ def p_type(p):
   p[0] = p[1]
   global current_var_type
 
-  current_var_type = convert_type(p[0])
+  current_var_type = convert_type(p[1])
 
+# Declaration of simple variables
+def p_simple_var(p):
+  '''
+  simple_var : VARIABLE type ARROW ID punto_simple_var simpleVarCycle SEMICOLON
+  simpleVarCycle : COMMA ID punto_simple_var simpleVarCycle
+                  | empty
+  '''
+  p[0] = None
+
+# Adds variables to the variable table of the corresponding and current function.
+def p_punto_simple_var(p):
+  '''
+  punto_simple_var :
+  '''
+  dir_func.add_variable(current_var_type, p[-1], current_func)
+
+# Declaration of arrays
 def p_array(p):
   '''
   array : RENGLON type ARROW ID LBRACKET CTEI RBRACKET punto_array arrayCycle SEMICOLON
@@ -245,12 +252,15 @@ def p_array(p):
   '''
   p[0] = None
 
+# Adds arrays to the variable table of the corresponding and current function.
+# It sends additional values such as its dimension and size. 
 def p_punto_array(p):
   '''
   punto_array :
   '''
   dir_func.add_variable(current_var_type, p[-4], current_func, 1, p[-2])
 
+# Declaration of matrix
 def p_matrix(p):
   '''
   matrix : TABLA type ARROW ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET punto_matrix matrixCycle SEMICOLON
@@ -259,15 +269,18 @@ def p_matrix(p):
   '''
   p[0] = None
 
+# Adds matrix to the variable table of the corresponding and current function.
+# It sends additional values such as its dimension and its size as a tuple. 
 def p_punto_matrix(p):
   '''
   punto_matrix :
   '''
   dir_func.add_variable(current_var_type, p[-7], current_func, 2, (p[-5],p[-2]))
 
+# Declares a function
 def p_dec_func(p):
   '''
-  dec_func : FUNCION dec_func_type ID punto_add_func LPAREN parameter RPAREN LBRACE dec_var_cycle estatutos_aux dec_func_regresar RBRACE SEMICOLON
+  dec_func : FUNCION dec_func_type ID punto_add_func LPAREN parameter RPAREN LBRACE dec_var_cycle estatutosCycle dec_func_regresar RBRACE SEMICOLON
   '''
 
 def p_dec_func_regresar(p):
@@ -284,8 +297,8 @@ def p_dec_func_type(p):
   '''
   p[0] = p[1]
 
-# Adds function to the function's directory.
-# Updates current_func pointer as we are accessing a new function.
+# Adds function and its return type to the global function's directory.
+# Updates "current_func" pointer as we are accessing a new function.
 def p_punto_add_func(p):
     '''
     punto_add_func :
@@ -294,22 +307,30 @@ def p_punto_add_func(p):
     current_func = p[-1]
     dir_func.add_function(p[-1], convert_type(p[-2]))
 
+# Declares function's parameters (if any)
 def p_parameter(p):
   '''
   parameter : type ID punto_parameter parameterCycle
             | empty
+  '''
+  p[0] = None
+
+# Allows multiple declaration of parameters
+def p_parameterCycle(p):
+  '''
   parameterCycle : COMMA type ID punto_parameter parameterCycle
                   | empty 
   '''
   p[0] = None
 
-# Adds parameter to the variable table of the current function.
+# Adds parameter (and its type) to the variable table of the current function.
 def p_punto_parameter(p):
   '''
   punto_parameter :
   '''
   dir_func.add_function_params(current_func, convert_type(p[-2]), p[-1])
 
+# List of the possible content on a function, conditional or cycle
 def p_estatutos(p):
   '''
   estatutos : asignar
@@ -322,9 +343,10 @@ def p_estatutos(p):
   '''
   p[0] = None
 
-def p_estatutos_aux(p):
+# Allows multiple declaration of estatutos
+def p_estatutosCycle(p):
 	'''
-	estatutos_aux : estatutos estatutos_aux
+	estatutosCycle : estatutos estatutosCycle
 						    | empty
 	'''
 
@@ -333,6 +355,21 @@ def p_asignar(p):
   asignar : variable ASSIGN push_op_igual hyper_exp check_op_igual SEMICOLON
   '''
   p[0] = None
+
+def p_variable(p):
+  '''
+  variable : ID variable_aux
+  '''
+  p[0] = p[1]
+
+# To assign a variable it can either be a simple var or an array and matrix position
+def p_variable_aux(p):
+  '''
+  variable_aux : LBRACKET exp RBRACKET
+              | LBRACKET exp RBRACKET LBRACKET exp RBRACKET
+              | empty
+  '''
+  p[0] = p[1]
 
 # Push the "=" operator to the stack of operators.
 def p_push_op_igual(p):
@@ -367,15 +404,6 @@ def p_check_op_igual(p):
     quadruple = Quadruple(converted_operador, operando, None , p[-4])
     lista_de_cuadruplos.append(quadruple.transform_quadruple())
 
-def p_variable(p):
-  '''
-  variable : ID variable_aux
-  variable_aux : LBRACKET exp RBRACKET
-              | LBRACKET exp RBRACKET LBRACKET exp RBRACKET
-              | empty
-  '''
-  p[0] = p[1]
-
 def p_leer(p):
   '''
   leer : LEER variable SEMICOLON
@@ -384,7 +412,7 @@ def p_leer(p):
 
 def p_ciclo_while(p):
   '''
-  ciclo_while : MIENTRAS punto_inicio_while LPAREN hyper_exp RPAREN punto_medio_while LBRACE estatutos_aux RBRACE punto_fin_while SEMICOLON
+  ciclo_while : MIENTRAS punto_inicio_while LPAREN hyper_exp RPAREN punto_medio_while LBRACE estatutosCycle RBRACE punto_fin_while SEMICOLON
   '''
   p[0] = None
 
@@ -427,7 +455,7 @@ def p_punto_fin_while(p):
 
 def p_ciclo_for(p):
   '''
-  ciclo_for : PORCADA ID punto_existe_id ASSIGN hyper_exp punto_valida_int HASTA hyper_exp punto_valida_exp LBRACE estatutos_aux RBRACE punto_termina_for SEMICOLON
+  ciclo_for : PORCADA ID punto_existe_id ASSIGN hyper_exp punto_valida_int HASTA hyper_exp punto_valida_exp LBRACE estatutosCycle RBRACE punto_termina_for SEMICOLON
   '''
   p[0] = None
 
@@ -500,8 +528,8 @@ def p_punto_termina_for(p):
   
 def p_condicion(p):
   '''
-  condicion : SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos_aux RBRACE punto_fin_si SEMICOLON
-            | SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos_aux RBRACE SINO punto_sino LBRACE estatutos_aux RBRACE punto_fin_si SEMICOLON
+  condicion : SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutosCycle RBRACE punto_fin_si SEMICOLON
+            | SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutosCycle RBRACE SINO punto_sino LBRACE estatutosCycle RBRACE punto_fin_si SEMICOLON
   '''
   p[0] = None
 

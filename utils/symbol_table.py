@@ -20,13 +20,13 @@ class SymbolTable:
 
     Parameters:
     type (int): type of the variable (int - 1, float - 2, char - 3)
-    name (string): name of the variable
+    name (string): name of the variable to be added
     func_name (string): current function where the variable is going to be added
-    dimension (int): dimension of the variable (0 - normal variable, 1 - array, 2 - matrix)
-    size (int): size of the variable (0 - normal variable, n - array, (n,m) - matrix)
+    dimension (int): dimension of the variable (0 - simple_var, 1 - array, 2 - matrix)
+    size (int): size of the variable (0 - simple_var, n - array, (n,m) - matrix)
 
     Returns:
-    Modified variable table or an error if the variable already exists
+    Modified variable table for the corresponding function or an error if the variable already exists.
 
    """
     access_dict = self.symbol_table["dir_functions"][func_name]["variables"]
@@ -92,7 +92,7 @@ class SymbolTable:
 
   def get_variable_type(self, func_name, variable_name) -> int:
     """Returns the requested variable type. If the variable is not found within the local scope of the
-      function, it looks it up within the global variable table.
+      function, it looks it up within the global variable table (unless you already are within the global scope).
 
       Parameters:
       func_name (string): name of the function
@@ -107,7 +107,7 @@ class SymbolTable:
         list_of_variables = self.symbol_table["dir_functions"][func_name]["variables"]['vars_info']
         variable_object = next((variable for variable in list_of_variables if variable['name'] == variable_name),None)
         return variable_object['type']
-    else:
+    elif func_name != "programa":
         list_of_variables = self.symbol_table["dir_functions"]['programa']["variables"]['vars_info']
         variable_object = next((variable for variable in list_of_variables if variable['name'] == variable_name),None)
         return variable_object['type']
@@ -124,7 +124,7 @@ class SymbolTable:
 
     """
     set_of_variables = self.get_function_variables(func_name)
-    if variable_name not in set_of_variables:
+    if variable_name not in set_of_variables and func_name != 'programa':
         return variable_name in self.get_function_variables('programa')
     else:
         return True
