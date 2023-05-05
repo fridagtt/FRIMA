@@ -17,6 +17,10 @@ def convert_type(type):
       return 2
     case 'letra':
       return 3
+    case 'bool':
+      return 4
+    case 'letrero':
+      return 5
     case '+':
       return 10
     case '-':

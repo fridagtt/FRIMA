@@ -2,8 +2,8 @@
   types_ID = {
     'int': 1,
     'float': 2,
-    'bool': 3,
-    'char': 4,
+    'char': 3,
+    'bool': 4,
   }
 
   operators_ID = {
