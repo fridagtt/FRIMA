@@ -132,7 +132,7 @@ def t_code_comment(t):
 # Define a rule so we can track line numbers
 def t_newline(t):
     r'\n+'
-    t.lexer.lineno += t.value.count("\n")
+    t.lexer.lineno += len(t.value)
 
 # Error handling rule
 def t_error(t):
@@ -880,10 +880,10 @@ def p_empty(p):
   pass
 
 def p_error(p):
-  print("Syntax error at token", p.type)
+  raise Exception("ERROR: Hay un error de syntaxis en la linea %d" % (p.lineno))
 
 parser = yacc.yacc()
-
+  
 def readFile():
   #Testear el parser y léxico juntos
   try:
