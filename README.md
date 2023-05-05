@@ -100,6 +100,16 @@ Desarrollo de la semántica para la creación de cuádruplos para las expresione
 
 
 
+<h1>  ${\color{gray} Avance  }$  ${\color{gray} 4  }$</h1> 
+Mayo 7, 2023
+
+Desarrollo de la semántica para la creación de cuádruplos para los estatutos condicionales de decisión y ciclos. 
+-Ciclo For (Por cada - hasta)
+-Ciclo While (Mientras)
+-Condición If y If else (Si - Si no)
+
+Se modificó el diagrama del Ciclo For que se puede ver en la siguiente imagen:
+![My Image](ActualizacionDiagramasAvance4.jpg)
 
 
 
