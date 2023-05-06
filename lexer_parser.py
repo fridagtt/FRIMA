@@ -4,6 +4,7 @@ from collections import deque
 
 from utils.symbol_table import *
 from utils.semantic_cube import *
+from utils.virtual_memory import *
 from utils.quadruples import *
 from utils.shared import *
 
@@ -188,6 +189,7 @@ def p_inicio(p):
   inicio : INICIO LPAREN RPAREN LBRACE estatutosCycle RBRACE SEMICOLON
   '''
   p[0] = None
+  print("TABLA DE VARIABLES", dir_func.symbol_table)
   for quadruple in lista_de_cuadruplos: 
     print(quadruple) 
 
@@ -241,7 +243,8 @@ def p_punto_simple_var(p):
   '''
   punto_simple_var :
   '''
-  dir_func.add_variable(current_var_type, p[-1], current_func)
+  memory_dir = assign_memory(current_var_type, current_func, False, False)
+  dir_func.add_variable(current_var_type, p[-1], current_func, memory_dir)
 
 # Declaration of arrays
 def p_array(p):
@@ -328,7 +331,9 @@ def p_punto_parameter(p):
   '''
   punto_parameter :
   '''
-  dir_func.add_function_params(current_func, convert_type(p[-2]), p[-1])
+  param_type = convert_type(p[-2])
+  memory_dir = assign_memory(param_type, current_func, False, False)
+  dir_func.add_function_params(current_func, param_type, p[-1], memory_dir)
 
 # List of the possible content on a function, conditional or cycle
 def p_estatutos(p):
@@ -606,13 +611,15 @@ def p_check_op_logicos(p):
       if operation_type == 5:
         raise Exception("ERROR: Type Mismatch")
       else:
-        temporal_variable = -1
-        quadruple = Quadruple(converted_operador, operando_izq, operando_der, temporal_variable)
+        # create direction for boolean temporal variable (either globally or locally)
+        temporal_dir_variable = assign_memory(4, current_func, False, True)
+
+        quadruple = Quadruple(converted_operador, operando_izq, operando_der, temporal_dir_variable)
         lista_de_cuadruplos.append(quadruple.transform_quadruple())
         stack_de_operandos.append(temporal_variable)
         stack_de_tipos.append(operation_type)
       
-    else:
+    else: # push operator back to stack
       stack_de_operadores.append(top_operador)
 
 # Push of logical operators to the stack of operators.
@@ -659,8 +666,8 @@ def p_check_op_relacionales(p):
       if operation_type == 5:
         raise Exception("ERROR: Type Mismatch")
       else:
-        temporal_variable = None
-        quadruple = Quadruple(converted_operador, operando_izq, operando_der, temporal_variable)
+        temporal_dir_variable = assign_memory(4, current_func, False, True)
+        quadruple = Quadruple(converted_operador, operando_izq, operando_der, temporal_dir_variable)
         lista_de_cuadruplos.append(quadruple.transform_quadruple())
         stack_de_operandos.append(temporal_variable)
         stack_de_tipos.append(operation_type)
@@ -724,8 +731,8 @@ def p_check_op_masmenos(p):
       if operation_type == 5:
         raise Exception("ERROR: Type Mismatch")
       else:
-        temporal_variable = None
-        quadruple = Quadruple(converted_operador, operando_izq, operando_der, temporal_variable)
+        temporal_dir_variable = assign_memory(operation_type, current_func, False, True)
+        quadruple = Quadruple(converted_operador, operando_izq, operando_der, temporal_dir_variable)
         lista_de_cuadruplos.append(quadruple.transform_quadruple())
         stack_de_operandos.append(temporal_variable)
         stack_de_tipos.append(operation_type)
@@ -767,8 +774,8 @@ def p_check_op_pordiv(p):
       if operation_type == 5:
         raise Exception("ERROR: Type Mismatch")
       else:
-        temporal_variable = None
-        quadruple = Quadruple(converted_operador, operando_izq, operando_der, temporal_variable)
+        temporal_dir_variable = assign_memory(operation_type, current_func, False, True)
+        quadruple = Quadruple(converted_operador, operando_izq, operando_der, temporal_dir_variable)
         lista_de_cuadruplos.append(quadruple.transform_quadruple())
         stack_de_operandos.append(temporal_variable)
         stack_de_tipos.append(operation_type)

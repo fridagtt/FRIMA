@@ -15,7 +15,7 @@ class SymbolTable:
       }
     }
 
-  def add_variable(self, type, name, func_name, dimension=0, size=0):
+  def add_variable(self, type, name, func_name, memory_dir, dimension=0, size=0):
     """Adds the variable to the variable table of the corresponding function
 
     Parameters:
@@ -24,6 +24,7 @@ class SymbolTable:
     func_name (string): current function where the variable is going to be added
     dimension (int): dimension of the variable (0 - simple_var, 1 - array, 2 - matrix)
     size (int): size of the variable (0 - simple_var, n - array, (n,m) - matrix)
+    memory_dir (int): assigned memory of the variable
 
     Returns:
     Modified variable table for the corresponding function or an error if the variable already exists.
@@ -32,7 +33,7 @@ class SymbolTable:
     access_dict = self.symbol_table["dir_functions"][func_name]["variables"]
     if name not in access_dict["var_names"]:
       access_dict["var_names"].add(name)
-      access_dict['vars_info'].append({'name': name, 'type': type, 'dimension': dimension, 'size': size})
+      access_dict['vars_info'].append({'name': name, 'type': type, 'dimension': dimension, 'size': size, 'memory_dir': memory_dir})
     else: 
       raise Exception(f"ERROR: La variable {name} ya está declarada.")
     
@@ -62,13 +63,14 @@ class SymbolTable:
     else:
       raise Exception(f"ERROR: La función {func_name} ya está declarada.")
 
-  def add_function_params(self, func_name, param_type, param_name):
+  def add_function_params(self, func_name, param_type, param_name, memory_dir):
     """Add parameters/variables to the variable table of the corresponding function
 
       Parameters:
       func_name (string): name of the function where the parameter will be added
       param_type (int): type of the parameter/variable
       param_name (string): name of the parameter/variable
+      memory_dir (int): assigned memory of the function parameter
 
       Returns:
       Modified variable directory of the corresponding function
@@ -76,7 +78,7 @@ class SymbolTable:
     """
     self.symbol_table["dir_functions"][func_name]["param_types"].append(param_type)
     self.symbol_table["dir_functions"][func_name]["variables"]['var_names'].add(param_name)
-    self.symbol_table["dir_functions"][func_name]["variables"]['vars_info'].append({'name': param_name, 'type': param_type})
+    self.symbol_table["dir_functions"][func_name]["variables"]['vars_info'].append({'name': param_name, 'type': param_type, 'memory_dir': memory_dir})
   
   def get_function_variables(self, func_name) -> set():
     """Returns the variables of the requested function

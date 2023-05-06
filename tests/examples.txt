@@ -3,9 +3,6 @@ variable entero -> gatos, perros, alumno;
 variable decimal -> pluma, pelos;
 variable letra -> a, b, c;
 
-renglon entero -> renglonX[2], renglonY[3];
-tabla decimal -> tablaX[2][2], tablaY[3][2];
-
 funcion entero funcion_prueba(){
    variable entero -> pluma, pelos;
    tabla entero -> tablaZ[2][2];
@@ -18,16 +15,6 @@ funcion entero funcion_prueba_dos(entero ff, decimal jj){
    renglon entero -> renglonX[2], renglonY[3];
 
    regresar pluma;
-};
-
-funcion entero prueba_si_while() {
-
-   si (pluma > perros) {
-      mientras (pluma < perros) {
-         pluma = pluma + gatos; 
-      };
-   };
-
 };
 
 inicio(){
