@@ -1,22 +1,15 @@
 programa pruebaUno:
 variable entero -> gatos, perros, alumno;
-variable decimal -> pluma, pelos;
-variable letra -> a, b, c;
+variable decimal -> pluma, pelos, lapiz;
 
 funcion entero funcion_prueba(){
    variable entero -> pluma, pelos;
-   tabla entero -> tablaZ[2][2];
 
-   regresar pluma;
-};
+   lapiz = lapiz*(pluma-pelos);
 
-funcion entero funcion_prueba_dos(entero ff, decimal jj){
-   variable entero -> pluma, pelos;
-   renglon entero -> renglonX[2], renglonY[3];
-
-   regresar pluma;
+   regresar lapiz;
 };
 
 inicio(){
-
+   lapiz = pluma * perros;
 };

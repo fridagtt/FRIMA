@@ -243,8 +243,8 @@ def p_punto_simple_var(p):
   '''
   punto_simple_var :
   '''
-  memory_dir = assign_memory(current_var_type, current_func, False, False)
-  dir_func.add_variable(current_var_type, p[-1], current_func, memory_dir)
+  var_dir_address = assign_memory(current_var_type, current_func, False, False)
+  dir_func.add_variable(current_var_type, p[-1], current_func, var_dir_address)
 
 # Declaration of arrays
 def p_array(p):
@@ -283,8 +283,19 @@ def p_punto_matrix(p):
 # Declares a function
 def p_dec_func(p):
   '''
-  dec_func : FUNCION dec_func_type ID punto_add_func LPAREN parameter RPAREN LBRACE dec_var_cycle estatutosCycle dec_func_regresar RBRACE SEMICOLON
+  dec_func : FUNCION dec_func_type ID punto_add_func LPAREN parameter RPAREN LBRACE dec_var_cycle estatutosCycle dec_func_regresar RBRACE SEMICOLON punto_end_function
   '''
+
+# Deletes the local variables of the function and its variable table.
+# Sets back the scope to be global.
+def p_punto_end_function(p):
+  '''
+  punto_end_function :
+  '''
+  global dir_func, current_func
+  reset_dir_local()
+  reset_local_temp()
+  current_func = 'programa'
 
 def p_dec_func_regresar(p):
   '''
@@ -332,8 +343,8 @@ def p_punto_parameter(p):
   punto_parameter :
   '''
   param_type = convert_type(p[-2])
-  memory_dir = assign_memory(param_type, current_func, False, False)
-  dir_func.add_function_params(current_func, param_type, p[-1], memory_dir)
+  parameter_dir_address = assign_memory(param_type, current_func, False, False)
+  dir_func.add_function_params(current_func, param_type, p[-1], parameter_dir_address)
 
 # List of the possible content on a function, conditional or cycle
 def p_estatutos(p):
@@ -389,7 +400,7 @@ def p_check_op_igual(p):
   '''
   check_op_igual :
   '''
-  global stack_de_operadores, stack_de_operandos, stack_de_tipos, lista_de_cuadruplos
+  global stack_de_operadores, stack_de_operandos, stack_de_tipos, lista_de_cuadruplos, dir_func
   top_operador = stack_de_operadores.pop()
   tipo_operando = stack_de_tipos.pop()
   operando = stack_de_operandos.pop()
@@ -404,9 +415,10 @@ def p_check_op_igual(p):
   operation_type = cubo_semantico.get_type(assign_variable_type, tipo_operando, converted_operador)
   # Raise exception if the assignation between the two types is not valid.
   if operation_type == 5:
-    raise Exception("ERROR: Type Mismatch")
+    raise Exception("ERROR: Type mismatch en asignación")
   else:
-    quadruple = Quadruple(converted_operador, operando, None , p[-4])
+    id_address = dir_func.get_variable_dir(current_func, p[-4])
+    quadruple = Quadruple(converted_operador, operando, None , id_address)
     lista_de_cuadruplos.append(quadruple.transform_quadruple())
 
 def p_leer(p):
@@ -612,11 +624,11 @@ def p_check_op_logicos(p):
         raise Exception("ERROR: Type Mismatch")
       else:
         # create direction for boolean temporal variable (either globally or locally)
-        temporal_dir_variable = assign_memory(4, current_func, False, True)
+        temporal_dir_address = assign_memory(4, current_func, False, True)
 
-        quadruple = Quadruple(converted_operador, operando_izq, operando_der, temporal_dir_variable)
+        quadruple = Quadruple(converted_operador, operando_izq, operando_der, temporal_dir_address)
         lista_de_cuadruplos.append(quadruple.transform_quadruple())
-        stack_de_operandos.append(temporal_variable)
+        stack_de_operandos.append(temporal_dir_address)
         stack_de_tipos.append(operation_type)
       
     else: # push operator back to stack
@@ -666,10 +678,10 @@ def p_check_op_relacionales(p):
       if operation_type == 5:
         raise Exception("ERROR: Type Mismatch")
       else:
-        temporal_dir_variable = assign_memory(4, current_func, False, True)
-        quadruple = Quadruple(converted_operador, operando_izq, operando_der, temporal_dir_variable)
+        temporal_dir_address = assign_memory(4, current_func, False, True)
+        quadruple = Quadruple(converted_operador, operando_izq, operando_der, temporal_dir_address)
         lista_de_cuadruplos.append(quadruple.transform_quadruple())
-        stack_de_operandos.append(temporal_variable)
+        stack_de_operandos.append(temporal_dir_address)
         stack_de_tipos.append(operation_type)
       
     else:
@@ -729,12 +741,12 @@ def p_check_op_masmenos(p):
       operation_type = cubo_semantico.get_type(tipo_operando_izq, tipo_operando_der, converted_operador)
       # Raise exception if the operation between the two types is not valid.
       if operation_type == 5:
-        raise Exception("ERROR: Type Mismatch")
+        raise Exception("ERROR: Type mismatch en suma y resta")
       else:
-        temporal_dir_variable = assign_memory(operation_type, current_func, False, True)
-        quadruple = Quadruple(converted_operador, operando_izq, operando_der, temporal_dir_variable)
+        temporal_dir_address = assign_memory(operation_type, current_func, False, True)
+        quadruple = Quadruple(converted_operador, operando_izq, operando_der, temporal_dir_address)
         lista_de_cuadruplos.append(quadruple.transform_quadruple())
-        stack_de_operandos.append(temporal_variable)
+        stack_de_operandos.append(temporal_dir_address)
         stack_de_tipos.append(operation_type)
       
     else:
@@ -772,12 +784,12 @@ def p_check_op_pordiv(p):
       operation_type = cubo_semantico.get_type(tipo_operando_izq, tipo_operando_der, converted_operador)
       # Raise exception if the operation between the two types is not valid.
       if operation_type == 5:
-        raise Exception("ERROR: Type Mismatch")
+        raise Exception("ERROR: Type mismatch multiplicacion y division")
       else:
-        temporal_dir_variable = assign_memory(operation_type, current_func, False, True)
-        quadruple = Quadruple(converted_operador, operando_izq, operando_der, temporal_dir_variable)
+        temporal_dir_address = assign_memory(operation_type, current_func, False, True)
+        quadruple = Quadruple(converted_operador, operando_izq, operando_der, temporal_dir_address)
         lista_de_cuadruplos.append(quadruple.transform_quadruple())
-        stack_de_operandos.append(temporal_variable)
+        stack_de_operandos.append(temporal_dir_address)
         stack_de_tipos.append(operation_type)
 
     else:
@@ -836,24 +848,28 @@ def p_quitar_fondo_falso(p) :
   '''
   stack_de_operadores.pop()
 
-# Push of INT constants
+# Creates the address memory of the int constant and push it to the stack of operands.
 def p_push_int(p) : 
   '''
   push_int :
   '''
-  global stack_de_operandos, stack_de_tipos
+  global stack_de_operandos, stack_de_tipos, dir_func
   if p[-1] != None:
-    stack_de_operandos.append(p[-1])
+    const_dir_address = assign_memory(1, current_func, True, False)
+    dir_func.add_constant_variable(1, p[-1], const_dir_address)
+    stack_de_operandos.append(const_dir_address)
     stack_de_tipos.append(1)
 
-# Push of FLOAT constants
+# Creates the address memory of the float constant and push it to the stack of operands.
 def p_push_float(p) : 
   '''
   push_float :
   '''
-  global stack_de_operandos, stack_de_tipos
+  global stack_de_operandos, stack_de_tipos, dir_func
   if p[-1] != None:
-    stack_de_operandos.append(p[-1])
+    const_dir_address = assign_memory(2, current_func, True, False)
+    dir_func.add_constant_variable(2, p[-1], const_dir_address)
+    stack_de_operandos.append(const_dir_address)
     stack_de_tipos.append(2)
 
 # Push of IDs
@@ -867,7 +883,8 @@ def p_push_id(p) :
 
   global stack_de_operandos, stack_de_tipos
   if p[-1] != None:
-    stack_de_operandos.append(p[-1])
+    id_address = dir_func.get_variable_dir(current_func, p[-1])
+    stack_de_operandos.append(id_address)
     id_type = dir_func.get_variable_type(current_func, p[-1])
     stack_de_tipos.append(id_type)
 
@@ -892,8 +909,8 @@ def p_imprimir(p):
   p[0] = None
 
 # It created a Quadruple for the print instruction. If there's something left within the
-# stack of operands it will pop it out from the stack and to store it as the result of the quadruple.
-# if not, it will only print the variable sent.
+# stack of operands that means it is either a variable, expression or an int/float. If not it means it's
+# a constant string. For each it will create the corresponding Quadruple.
 def p_push_imprimir(p):
   '''
   push_imprimir :
@@ -905,7 +922,9 @@ def p_push_imprimir(p):
     quadruple = Quadruple(converted_operador, None, None, top_operando)
     lista_de_cuadruplos.append(quadruple.transform_quadruple())
   else:
-    quadruple = Quadruple(converted_operador, None, None, p[-1])
+    const_dir_address = assign_memory(5, current_func, True, False)
+    dir_func.add_constant_variable(1, p[-1], const_dir_address)
+    quadruple = Quadruple(converted_operador, None, None, const_dir_address)
     lista_de_cuadruplos.append(quadruple.transform_quadruple())
 
 def p_empty(p):

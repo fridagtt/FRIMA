@@ -12,7 +12,8 @@ class SymbolTable:
             'vars_info' : [],
           },
         },
-      }
+      },
+      'constant_table': {},
     }
 
   def add_variable(self, type, name, func_name, memory_dir, dimension=0, size=0):
@@ -113,6 +114,28 @@ class SymbolTable:
         list_of_variables = self.symbol_table["dir_functions"]['programa']["variables"]['vars_info']
         variable_object = next((variable for variable in list_of_variables if variable['name'] == variable_name),None)
         return variable_object['type']
+    
+  def get_variable_dir(self, func_name, variable_name) -> int:
+    """Returns the requested variable direction. If the variable is not found within the local scope of the
+      function, it looks it up within the global variable table (unless you already are within the global scope).
+
+      Parameters:
+      func_name (string): name of the function
+      variable_name (string): name of the variable
+
+      Returns:
+      int(): direction of the requested variable
+
+    """
+    set_of_variables = self.get_function_variables(func_name)
+    if variable_name in set_of_variables:
+        list_of_variables = self.symbol_table["dir_functions"][func_name]["variables"]['vars_info']
+        variable_object = next((variable for variable in list_of_variables if variable['name'] == variable_name),None)
+        return variable_object['memory_dir']
+    elif func_name != "programa":
+        list_of_variables = self.symbol_table["dir_functions"]['programa']["variables"]['vars_info']
+        variable_object = next((variable for variable in list_of_variables if variable['name'] == variable_name),None)
+        return variable_object['memory_dir']
 
   def is_variable_declared(self, func_name, variable_name) -> bool:
     """Validates if the variables is either declared within the local or global scope
@@ -130,4 +153,34 @@ class SymbolTable:
         return variable_name in self.get_function_variables('programa')
     else:
         return True
+    
+  def add_constant_variable(self, const_type, const_value, const_memory_dir):
+    """Adds the constant and its memory direction to the global variable table
+
+    Parameters:
+    const_type (int): type of the constant (int - 1, float - 2, char - 3)
+    const_value (string): value of the constant to be added
+    const_memory_dir (int): assigned memory of the constant
+
+    Returns:
+    Modified global variable table with the constant added.
+
+    """
+    self.symbol_table['constant_table'][const_memory_dir] = {
+      'type': const_type,
+      'memory_dir': const_memory_dir,
+      'value': const_value,
+    }
+
+  def delete_function_var_table(self, current_func):
+    """Deletes variable table of function received
+
+    Parameters:
+    current_func (string): name of the function to delete its variable table
+
+    Returns:
+    Modified variable table.
+
+    """
+    del self.symbol_table['dir_functions'][current_func]
   

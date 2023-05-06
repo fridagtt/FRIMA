@@ -208,15 +208,7 @@ def reset_dir_local():
   local_float = 10000
   local_char = 12000
 
-#Borra las global temp
-def reser_global_temp():
-  global global_temp_int, global_temp_float, global_temp_char, global_temp_bool
-  global_temp_int = 14000
-  global_temp_float = 16000
-  global_temp_char = 18000
-  global_temp_bool = 20000
-
-#Borra las local temp
+#Borra las direcciones locales temporales
 def reset_local_temp():
   global local_temp_int, local_temp_float, local_temp_char, local_temp_bool
   local_temp_int = 22000
