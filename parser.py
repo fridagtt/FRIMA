@@ -609,7 +609,6 @@ def p_check_op_masmenos(p):
         lista_de_cuadruplos.append(quadruple.transform_quadruple())
         stack_de_operandos.append(temporal_dir_address)
         stack_de_tipos.append(operation_type)
-      
     else:
       stack_de_operadores.append(top_operador)
 
@@ -652,7 +651,6 @@ def p_check_op_pordiv(p):
         lista_de_cuadruplos.append(quadruple.transform_quadruple())
         stack_de_operandos.append(temporal_dir_address)
         stack_de_tipos.append(operation_type)
-
     else:
       stack_de_operadores.append(top_operador)
 
@@ -709,28 +707,36 @@ def p_quitar_fondo_falso(p) :
   '''
   stack_de_operadores.pop()
 
-# Creates the address memory of the int constant and push it to the stack of operands.
+# Creates the address memory of the int constant (if it doesn't have one yet) 
+# and push it to the stack of operands.
 def p_push_int(p) : 
   '''
   push_int :
   '''
   global stack_de_operandos, stack_de_tipos, dir_func
   if p[-1] != None:
-    const_dir_address = assign_memory(1, current_func, True, False)
-    dir_func.add_constant_variable(1, p[-1], const_dir_address)
-    stack_de_operandos.append(const_dir_address)
+    constant = p[-1]
+    constant_address = dir_func.get_constant_address(constant)
+    if(not constant_address):
+      constant_address = assign_memory(1, current_func, True, False)
+      dir_func.add_constant_variable(1, constant, constant_address)
+    stack_de_operandos.append(constant_address)
     stack_de_tipos.append(1)
 
-# Creates the address memory of the float constant and push it to the stack of operands.
+# Creates the address memory of the float constant (if it doesn't have one yet)
+# and push it to the stack of operands.
 def p_push_float(p) : 
   '''
   push_float :
   '''
   global stack_de_operandos, stack_de_tipos, dir_func
   if p[-1] != None:
-    const_dir_address = assign_memory(2, current_func, True, False)
-    dir_func.add_constant_variable(2, p[-1], const_dir_address)
-    stack_de_operandos.append(const_dir_address)
+    constant = p[-1]
+    constant_address = dir_func.get_constant_address(constant)
+    if(not constant_address):
+      constant_address = assign_memory(2, current_func, True, False)
+      dir_func.add_constant_variable(2, constant, constant_address)
+    stack_de_operandos.append(constant_address)
     stack_de_tipos.append(2)
 
 # Push of IDs
@@ -783,9 +789,12 @@ def p_push_imprimir(p):
     quadruple = Quadruple(converted_operador, None, None, top_operando)
     lista_de_cuadruplos.append(quadruple.transform_quadruple())
   else:
-    const_dir_address = assign_memory(5, current_func, True, False)
-    dir_func.add_constant_variable(1, p[-1], const_dir_address)
-    quadruple = Quadruple(converted_operador, None, None, const_dir_address)
+    constant = p[-1]
+    constant_address = dir_func.get_constant_address(constant)
+    if(not constant_address):
+      constant_address = assign_memory(5, current_func, True, False)
+      dir_func.add_constant_variable(5, constant, constant_address)
+    quadruple = Quadruple(converted_operador, None, None, constant_address)
     lista_de_cuadruplos.append(quadruple.transform_quadruple())
 
 def p_empty(p):

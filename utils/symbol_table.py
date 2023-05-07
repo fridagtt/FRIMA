@@ -28,7 +28,7 @@ class SymbolTable:
     memory_dir (int): assigned memory of the variable
 
     Returns:
-    Modified variable table for the corresponding function or an error if the variable already exists.
+    void: modified variable table for the corresponding function or an error if the variable already exists.
 
    """
     access_dict = self.symbol_table["dir_functions"][func_name]["variables"]
@@ -46,7 +46,7 @@ class SymbolTable:
     return_type (int): return type of the function
 
     Returns:
-    Modified function directory or an error if the function already exists
+    void: modified function directory or an error if the function already exists
 
    """
     access_dict = self.symbol_table["dir_functions"]["dir_func_names"]
@@ -74,7 +74,7 @@ class SymbolTable:
       memory_dir (int): assigned memory of the function parameter
 
       Returns:
-      Modified variable directory of the corresponding function
+      void: modified variable directory of the corresponding function
 
     """
     self.symbol_table["dir_functions"][func_name]["param_types"].append(param_type)
@@ -145,7 +145,7 @@ class SymbolTable:
       variable_name (string): name of the variable
 
       Returns:
-      bool(): wether the variable exists within the local or global scope
+      bool(): whether the variable exists within the local or global scope
 
     """
     set_of_variables = self.get_function_variables(func_name)
@@ -158,19 +158,34 @@ class SymbolTable:
     """Adds the constant and its memory direction to the global variable table
 
     Parameters:
-    const_type (int): type of the constant (int - 1, float - 2, char - 3)
+    const_type (int): type of the constant (int - 1, float - 2, char - 3, string - 5)
     const_value (string): value of the constant to be added
     const_memory_dir (int): assigned memory of the constant
 
     Returns:
-    Modified global variable table with the constant added.
+    void: modified global variable table with the constant added.
 
     """
-    self.symbol_table['constant_table'][const_memory_dir] = {
+    self.symbol_table['constant_table'][const_value] = {
       'type': const_type,
       'memory_dir': const_memory_dir,
       'value': const_value,
     }
+  
+  def get_constant_address(self, const_value)-> int:
+    """Fetches the memory address of the requested constant value
+
+    Parameters:
+    const_value (string): value of the constant to be fetched
+
+    Returns:
+    int(): memory address of the requested constant
+
+    """
+    if(const_value in self.symbol_table['constant_table']):
+      return self.symbol_table['constant_table'][const_value]['memory_dir']
+    else:
+      return None
 
   def delete_function_var_table(self, current_func):
     """Deletes variable table of function received
@@ -179,7 +194,7 @@ class SymbolTable:
     current_func (string): name of the function to delete its variable table
 
     Returns:
-    Modified variable table.
+    void: modified variable table
 
     """
     del self.symbol_table['dir_functions'][current_func]

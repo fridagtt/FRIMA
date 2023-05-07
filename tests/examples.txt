@@ -11,7 +11,20 @@ funcion entero funcion_prueba(){
    regresar lapiz;
 };
 
+// This is a single comment
+
+/*
 funcion entero funcion_prueba_dos(){
+   variable entero -> pluma, pelos;
+
+   imprimir(2, "string");
+   lapiz = lapiz*(pluma-pelos);
+
+   regresar lapiz;
+};
+*/
+
+funcion entero funcion_prueba_tres(){
    variable entero -> pluma, pelos;
 
    imprimir(2, "string");
