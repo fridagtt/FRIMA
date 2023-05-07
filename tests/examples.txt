@@ -5,6 +5,16 @@ variable decimal -> pluma, pelos, lapiz;
 funcion entero funcion_prueba(){
    variable entero -> pluma, pelos;
 
+   imprimir(2, "string");
+   lapiz = lapiz*(pluma-pelos);
+
+   regresar lapiz;
+};
+
+funcion entero funcion_prueba_dos(){
+   variable entero -> pluma, pelos;
+
+   imprimir(2, "string");
    lapiz = lapiz*(pluma-pelos);
 
    regresar lapiz;
