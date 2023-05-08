@@ -111,6 +111,9 @@ Desarrollo de la semántica para la creación de cuádruplos para los estatutos 
 Se modificó el diagrama del Ciclo For que se puede ver en la siguiente imagen:
 ![My Image](ActualizacionDiagramasAvance4.jpg)
 
+<h1>  ${\color{gray} Avance  }$  ${\color{gray} 5  }$</h1> 
+Mayo 14, 2023
+
 
 
 
