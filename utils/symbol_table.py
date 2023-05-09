@@ -4,18 +4,59 @@ class SymbolTable:
       'dir_functions': {
         'dir_func_names': set(),
         'programa': {
-          'param_types': [],
+          'param_types': [], # en programa este siempre estará vacío
           'return_type': 'void',
           'kind': 'np', # np -> nombre of program
           'variables': {
             'var_names': set(),
             'vars_info' : [],
           },
+          'initial_quadruple': 0,
+          'cont_temp': [0,0,0,0],
+          'cont_var': [0,0,0],
         },
       },
       'constant_table': {},
     }
 
+  def add_cont_temp(self, type, func_name):
+    """Adds 1 to the temporal counter of variables of the type received
+
+    Parameters:
+    type (int): type of the temporal variable (int - 1, float - 2, char - 3)
+    func_name (string): current function where the temporal counter is going to be added
+
+    Returns:
+    void: modified temporal counter of each type of variable
+
+    """
+    if type == 1:
+      self.symbol_table["dir_functions"][func_name]['cont_temp'][0] += 1
+    elif type == 2:
+      self.symbol_table["dir_functions"][func_name]['cont_temp'][1] += 1
+    elif type == 3:
+      self.symbol_table["dir_functions"][func_name]['cont_temp'][2] += 1
+    elif type == 4:
+      self.symbol_table["dir_functions"][func_name]['cont_temp'][3] += 1
+
+  def add_cont_var(self, type, func_name):
+    """Adds 1 to the counter of variables of the type received
+
+    Parameters:
+    type (int): type of the variable (int - 1, float - 2, char - 3)
+    func_name (string): current function where the counter is going to be added
+
+    Returns:
+    void: modified counter of each type of variable
+
+    """
+    if type == 1:
+      self.symbol_table["dir_functions"][func_name]['cont_var'][0] += 1
+    elif type == 2:
+      self.symbol_table["dir_functions"][func_name]['cont_var'][1] += 1
+    elif type == 3:
+      self.symbol_table["dir_functions"][func_name]['cont_var'][2] += 1
+    
   def add_variable(self, type, name, func_name, memory_dir, dimension=0, size=0):
     """Adds the variable to the variable table of the corresponding function
 
@@ -30,11 +71,12 @@ class SymbolTable:
     Returns:
     void: modified variable table for the corresponding function or an error if the variable already exists.
 
-   """
+    """
     access_dict = self.symbol_table["dir_functions"][func_name]["variables"]
     if name not in access_dict["var_names"]:
       access_dict["var_names"].add(name)
       access_dict['vars_info'].append({'name': name, 'type': type, 'dimension': dimension, 'size': size, 'memory_dir': memory_dir})
+      self.add_cont_var(type, func_name)
     else: 
       raise Exception(f"ERROR: La variable {name} ya está declarada.")
     
@@ -60,6 +102,9 @@ class SymbolTable:
           'var_names': set(),
           'vars_info' : [],
         },
+        'initial_quadruple': 0,
+        'cont_temp': [0,0,0,0],
+        'cont_var': [0,0,0],
       }
     else:
       raise Exception(f"ERROR: La función {func_name} ya está declarada.")
@@ -115,7 +160,7 @@ class SymbolTable:
         variable_object = next((variable for variable in list_of_variables if variable['name'] == variable_name),None)
         return variable_object['type']
     
-  def get_variable_dir(self, func_name, variable_name) -> int:
+  def get_variable_address(self, func_name, variable_name) -> int:
     """Returns the requested variable direction. If the variable is not found within the local scope of the
       function, it looks it up within the global variable table (unless you already are within the global scope).
 
@@ -155,7 +200,7 @@ class SymbolTable:
         return True
     
   def add_constant_variable(self, const_type, const_value, const_memory_dir):
-    """Adds the constant and its memory direction to the global variable table
+    """Adds the constant variable and its memory direction to the global variable table
 
     Parameters:
     const_type (int): type of the constant (int - 1, float - 2, char - 3, string - 5)

@@ -1,7 +1,7 @@
 import ply.yacc as yacc
 from collections import deque
 
-from lexer import tokens
+from lexer_frima import tokens
 
 from utils.symbol_table import *
 from utils.semantic_cube import *
@@ -47,7 +47,7 @@ def p_punto_programa(p):
 
 def p_inicio(p):
   '''
-  inicio : INICIO LPAREN RPAREN LBRACE estatutosCycle RBRACE SEMICOLON
+  inicio : INICIO LPAREN RPAREN LBRACE estatutos RBRACE SEMICOLON
   '''
   p[0] = None
   print("TABLA DE VARIABLES", dir_func.symbol_table)
@@ -144,7 +144,8 @@ def p_punto_matrix(p):
 # Declares a function
 def p_dec_func(p):
   '''
-  dec_func : FUNCION dec_func_type ID punto_add_func LPAREN parameter RPAREN LBRACE dec_var_cycle estatutosCycle dec_func_regresar RBRACE SEMICOLON punto_end_function
+  dec_func : FUNCION type ID punto_add_func LPAREN parameter RPAREN LBRACE dec_var_cycle estatutos RBRACE SEMICOLON punto_end_function
+            | FUNCION SINREGRESAR ID punto_add_func LPAREN parameter RPAREN LBRACE dec_var_cycle estatutos RBRACE SEMICOLON punto_end_function
   '''
 
 # Deletes the local variables of the function and its variable table.
@@ -158,20 +159,6 @@ def p_punto_end_function(p):
   reset_local_temp()
   dir_func.delete_function_var_table(current_func)
   current_func = 'programa'
-
-def p_dec_func_regresar(p):
-  '''
-  dec_func_regresar : REGRESAR variable SEMICOLON
-                    | empty
-  '''
-  p[0] = p[1]
-
-def p_dec_func_type(p):
-  '''
-  dec_func_type : type
-                | SINREGRESAR
-  '''
-  p[0] = p[1]
 
 # Adds function and its return type to the global function's directory.
 # Updates "current_func" pointer as we are accessing a new function.
@@ -208,25 +195,37 @@ def p_punto_parameter(p):
   parameter_dir_address = assign_memory(param_type, current_func, False, False)
   dir_func.add_function_params(current_func, param_type, p[-1], parameter_dir_address)
 
-# List of the possible content on a function, conditional or cycle
 def p_estatutos(p):
   '''
-  estatutos : asignar
-          | llamada_func
-          | ciclo_for
-          | ciclo_while
-          | condicion
-          | imprimir
-          | leer
+  estatutos : estatutosCycle
+            | func_regresar
   '''
-  p[0] = None
 
 # Allows multiple declaration of estatutos
 def p_estatutosCycle(p):
 	'''
-	estatutosCycle : estatutos estatutosCycle
-						    | empty
+	estatutosCycle : estatutos_opciones estatutos
+                | empty
 	'''
+        
+# List of the possible content on a function, conditional or cycle
+def p_estatutos_opciones(p):
+  '''
+  estatutos_opciones : asignar
+                      | llamada_func
+                      | ciclo_for
+                      | ciclo_while
+                      | condicion
+                      | imprimir
+                      | leer
+  '''
+  p[0] = p[1]
+
+def p_func_regresar(p):
+  '''
+  func_regresar : REGRESAR exp SEMICOLON
+  '''
+  p[0] = None
 
 def p_asignar(p):
   '''
@@ -279,7 +278,7 @@ def p_check_op_igual(p):
   if operation_type == 5:
     raise Exception("ERROR: Type mismatch en asignación")
   else:
-    id_address = dir_func.get_variable_dir(current_func, p[-4])
+    id_address = dir_func.get_variable_address(current_func, p[-4])
     quadruple = Quadruple(converted_operador, operando, None , id_address)
     lista_de_cuadruplos.append(quadruple.transform_quadruple())
 
@@ -291,7 +290,7 @@ def p_leer(p):
 
 def p_ciclo_while(p):
   '''
-  ciclo_while : MIENTRAS punto_inicio_while LPAREN hyper_exp RPAREN punto_medio_while LBRACE estatutosCycle RBRACE punto_fin_while SEMICOLON
+  ciclo_while : MIENTRAS punto_inicio_while LPAREN hyper_exp RPAREN punto_medio_while LBRACE estatutos RBRACE punto_fin_while SEMICOLON
   '''
   p[0] = None
 
@@ -334,7 +333,7 @@ def p_punto_fin_while(p):
 
 def p_ciclo_for(p):
   '''
-  ciclo_for : PORCADA ID punto_existe_id ASSIGN hyper_exp punto_valida_int HASTA hyper_exp punto_valida_exp LBRACE estatutosCycle RBRACE punto_termina_for SEMICOLON
+  ciclo_for : PORCADA ID punto_existe_id ASSIGN hyper_exp punto_valida_int HASTA hyper_exp punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
   '''
   p[0] = None
 
@@ -407,8 +406,8 @@ def p_punto_termina_for(p):
   
 def p_condicion(p):
   '''
-  condicion : SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutosCycle RBRACE punto_fin_si SEMICOLON
-            | SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutosCycle RBRACE SINO punto_sino LBRACE estatutosCycle RBRACE punto_fin_si SEMICOLON
+  condicion : SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE punto_fin_si SEMICOLON
+            | SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE SINO punto_sino LBRACE estatutos RBRACE punto_fin_si SEMICOLON
   '''
   p[0] = None
 
@@ -468,7 +467,7 @@ def p_check_op_logicos(p):
   '''
   check_op_logicos :
   '''
-  global stack_de_operadores, stack_de_operandos, stack_de_tipos, lista_de_cuadruplos
+  global stack_de_operadores, stack_de_operandos, stack_de_tipos, lista_de_cuadruplos, dir_func
   if len(stack_de_operadores) != 0:
     top_operador = stack_de_operadores.pop()
     if top_operador == 'y' or top_operador == 'o':
@@ -487,6 +486,7 @@ def p_check_op_logicos(p):
       else:
         # create direction for boolean temporal variable (either globally or locally)
         temporal_dir_address = assign_memory(4, current_func, False, True)
+        dir_func.add_cont_temp(4, current_func)
 
         quadruple = Quadruple(converted_operador, operando_izq, operando_der, temporal_dir_address)
         lista_de_cuadruplos.append(quadruple.transform_quadruple())
@@ -541,6 +541,8 @@ def p_check_op_relacionales(p):
         raise Exception("ERROR: Type Mismatch")
       else:
         temporal_dir_address = assign_memory(4, current_func, False, True)
+        dir_func.add_cont_temp(4, current_func)
+
         quadruple = Quadruple(converted_operador, operando_izq, operando_der, temporal_dir_address)
         lista_de_cuadruplos.append(quadruple.transform_quadruple())
         stack_de_operandos.append(temporal_dir_address)
@@ -606,6 +608,8 @@ def p_check_op_masmenos(p):
         raise Exception("ERROR: Type mismatch en suma y resta")
       else:
         temporal_dir_address = assign_memory(operation_type, current_func, False, True)
+        dir_func.add_cont_temp(operation_type, current_func)
+        
         quadruple = Quadruple(converted_operador, operando_izq, operando_der, temporal_dir_address)
         lista_de_cuadruplos.append(quadruple.transform_quadruple())
         stack_de_operandos.append(temporal_dir_address)
@@ -648,6 +652,8 @@ def p_check_op_pordiv(p):
         raise Exception("ERROR: Type mismatch multiplicacion y division")
       else:
         temporal_dir_address = assign_memory(operation_type, current_func, False, True)
+        dir_func.add_cont_temp(operation_type, current_func)
+
         quadruple = Quadruple(converted_operador, operando_izq, operando_der, temporal_dir_address)
         lista_de_cuadruplos.append(quadruple.transform_quadruple())
         stack_de_operandos.append(temporal_dir_address)
@@ -751,7 +757,7 @@ def p_push_id(p) :
 
   global stack_de_operandos, stack_de_tipos
   if p[-1] != None:
-    id_address = dir_func.get_variable_dir(current_func, p[-1])
+    id_address = dir_func.get_variable_address(current_func, p[-1])
     stack_de_operandos.append(id_address)
     id_type = dir_func.get_variable_type(current_func, p[-1])
     stack_de_tipos.append(id_type)
