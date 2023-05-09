@@ -156,6 +156,7 @@ def p_punto_end_function(p):
   global dir_func, current_func
   reset_dir_local()
   reset_local_temp()
+  dir_func.delete_function_var_table(current_func)
   current_func = 'programa'
 
 def p_dec_func_regresar(p):

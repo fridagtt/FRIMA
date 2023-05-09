@@ -197,5 +197,5 @@ class SymbolTable:
     void: modified variable table
 
     """
-    del self.symbol_table['dir_functions'][current_func]
+    del self.symbol_table['dir_functions'][current_func]['variables']
   
