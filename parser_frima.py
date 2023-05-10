@@ -40,19 +40,30 @@ def p_punto_programa(p):
   '''
   punto_programa : 
   '''
-  global dir_func, current_func
+  global dir_func, current_func, lista_de_cuadruplos
   dir_func = SymbolTable() # Create symbol table
   current_func = "programa" # Sets global scope
   dir_func.symbol_table['dir_functions']['dir_func_names'].add("programa")
 
+  quadruple = Quadruple(80, None, None , None) # Crete GOTO quadruple
+  lista_de_cuadruplos.append(quadruple.transform_quadruple())
+
 def p_inicio(p):
   '''
-  inicio : INICIO LPAREN RPAREN LBRACE estatutos RBRACE SEMICOLON
+  inicio : INICIO LPAREN RPAREN LBRACE punto_update_goto estatutos RBRACE SEMICOLON
   '''
   p[0] = None
   print("TABLA DE VARIABLES", dir_func.symbol_table)
   for quadruple in lista_de_cuadruplos: 
-    print(quadruple) 
+    print(quadruple)
+
+def p_punto_update_goto(p):
+  '''
+  punto_update_goto :
+  '''
+  global current_func, lista_de_cuadruplos
+  current_func = 'programa'
+  lista_de_cuadruplos[0]=(80,None,None,len(lista_de_cuadruplos))
 
 # Allows multiple declaration of variables
 def p_dec_var_cycle(p):
