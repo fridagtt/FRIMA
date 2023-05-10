@@ -39,11 +39,11 @@ Rule 29    dec_func -> FUNCION type ID punto_add_func LPAREN parameter RPAREN LB
 Rule 30    dec_func -> FUNCION SINREGRESAR ID punto_add_func LPAREN parameter RPAREN LBRACE dec_var_cycle estatutos RBRACE SEMICOLON punto_end_function
 Rule 31    punto_end_function -> <empty>
 Rule 32    punto_add_func -> <empty>
-Rule 33    parameter -> type ID punto_parameter parameterCycle
+Rule 33    parameter -> type ID punto_add_parameter parameterCycle
 Rule 34    parameter -> empty
-Rule 35    parameterCycle -> COMMA type ID punto_parameter parameterCycle
+Rule 35    parameterCycle -> COMMA type ID punto_add_parameter parameterCycle
 Rule 36    parameterCycle -> empty
-Rule 37    punto_parameter -> <empty>
+Rule 37    punto_add_parameter -> <empty>
 Rule 38    estatutos -> estatutosCycle
 Rule 39    estatutos -> func_regresar
 Rule 40    estatutosCycle -> estatutos_opciones estatutos
@@ -233,6 +233,7 @@ parameter            : 29 30
 parameterCycle       : 33 35
 programa             : 0
 punto_add_func       : 29 30
+punto_add_parameter  : 33 35
 punto_array          : 21 22
 punto_end_function   : 29 30
 punto_existe_id      : 62
@@ -241,7 +242,6 @@ punto_fin_while      : 58
 punto_inicio_while   : 58
 punto_matrix         : 25 26
 punto_medio_while    : 58
-punto_parameter      : 33 35
 punto_programa       : 1 2 3 4
 punto_si             : 67 68
 punto_simple_var     : 17 18
@@ -1125,7 +1125,7 @@ state 68
 state 69
 
     (29) dec_func -> FUNCION type ID punto_add_func LPAREN . parameter RPAREN LBRACE dec_var_cycle estatutos RBRACE SEMICOLON punto_end_function
-    (33) parameter -> . type ID punto_parameter parameterCycle
+    (33) parameter -> . type ID punto_add_parameter parameterCycle
     (34) parameter -> . empty
     (14) type -> . ENTERO
     (15) type -> . DECIMAL
@@ -1144,7 +1144,7 @@ state 69
 state 70
 
     (30) dec_func -> FUNCION SINREGRESAR ID punto_add_func LPAREN . parameter RPAREN LBRACE dec_var_cycle estatutos RBRACE SEMICOLON punto_end_function
-    (33) parameter -> . type ID punto_parameter parameterCycle
+    (33) parameter -> . type ID punto_add_parameter parameterCycle
     (34) parameter -> . empty
     (14) type -> . ENTERO
     (15) type -> . DECIMAL
@@ -1660,7 +1660,7 @@ state 96
 
 state 97
 
-    (33) parameter -> type . ID punto_parameter parameterCycle
+    (33) parameter -> type . ID punto_add_parameter parameterCycle
 
     ID              shift and go to state 131
 
@@ -2212,13 +2212,13 @@ state 130
 
 state 131
 
-    (33) parameter -> type ID . punto_parameter parameterCycle
-    (37) punto_parameter -> .
+    (33) parameter -> type ID . punto_add_parameter parameterCycle
+    (37) punto_add_parameter -> .
 
-    COMMA           reduce using rule 37 (punto_parameter -> .)
-    RPAREN          reduce using rule 37 (punto_parameter -> .)
+    COMMA           reduce using rule 37 (punto_add_parameter -> .)
+    RPAREN          reduce using rule 37 (punto_add_parameter -> .)
 
-    punto_parameter                shift and go to state 176
+    punto_add_parameter            shift and go to state 176
 
 state 132
 
@@ -2878,8 +2878,8 @@ state 175
 
 state 176
 
-    (33) parameter -> type ID punto_parameter . parameterCycle
-    (35) parameterCycle -> . COMMA type ID punto_parameter parameterCycle
+    (33) parameter -> type ID punto_add_parameter . parameterCycle
+    (35) parameterCycle -> . COMMA type ID punto_add_parameter parameterCycle
     (36) parameterCycle -> . empty
     (130) empty -> .
 
@@ -3308,14 +3308,14 @@ state 199
 
 state 200
 
-    (33) parameter -> type ID punto_parameter parameterCycle .
+    (33) parameter -> type ID punto_add_parameter parameterCycle .
 
-    RPAREN          reduce using rule 33 (parameter -> type ID punto_parameter parameterCycle .)
+    RPAREN          reduce using rule 33 (parameter -> type ID punto_add_parameter parameterCycle .)
 
 
 state 201
 
-    (35) parameterCycle -> COMMA . type ID punto_parameter parameterCycle
+    (35) parameterCycle -> COMMA . type ID punto_add_parameter parameterCycle
     (14) type -> . ENTERO
     (15) type -> . DECIMAL
     (16) type -> . LETRA
@@ -3657,7 +3657,7 @@ state 220
 
 state 221
 
-    (35) parameterCycle -> COMMA type . ID punto_parameter parameterCycle
+    (35) parameterCycle -> COMMA type . ID punto_add_parameter parameterCycle
 
     ID              shift and go to state 232
 
@@ -3818,13 +3818,13 @@ state 231
 
 state 232
 
-    (35) parameterCycle -> COMMA type ID . punto_parameter parameterCycle
-    (37) punto_parameter -> .
+    (35) parameterCycle -> COMMA type ID . punto_add_parameter parameterCycle
+    (37) punto_add_parameter -> .
 
-    COMMA           reduce using rule 37 (punto_parameter -> .)
-    RPAREN          reduce using rule 37 (punto_parameter -> .)
+    COMMA           reduce using rule 37 (punto_add_parameter -> .)
+    RPAREN          reduce using rule 37 (punto_add_parameter -> .)
 
-    punto_parameter                shift and go to state 241
+    punto_add_parameter            shift and go to state 241
 
 state 233
 
@@ -3917,8 +3917,8 @@ state 240
 
 state 241
 
-    (35) parameterCycle -> COMMA type ID punto_parameter . parameterCycle
-    (35) parameterCycle -> . COMMA type ID punto_parameter parameterCycle
+    (35) parameterCycle -> COMMA type ID punto_add_parameter . parameterCycle
+    (35) parameterCycle -> . COMMA type ID punto_add_parameter parameterCycle
     (36) parameterCycle -> . empty
     (130) empty -> .
 
@@ -4010,9 +4010,9 @@ state 251
 
 state 252
 
-    (35) parameterCycle -> COMMA type ID punto_parameter parameterCycle .
+    (35) parameterCycle -> COMMA type ID punto_add_parameter parameterCycle .
 
-    RPAREN          reduce using rule 35 (parameterCycle -> COMMA type ID punto_parameter parameterCycle .)
+    RPAREN          reduce using rule 35 (parameterCycle -> COMMA type ID punto_add_parameter parameterCycle .)
 
 
 state 253

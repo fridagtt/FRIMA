@@ -18,7 +18,7 @@ class SymbolTable:
       },
       'constant_table': {},
     }
-
+  
   def add_cont_temp(self, type, func_name):
     """Adds 1 to the temporal counter of variables of the type received
 
@@ -80,12 +80,14 @@ class SymbolTable:
     else: 
       raise Exception(f"ERROR: La variable {name} ya está declarada.")
     
-  def add_function(self, func_name, return_type): 
-    """Adds a function to the function directory if it doesn't exist
+  def add_function(self, func_name, return_type, position): 
+    """Adds a function to the function directory if it doesn't exist, with its corresponding
+    initial quadruple position.
 
     Parameters:
     func_name (string): name of the function to be added
     return_type (int): return type of the function
+    position (int): quadruple position for the function
 
     Returns:
     void: modified function directory or an error if the function already exists
@@ -102,7 +104,7 @@ class SymbolTable:
           'var_names': set(),
           'vars_info' : [],
         },
-        'initial_quadruple': 0,
+        'initial_quadruple': position,
         'cont_temp': [0,0,0,0],
         'cont_var': [0,0,0],
       }

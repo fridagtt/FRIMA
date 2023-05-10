@@ -154,7 +154,11 @@ def p_punto_end_function(p):
   '''
   punto_end_function :
   '''
-  global dir_func, current_func
+  global dir_func, current_func, lista_de_cuadruplos
+
+  quadruple = Quadruple(85, None, None , None)
+  lista_de_cuadruplos.append(quadruple.transform_quadruple())
+  
   reset_dir_local()
   reset_local_temp()
   dir_func.delete_function_var_table(current_func)
@@ -166,14 +170,14 @@ def p_punto_add_func(p):
     '''
     punto_add_func :
     '''
-    global current_func
+    global current_func, lista_de_cuadruplos
     current_func = p[-1]
-    dir_func.add_function(p[-1], convert_type(p[-2]))
+    dir_func.add_function(p[-1], convert_type(p[-2]), len(lista_de_cuadruplos))
 
 # Declares function's parameters (if any)
 def p_parameter(p):
   '''
-  parameter : type ID punto_parameter parameterCycle
+  parameter : type ID punto_add_parameter parameterCycle
             | empty
   '''
   p[0] = None
@@ -181,15 +185,15 @@ def p_parameter(p):
 # Allows multiple declaration of parameters
 def p_parameterCycle(p):
   '''
-  parameterCycle : COMMA type ID punto_parameter parameterCycle
+  parameterCycle : COMMA type ID punto_add_parameter parameterCycle
                   | empty 
   '''
   p[0] = None
 
 # Adds parameter (and its type) to the variable table of the current function.
-def p_punto_parameter(p):
+def p_punto_add_parameter(p):
   '''
-  punto_parameter :
+  punto_add_parameter :
   '''
   param_type = convert_type(p[-2])
   parameter_dir_address = assign_memory(param_type, current_func, False, False)

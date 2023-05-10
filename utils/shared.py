@@ -51,10 +51,16 @@ def convert_type(type):
       return 75
     case 'GOTO':
       return 80
-    case 'GOTOV':
+    case 'ENDFUNC':
       return 85
     case 'imprimir':
       return 90
+    case 'GOSUB':
+      return 95
+    case 'ERA':
+      return 100
+    case 'PARAMETER':
+      return 105
     case _:
       return -1
 
