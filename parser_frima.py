@@ -155,9 +155,16 @@ def p_punto_matrix(p):
 # Declares a function
 def p_dec_func(p):
   '''
-  dec_func : FUNCION type ID punto_add_func LPAREN parameter RPAREN LBRACE dec_var_cycle estatutos RBRACE SEMICOLON punto_end_function
+  dec_func : FUNCION type ID punto_add_func LPAREN parameter RPAREN LBRACE dec_var_cycle estatutos dec_func_regresar RBRACE SEMICOLON punto_end_function
             | FUNCION SINREGRESAR ID punto_add_func LPAREN parameter RPAREN LBRACE dec_var_cycle estatutos RBRACE SEMICOLON punto_end_function
   '''
+
+def p_dec_func_regresar(p):
+  '''
+  dec_func_regresar : REGRESAR exp SEMICOLON
+                    | empty
+  '''
+  p[0] = p[1]
 
 # Deletes the local variables of the function and its variable table.
 # Sets back the scope to be global.
@@ -210,19 +217,13 @@ def p_punto_add_parameter(p):
   parameter_dir_address = assign_memory(param_type, current_func, False, False)
   dir_func.add_function_params(current_func, param_type, p[-1], parameter_dir_address)
 
+# Allows multiple declaration of estatutos
 def p_estatutos(p):
   '''
-  estatutos : estatutosCycle
-            | func_regresar
+  estatutos : estatutos_opciones estatutos
+            | empty
   '''
 
-# Allows multiple declaration of estatutos
-def p_estatutosCycle(p):
-	'''
-	estatutosCycle : estatutos_opciones estatutos
-                | empty
-	'''
-        
 # List of the possible content on a function, conditional or cycle
 def p_estatutos_opciones(p):
   '''
