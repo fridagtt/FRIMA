@@ -155,9 +155,18 @@ def p_punto_matrix(p):
 # Declares a function
 def p_dec_func(p):
   '''
-  dec_func : FUNCION type ID punto_add_func LPAREN parameter RPAREN LBRACE dec_var_cycle estatutos dec_func_regresar RBRACE SEMICOLON punto_end_function
+  dec_func : FUNCION type ID punto_add_func punto_global_func_var LPAREN parameter RPAREN LBRACE dec_var_cycle estatutos dec_func_regresar RBRACE SEMICOLON punto_end_function
             | FUNCION SINREGRESAR ID punto_add_func LPAREN parameter RPAREN LBRACE dec_var_cycle estatutos RBRACE SEMICOLON punto_end_function
   '''
+
+def p_punto_global_func_var(p):
+  '''
+  punto_global_func_var : 
+  '''
+  global dir_func
+  current_func_type = convert_type(p[-3])
+  global_func_var_address = assign_memory(current_func_type, 'programa', False, False)
+  dir_func.add_variable(current_func_type, p[-2], 'programa', global_func_var_address)
 
 def p_dec_func_regresar(p):
   '''
