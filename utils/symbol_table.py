@@ -200,6 +200,18 @@ class SymbolTable:
         return variable_name in self.get_function_variables('programa')
     else:
         return True
+
+  def is_function_declared(self, func_name) -> bool:
+    """Validates if the function requested exists in the symbol table
+
+      Parameters:
+      func_name (string): name of the function to be found
+
+      Returns:
+      bool(): whether the function exists in the symbol table
+
+    """
+    return func_name in self.symbol_table['dir_functions']
     
   def add_constant_variable(self, const_type, const_value, const_memory_dir):
     """Adds the constant variable and its memory direction to the global variable table

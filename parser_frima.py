@@ -793,15 +793,42 @@ def p_push_id(p) :
     id_type = dir_func.get_variable_type(current_func, p[-1])
     stack_de_tipos.append(id_type)
 
-def p_llamada_func(p):
+# Allows multiple declaration of parameters
+def p_func_params_aux(p):
   '''
-  llamada_func : ID LPAREN llamadaCYCLE RPAREN SEMICOLON
-  llamadaCYCLE : hyper_exp llamadaCYCLE_aux
-              | empty
-  llamadaCYCLE_aux : COMMA hyper_exp llamadaCYCLE_aux
+  func_params_aux : COMMA hyper_exp func_params_aux
                   | empty
   '''
-  p[0] = None 
+
+# Allows one, none, or multiple declaration of parameters
+def p_func_params(p):
+  '''
+  func_params : hyper_exp func_params_aux
+              | empty
+  '''
+
+def p_llamada_func(p):
+  '''
+  llamada_func : ID punto_verify_func LPAREN punto_create_era func_params RPAREN SEMICOLON
+  '''
+  p[0] = None
+
+def p_punto_verify_func(p):
+  '''
+  punto_verify_func :
+  '''
+  global dir_func
+  if not dir_func.is_function_declared(p[-1]):
+    raise Exception(f"ERROR: La función {p[-1]} no está definida.")
+
+# Create ERA quadruple
+def p_punto_create_era(p):
+  '''
+  punto_create_era : 
+  ''' 
+  global dir_func, lista_de_cuadruplos
+  quadruple = Quadruple(100, None, None, p[-3])
+  lista_de_cuadruplos.append(quadruple.transform_quadruple())
 
 def p_imprimir(p):
   '''
