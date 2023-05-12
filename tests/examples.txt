@@ -1,38 +1,28 @@
-programa pruebaUno:
-variable entero -> gatos, perros, alumno;
-variable decimal -> pluma, pelos, lapiz;
+programa frima:
 
-funcion entero funcion_prueba(entero hojas, decimal flores){
-   variable entero -> pluma, pelos;
+variable decimal -> a,b,c,d,e,f,g,h,j,k;
 
-   imprimir(2, "string");
-   lapiz = lapiz*(pluma-pelos);
+funcion sinregresar uno() { 
 
-   regresar lapiz;
+  a = b + c * (d - e / f) * h;
+  b = e - f;
+
+  mientras ( a * b - c >= d * e / (g + h)) {
+    h = j * k + b;
+    si (b < h) {
+      b = h + j;
+      mientras ( b > a + c) {
+        imprimir ( a + b * c, d - e);
+        b = b - j;
+      };
+    }
+    sino {
+      a = a + b;
+      imprimir (b - d);
+    };
+  };
 };
 
-// This is a single comment
-
-/*
-funcion entero funcion_prueba_dos(letra paloma){
-   variable entero -> pluma, pelos;
-
-   imprimir(2, "string");
-   lapiz = lapiz*(pluma-pelos);
-
-   regresar lapiz;
-};
-*/
-
-funcion entero funcion_prueba_tres(letra paloma){
-   variable entero -> pluma, pelos;
-
-   imprimir(2, "string");
-   lapiz = lapiz*(pluma-pelos);
-
-   regresar lapiz;
-};
-
-inicio(){
-   lapiz = pluma * perros;
+inicio () {
+	
 };

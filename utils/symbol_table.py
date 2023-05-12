@@ -213,6 +213,18 @@ class SymbolTable:
     """
     return func_name in self.symbol_table['dir_functions']
     
+  def get_func_quadruple_init(self, func_name) -> int:
+    """Returns function's quadruple initial position
+
+      Parameters:
+      func_name (string): name of the function requested
+
+      Returns:
+      int(): function's quadruple initial position
+
+    """
+    return self.symbol_table['dir_functions'][func_name]['initial_quadruple']
+  
   def add_constant_variable(self, const_type, const_value, const_memory_dir):
     """Adds the constant variable and its memory direction to the global variable table
 

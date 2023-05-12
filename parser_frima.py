@@ -275,9 +275,20 @@ def p_variable_aux(p):
   '''
   variable_aux : LBRACKET exp RBRACKET
               | LBRACKET exp RBRACKET LBRACKET exp RBRACKET
-              | empty
+              | punto_push_id empty
   '''
   p[0] = p[1]
+
+def p_punto_push_id(p):
+  '''
+  punto_push_id : 
+  '''
+  global stack_de_operandos, stack_de_tipos, semantic_var, current_func
+  id_address = dir_func.get_variable_address(current_func, p[-1])
+  id_type = dir_func.get_variable_type(current_func, p[-1])
+
+  stack_de_operandos.append(id_address)
+  stack_de_tipos.append(id_type)
 
 # Push the "=" operator to the stack of operators.
 def p_push_op_igual(p):
@@ -294,23 +305,24 @@ def p_check_op_igual(p):
   '''
   global stack_de_operadores, stack_de_operandos, stack_de_tipos, lista_de_cuadruplos, dir_func
   top_operador = stack_de_operadores.pop()
-  tipo_operando = stack_de_tipos.pop()
-  operando = stack_de_operandos.pop()
+
+  operando_der = stack_de_operandos.pop()
+  operando_izq = stack_de_operandos.pop()
+
+  tipo_operando_der = stack_de_tipos.pop()
+  tipo_operando_izq = stack_de_tipos.pop()
 
   converted_operador = convert_type(top_operador)
   # Validate if the variable to assign exists either locally or globally
   if not dir_func.is_variable_declared(current_func, p[-4]):
     raise Exception(f"ERROR: La variable {p[-4]} no está declarada.")
 
-  assign_variable_type = dir_func.get_variable_type(current_func, p[-4])
-
-  operation_type = cubo_semantico.get_type(assign_variable_type, tipo_operando, converted_operador)
+  operation_type = cubo_semantico.get_type(tipo_operando_izq, tipo_operando_der, converted_operador)
   # Raise exception if the assignation between the two types is not valid.
   if operation_type == 5:
     raise Exception("ERROR: Type mismatch en asignación")
   else:
-    id_address = dir_func.get_variable_address(current_func, p[-4])
-    quadruple = Quadruple(converted_operador, operando, None , id_address)
+    quadruple = Quadruple(converted_operador, operando_der, None , operando_izq)
     lista_de_cuadruplos.append(quadruple.transform_quadruple())
 
 def p_leer(p):
@@ -827,7 +839,8 @@ def p_punto_create_era(p):
   punto_create_era : 
   ''' 
   global dir_func, lista_de_cuadruplos
-  quadruple = Quadruple(100, None, None, p[-3])
+  func_quadruple_pos = dir_func.get_func_quadruple_init(p[-3])
+  quadruple = Quadruple(100, None, None, func_quadruple_pos)
   lista_de_cuadruplos.append(quadruple.transform_quadruple())
 
 def p_imprimir(p):
