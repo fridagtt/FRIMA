@@ -728,6 +728,7 @@ def p_factor_constante(p) :
   '''
   factor_constante : CTEI push_int
                 | CTEF push_float 
+                | CTECHAR push_char
   '''
 
 # Normal IDs, arrays, matrix, or returned values of functions.
@@ -790,6 +791,22 @@ def p_push_float(p) :
       dir_func.add_constant_variable(2, constant, constant_address)
     stack_de_operandos.append(constant_address)
     stack_de_tipos.append(2)
+  
+# Creates the address memory of the char constant (if it doesn't have one yet) 
+# and push it to the stack of operands.
+def p_push_char(p) : 
+  '''
+  push_char :
+  '''
+  global stack_de_operandos, stack_de_tipos, dir_func
+  if p[-1] != None:
+    constant = p[-1]
+    constant_address = dir_func.get_constant_address(constant)
+    if(not constant_address):
+      constant_address = assign_memory(1, current_func, True, False)
+      dir_func.add_constant_variable(1, constant, constant_address)
+    stack_de_operandos.append(constant_address)
+    stack_de_tipos.append(3)
 
 # Push of IDs
 def p_push_id(p) : 
