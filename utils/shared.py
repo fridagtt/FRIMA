@@ -59,8 +59,10 @@ def convert_type(type):
       return 95
     case 'ERA':
       return 100
-    case 'PARAMETER':
+    case 'PARAM':
       return 105
+    case 'RET':
+      return 110
     case _:
       return -1
 

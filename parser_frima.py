@@ -18,7 +18,9 @@ stack_de_tipos = deque()
 stack_de_saltos = deque()
 
 lista_de_cuadruplos = []
-vControl = current_func = current_var_type = None
+vControl = current_func = current_var_type = called_func = None
+
+contador_params = 0
 
 #__________PARSER____________
 
@@ -808,20 +810,43 @@ def p_push_id(p) :
 # Allows multiple declaration of parameters
 def p_func_params_aux(p):
   '''
-  func_params_aux : COMMA hyper_exp func_params_aux
+  func_params_aux : COMMA exp punto_check_param func_params_aux
                   | empty
   '''
 
 # Allows one, none, or multiple declaration of parameters
 def p_func_params(p):
   '''
-  func_params : hyper_exp func_params_aux
+  func_params : exp punto_check_param func_params_aux
               | empty
   '''
 
+# Validates type of param with function's signature, and
+# updates the param's global counter.
+def p_punto_check_param(p):
+  '''
+  punto_check_param :
+  '''
+  global contador_params, stack_de_tipos, stack_de_operandos, lista_de_cuadruplos, called_func
+  function_param_signature = dir_func.get_param_types(called_func)
+  try:
+    param_type = function_param_signature[contador_params]
+  except:
+    raise Exception(f"ERROR: Se excedió el número de parámetros declarados en la función {called_func}.")
+
+  type_exp = stack_de_tipos.pop()
+
+  if type_exp == param_type:
+    operand_exp = stack_de_operandos.pop()
+    quadruple = Quadruple(105, operand_exp, None, contador_params)
+    lista_de_cuadruplos.append(quadruple.transform_quadruple())
+    contador_params+=1
+  else:
+    raise Exception(f"ERROR: Los parámetros enviados no coinciden con la función {called_func}.")
+
 def p_llamada_func(p):
   '''
-  llamada_func : ID punto_verify_func LPAREN punto_create_era func_params RPAREN SEMICOLON
+  llamada_func : ID punto_verify_func LPAREN punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub SEMICOLON
   '''
   p[0] = None
 
@@ -833,14 +858,36 @@ def p_punto_verify_func(p):
   if not dir_func.is_function_declared(p[-1]):
     raise Exception(f"ERROR: La función {p[-1]} no está definida.")
 
-# Create ERA quadruple
+# Create ERA quadruple and updates name of called_func to keep track
 def p_punto_create_era(p):
   '''
   punto_create_era : 
   ''' 
-  global dir_func, lista_de_cuadruplos
+  global dir_func, lista_de_cuadruplos, called_func
   func_quadruple_pos = dir_func.get_func_quadruple_init(p[-3])
   quadruple = Quadruple(100, None, None, func_quadruple_pos)
+  lista_de_cuadruplos.append(quadruple.transform_quadruple())
+
+  called_func = p[-3]
+
+def p_punto_check_total_params(p):
+  '''
+  punto_check_total_params :
+  '''
+  global dir_func, contador_params
+  function_param_signature = dir_func.get_param_types(called_func)
+  if (len(function_param_signature) != contador_params):
+    raise Exception(f"ERROR: La cantidad de parámetros no concuerda con {called_func}.")
+
+  contador_params = 0
+
+def p_punto_create_gosub(p):
+  '''
+  punto_create_gosub :
+  '''
+  global lista_de_cuadruplos
+  func_quadruple_pos = dir_func.get_func_quadruple_init(called_func)
+  quadruple = Quadruple(95, None, None, func_quadruple_pos)
   lista_de_cuadruplos.append(quadruple.transform_quadruple())
 
 def p_imprimir(p):

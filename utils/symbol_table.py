@@ -184,6 +184,18 @@ class SymbolTable:
         variable_object = next((variable for variable in list_of_variables if variable['name'] == variable_name),None)
         return variable_object['memory_dir']
 
+  def get_param_types(self, func_name) -> list:
+     """Returns the param signature array of the requested function.
+
+      Parameters:
+      func_name (string): name of the function to return its param types
+
+      Returns:
+      list(): function's param types
+
+    """
+     return self.symbol_table["dir_functions"][func_name]["param_types"]
+  
   def is_variable_declared(self, func_name, variable_name) -> bool:
     """Validates if the variables is either declared within the local or global scope
 
