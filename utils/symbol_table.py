@@ -5,7 +5,7 @@ class SymbolTable:
         'dir_func_names': set(),
         'programa': {
           'param_types': [], # en programa este siempre estará vacío
-          'return_type': 'void',
+          'return_type': 0,
           'kind': 'np', # np -> nombre of program
           'variables': {
             'var_names': set(),

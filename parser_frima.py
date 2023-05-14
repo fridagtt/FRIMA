@@ -256,9 +256,34 @@ def p_estatutos_opciones(p):
 
 def p_func_regresar(p):
   '''
-  func_regresar : REGRESAR exp SEMICOLON
+  func_regresar : REGRESAR punto_check_void exp punto_check_types SEMICOLON
   '''
   p[0] = None
+
+# Validate if function is suppose to return something
+def p_punto_check_void(p):
+  '''
+  punto_check_void :
+  '''
+  func_return_type = dir_func.symbol_table['dir_functions'][current_func]['return_type']
+  if func_return_type == 0:
+    raise Exception(f"ERROR: La función {current_func} no debe tener un retorno.")
+
+# Validates that the type of return is the same as the type that was used when function was declared,
+# If types match it created the RETURN quadruple.
+def p_punto_check_types(p):
+  '''
+  punto_check_types :
+  '''
+  global stack_de_tipos, stack_de_operandos, lista_de_cuadruplos
+  exp_type = stack_de_tipos.pop()
+  func_return_type = dir_func.symbol_table['dir_functions'][current_func]['return_type']
+  if (exp_type != func_return_type):
+    raise Exception(f"ERROR: Type mismatch en función {current_func}.")
+  else:
+    result = stack_de_operandos.pop()
+    quadruple = Quadruple(110, None, None, result)
+    lista_de_cuadruplos.append(quadruple.transform_quadruple())  
 
 def p_asignar(p):
   '''
@@ -728,7 +753,6 @@ def p_factor_constante(p) :
   '''
   factor_constante : CTEI push_int
                 | CTEF push_float 
-                | CTECHAR push_char
   '''
 
 # Normal IDs, arrays, matrix, or returned values of functions.
@@ -791,22 +815,6 @@ def p_push_float(p) :
       dir_func.add_constant_variable(2, constant, constant_address)
     stack_de_operandos.append(constant_address)
     stack_de_tipos.append(2)
-  
-# Creates the address memory of the char constant (if it doesn't have one yet) 
-# and push it to the stack of operands.
-def p_push_char(p) : 
-  '''
-  push_char :
-  '''
-  global stack_de_operandos, stack_de_tipos, dir_func
-  if p[-1] != None:
-    constant = p[-1]
-    constant_address = dir_func.get_constant_address(constant)
-    if(not constant_address):
-      constant_address = assign_memory(1, current_func, True, False)
-      dir_func.add_constant_variable(1, constant, constant_address)
-    stack_de_operandos.append(constant_address)
-    stack_de_tipos.append(3)
 
 # Push of IDs
 def p_push_id(p) : 
