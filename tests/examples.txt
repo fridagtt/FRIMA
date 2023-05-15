@@ -35,4 +35,8 @@ inicio () {
 	imprimir ( dos ( i+k, f*3) + 3);
 	imprimir ( i, j*2, f*2 +1.5);
 	i = i - k;
+
+	leer(i);
+	leer(j);
+	leer(f);
 };

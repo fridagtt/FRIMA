@@ -67,19 +67,6 @@ def p_inicio_estatutos(p):
   '''
   p[0] = p[1]
 
-# List of the possible content for either main, a function, a conditional, or a cycle
-def p_estatutos_opciones(p):
-  '''
-  estatutos_opciones : asignar
-                      | llamada_func_void
-                      | ciclo_for
-                      | ciclo_while
-                      | condicion
-                      | imprimir
-                      | leer
-  '''
-  p[0] = p[1]
-
 def p_punto_update_goto(p):
   '''
   punto_update_goto :
@@ -365,9 +352,31 @@ def p_check_op_igual(p):
 
 def p_leer(p):
   '''
-  leer : LEER variable SEMICOLON
+  leer : LEER LPAREN punto_push_leer ID punto_create_leer RPAREN SEMICOLON
   '''
-  p[0] = None
+
+def p_punto_push_leer(p):
+  '''
+  punto_push_leer :
+  ''' 
+  global stack_de_operadores
+  converted_operador = convert_type(p[-2])
+  stack_de_operadores.append(converted_operador)
+
+def p_punto_create_leer(p):
+  '''
+  punto_create_leer :
+  '''
+  global stack_de_operadores, stack_de_tipos
+  if(p[-1] != None):
+    if not dir_func.is_variable_declared(current_func, p[-1]):
+      raise Exception(f"ERROR: La variable {p[-1]} no está declarada.")
+
+    id_address = dir_func.get_variable_address(current_func, p[-1])
+
+    converted_operador = stack_de_operadores.pop()
+    quadruple = Quadruple(converted_operador, None, None, id_address)
+    lista_de_cuadruplos.append(quadruple.transform_quadruple())
 
 def p_ciclo_while(p):
   '''

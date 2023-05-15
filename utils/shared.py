@@ -63,6 +63,8 @@ def convert_type(type):
       return 105
     case 'RET':
       return 110
+    case 'leer':
+      return 115
     case _:
       return -1
 
