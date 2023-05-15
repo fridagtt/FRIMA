@@ -295,12 +295,6 @@ def p_punto_check_types(p):
     result = stack_de_operandos.pop()
     quadruple = Quadruple(110, None, None, result)
     lista_de_cuadruplos.append(quadruple.transform_quadruple())
-
-    '''
-    func_global_var = dir_func.get_variable_address('programa', current_func)
-    quadruple = Quadruple(70, result, None , func_global_var)
-    lista_de_cuadruplos.append(quadruple.transform_quadruple())
-    '''
     
 def p_asignar(p):
   '''
