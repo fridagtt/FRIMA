@@ -98,7 +98,12 @@ def p_dec_var_cycle(p):
 # Allows multiple declaration of functions
 def p_dec_func_cycle(p):
   '''
-  dec_func_cycle : dec_func dec_func_cycle
+  dec_func_cycle : dec_func p_dec_func_aux
+  '''
+
+def p_dec_func_aux(p):
+  '''
+  p_dec_func_aux : dec_func p_dec_func_aux
                   | empty
   '''
 
@@ -291,9 +296,11 @@ def p_punto_check_types(p):
     quadruple = Quadruple(110, None, None, result)
     lista_de_cuadruplos.append(quadruple.transform_quadruple())
 
+    '''
     func_global_var = dir_func.get_variable_address('programa', current_func)
     quadruple = Quadruple(70, result, None , func_global_var)
     lista_de_cuadruplos.append(quadruple.transform_quadruple())
+    '''
     
 def p_asignar(p):
   '''
@@ -640,7 +647,6 @@ def p_push_op_relacionales(p):
         | LESSEQ
         | NOTEQUAL
         | EQUAL
-        | empty
   '''
   stack_de_operadores.append(p[1])
 
@@ -660,8 +666,7 @@ def p_exp_aux(p):
 def p_push_op_exp_masmenos(p):
   '''
   push_op_exp_masmenos : PLUS 
-        | MINUS 
-        | empty
+        | MINUS
   '''
   stack_de_operadores.append(p[1])
 
@@ -745,8 +750,7 @@ def p_check_op_pordiv(p):
 def p_push_op_exp_pordiv(p):
   '''
   push_op_exp_pordiv : TIMES 
-        | DIVIDE 
-        | empty
+        | DIVIDE
   '''
   stack_de_operadores.append(p[1])
 
