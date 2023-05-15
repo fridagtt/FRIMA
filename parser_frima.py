@@ -766,7 +766,8 @@ def p_factor(p) :
 def p_factor_constante(p) :
   '''
   factor_constante : CTEI push_int
-                | CTEF push_float 
+                | CTEF push_float
+                | CTECHAR push_char
   '''
   p[0] = p[1]
 
@@ -831,6 +832,22 @@ def p_push_id(p) :
     stack_de_operandos.append(id_address)
     id_type = dir_func.get_variable_type(current_func, p[-1])
     stack_de_tipos.append(id_type)
+
+# Creates the address memory of the char constant (if it doesn't have one yet) 
+# and push it to the stack of operands.
+def p_push_char(p) : 
+  '''
+  push_char :
+  '''
+  global stack_de_operandos, stack_de_tipos, dir_func
+  if p[-1] != None:
+    constant = p[-1]
+    constant_address = dir_func.get_constant_address(constant)
+    if(not constant_address):
+      constant_address = assign_memory(1, current_func, True, False)
+      dir_func.add_constant_variable(1, constant, constant_address)
+    stack_de_operandos.append(constant_address)
+    stack_de_tipos.append(3)
 
 # Allows multiple declaration of parameters
 def p_func_params_aux(p):
