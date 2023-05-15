@@ -87,12 +87,12 @@ def t_ID(t):
     return t
 
 def t_CTEF(t):
-    r'[-]?\d+\.\d+'
+    r'\d+\.\d+'
     t.value = float(t.value)
     return t
 
 def t_CTEI(t):
-    r'[-]?\d+'
+    r'\d+'
     t.value = int(t.value)
     return t
 

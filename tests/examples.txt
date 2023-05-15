@@ -1,11 +1,38 @@
-programa pruebaUno:
-variable entero -> a, b;
+programa patito:
+variable entero -> i,j,k;
+variable decimal -> f;
 
-funcion entero fibo(entero n){
-
-   regresar 4;
+funcion sinregresar uno (entero a, entero b) {
+	si ( a > 0 ) {
+		
+		i = a + b * j + i;
+		imprimir (i + j);
+		uno(a-i,i);
+		
+	} sino {
+		imprimir (a + b);
+	};
 };
 
-inicio(){
-  a = a+b;
+funcion entero dos (entero a, decimal g){
+	variable entero -> i;
+	i = a;
+
+	mientras (a > 0){
+	a = a - k * j;
+		uno(a*2,a+k);
+		g = g * j - k;
+	};
+	regresar i+k*j;
+
+};
+
+inicio () {
+	i = 2; 
+	k = i + 1; 
+	f = 3.14;
+
+	imprimir ( dos ( i+k, f*3) + 3);
+	imprimir ( i, j*2, f*2 +1.5);
+	i = i - k;
 };

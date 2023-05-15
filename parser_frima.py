@@ -52,12 +52,33 @@ def p_punto_programa(p):
 
 def p_inicio(p):
   '''
-  inicio : INICIO LPAREN RPAREN LBRACE punto_update_goto estatutos RBRACE SEMICOLON
+  inicio : INICIO LPAREN RPAREN LBRACE punto_update_goto inicio_estatutos RBRACE SEMICOLON
   '''
   p[0] = None
   print("TABLA DE VARIABLES", dir_func.symbol_table)
   for quadruple in lista_de_cuadruplos: 
     print(quadruple)
+
+# Body for inicio (without the return option)
+def p_inicio_estatutos(p):
+  '''
+  inicio_estatutos : estatutos_opciones inicio_estatutos
+                    | empty
+  '''
+  p[0] = p[1]
+
+# List of the possible content for either main, a function, a conditional, or a cycle
+def p_estatutos_opciones(p):
+  '''
+  estatutos_opciones : asignar
+                      | llamada_func_void
+                      | ciclo_for
+                      | ciclo_while
+                      | condicion
+                      | imprimir
+                      | leer
+  '''
+  p[0] = p[1]
 
 def p_punto_update_goto(p):
   '''
@@ -77,8 +98,8 @@ def p_dec_var_cycle(p):
 # Allows multiple declaration of functions
 def p_dec_func_cycle(p):
   '''
-  dec_func_cycle : dec_func
-                | dec_func dec_func_cycle
+  dec_func_cycle : dec_func dec_func_cycle
+                  | empty
   '''
 
 # Types of variable declarations
@@ -221,6 +242,7 @@ def p_punto_add_parameter(p):
   parameter_dir_address = assign_memory(param_type, current_func, False, False)
   dir_func.add_function_params(current_func, param_type, p[-1], parameter_dir_address)
 
+# Body for functions
 def p_estatutos(p):
   '''
   estatutos : estatutosCycle
@@ -231,7 +253,7 @@ def p_estatutos(p):
 def p_estatutosCycle(p):
 	'''
 	estatutosCycle : estatutos_opciones estatutos
-                | empty
+                | estatutos_opciones
 	'''
 
 # List of the possible content on a function, conditional or cycle
@@ -249,7 +271,7 @@ def p_estatutos_opciones(p):
 
 def p_func_regresar(p):
   '''
-  func_regresar : REGRESAR exp punto_check_types SEMICOLON
+  func_regresar : REGRESAR exp SEMICOLON punto_check_types
   '''
   p[0] = None
 
@@ -269,7 +291,7 @@ def p_punto_check_types(p):
     quadruple = Quadruple(110, None, None, result)
     lista_de_cuadruplos.append(quadruple.transform_quadruple())
 
-    func_global_var = dir_func.get_variable_address('programa', called_func)
+    func_global_var = dir_func.get_variable_address('programa', current_func)
     quadruple = Quadruple(70, result, None , func_global_var)
     lista_de_cuadruplos.append(quadruple.transform_quadruple())
     
@@ -852,21 +874,18 @@ def p_llamada_func_void(p):
   '''
   llamada_func_void : ID LPAREN punto_func_exists punto_validate_isvoid punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub SEMICOLON
   '''
-  p[0] = None
 
 # Return a value used in expressions
 def p_llamada_func_return(p):
   '''
-  llamada_func_return : ID LPAREN punto_func_exists punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub SEMICOLON
+  llamada_func_return : ID LPAREN punto_func_exists punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub
   '''
-  p[0] = None
 
 # Validates called function exists and updates name of called_func to keep track
 def p_punto_func_exists(p):
   '''
   punto_func_exists :
   '''
-  print("punto_func_exists")
   global dir_func, called_func
   if not dir_func.is_function_declared(p[-2]):
     raise Exception(f"ERROR: La función {p[-2]} no está definida.")
@@ -926,7 +945,10 @@ def p_punto_create_gosub(p):
     temp_var = assign_memory(var_type, current_func, False, True)
     quadruple = Quadruple(70, var_address, None , temp_var)
     lista_de_cuadruplos.append(quadruple.transform_quadruple())
-  
+    
+    stack_de_operandos.append(temp_var)
+    stack_de_tipos.append(var_type)
+
 def p_imprimir(p):
   '''
   imprimir : IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON
