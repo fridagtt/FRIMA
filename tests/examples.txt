@@ -1,21 +1,11 @@
 programa pruebaUno:
-variable entero -> gatos, perros, alumno;
-variable decimal -> pluma, pelos, lapiz;
-variable letra -> abuela;
+variable entero -> a, b;
 
-funcion sinregresar funcion_prueba(entero hojas, decimal flores){
-   variable entero -> pluma, pelos;
-   lapiz = lapiz*(pluma-pelos);
+funcion entero fibo(entero n){
 
-};
-
-funcion sinregresar funcion_prueba_tres(letra paloma){
-   variable entero -> pluma, pelos;
-   lapiz = lapiz*(pluma-pelos);
+   regresar 4;
 };
 
 inicio(){
-   // funcion_prueba(gatos*perros,pluma+lapiz);
-  funcion_prueba(5,5.34);
-  funcion_prueba_tres('a');
+  a = a+b;
 };
