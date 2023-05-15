@@ -114,6 +114,7 @@ Se modificó el diagrama del Ciclo For que se puede ver en la siguiente imagen:
 <h1>  ${\color{gray} Avance  }$  ${\color{gray} 5  }$</h1> 
 Mayo 14, 2023
 
+Desarrollo de semántica para la creación de cuádruplos de funciones. 
 
 
 
