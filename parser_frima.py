@@ -1016,13 +1016,12 @@ parser = yacc.yacc()
 def readFile():
   #Testear el parser y léxico juntos
   try:
-      file = open("./tests/examples.txt", "r")
-      print(f"PLY LEXER AND PARSER")
-      archivo = file.read()
-      file.close()
-      parser.parse(archivo)
+    file = open("./tests/examples.txt", "r")
+    archivo = file.read()
+    file.close()
+    parser.parse(archivo)
   except EOFError:
-      print('ERROR')
+    print('ERROR', EOFError)
 
 if __name__ == '__main__':
 	readFile()

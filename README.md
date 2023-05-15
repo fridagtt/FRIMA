@@ -44,7 +44,7 @@ Abril 16, 2023
 
 Dentro del repositorio se podrá encontrar en Léxico y Sintaxis de FRIMA. Todo fue hecho con base a los diagramas mostrados a continuación. 
 
-![My Image](Diagramas.png)
+![My Image](src/Diagramas.png)
 
 <h1>  ${\color{gray} Avance  }$  ${\color{gray} 2  }$</h1> 
 Abril 23, 2023
@@ -86,7 +86,7 @@ inicio(){
 };
 ```
 
-![My Image](Avance2.jpeg)
+![My Image](src/Avance2.jpeg)
 
 
 
@@ -96,7 +96,7 @@ Abril 30, 2023
 Desarrollo de la semántica para la creación de cuádruplos para las expresiones aritmeticas y estatutos lineales. Se agregaron y modificaron los respectivos diagramas que se pueden ver a continuación:
 
 
-![My Image](ActualizacionDiagramas.jpg)
+![My Image](src/ActualizacionDiagramas.jpg)
 
 
 
@@ -109,7 +109,7 @@ Desarrollo de la semántica para la creación de cuádruplos para los estatutos 
 -Condición If y If else (Si - Si no)
 
 Se modificó el diagrama del Ciclo For que se puede ver en la siguiente imagen:
-![My Image](ActualizacionDiagramasAvance4.jpg)
+![My Image](src/ActualizacionDiagramasAvance4.jpg)
 
 <h1>  ${\color{gray} Avance  }$  ${\color{gray} 5  }$</h1> 
 Mayo 14, 2023
