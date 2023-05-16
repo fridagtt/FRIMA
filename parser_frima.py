@@ -427,34 +427,36 @@ def p_ciclo_for(p):
   '''
   p[0] = None
 
+# Validate if the id exists either locally or globally.
+# If it does add its virtual address to the stack of operands.
 def p_punto_existe_id(p):
   '''
   punto_existe_id : 
   '''
-  # Validate if the id exists either locally or globally
+  global stack_de_operandos, stack_de_tipos
   if not dir_func.is_variable_declared(current_func, p[-1]):
     raise Exception(f"ERROR: La variable {p[-1]} no está declarada.")
   else:
-    stack_de_operandos.append(p[-1])
-  
+    id_address = dir_func.get_variable_address(current_func, p[-1])
+    id_type = dir_func.get_variable_type(current_func, p[-1])
+    stack_de_operandos.append(id_address)
+    stack_de_tipos.append(id_address)
+
 def p_punto_valida_int(p):
   '''
   punto_valida_int : 
   '''
   #Validate if the hyper_exp is equal to an integer number
   global stack_de_operadores, stack_de_operandos, stack_de_tipos, lista_de_cuadruplos
-  top_operador = stack_de_operadores.pop()
-  tipo_exp = stack_de_tipos.pop()
+  result_type = stack_de_tipos.pop()
+  id_type = stack_de_tipos.pop()
 
-  converted_operador = convert_type(top_operador)
-  assign_variable_type = dir_func.get_variable_type(current_func, p[-4])
-
-  if tipo_exp != 1 and assign_variable_type != 1:
+  if result_type != 1 and id_type != 1:
     raise Exception(f"ERROR: Type Mismatch. El ID y su valor deben ser enteros") 
   else: 
-    operando_exp = stack_de_operandos.pop()
+    result_operando = stack_de_operandos.pop()
     vControl = stack_de_operandos.pop()
-    quadruple = Quadruple(converted_operador, operando_exp, None , vControl)
+    quadruple = Quadruple(70, result_operando, None , vControl)
     lista_de_cuadruplos.append(quadruple.transform_quadruple())
 
 def p_punto_valida_exp(p):
@@ -467,15 +469,16 @@ def p_punto_valida_exp(p):
     raise Exception(f"ERROR: Type Mismatch. El valor de la expresion debe ser entera") 
   else: 
     operando_exp = stack_de_operandos.pop()
-    vFinal = operando_exp
+    vFinal = assign_memory(1, current_func, False, True)
     quadruple = Quadruple(70,operando_exp,None,vFinal)
     lista_de_cuadruplos.append(quadruple.transform_quadruple())
 
-    quadruple2 = Quadruple(35,vControl,vFinal,None) #Pendiente el resultado en lugar de None
+    temporal_dir_address = assign_memory(4, current_func, False, True)
+    quadruple2 = Quadruple(35,vControl,vFinal,temporal_dir_address)
     lista_de_cuadruplos.append(quadruple2.transform_quadruple())
-
     stack_de_saltos.append(len(lista_de_cuadruplos)-1)
-    quadruple_goto = Quadruple(75,None,None,None) #El segundo none es el valor que esta en Quadruple2
+
+    quadruple_goto = Quadruple(75,temporal_dir_address,None,None) #El segundo none es el valor que esta en Quadruple2
     lista_de_cuadruplos.append(quadruple_goto.transform_quadruple())
     stack_de_saltos.append(len(lista_de_cuadruplos)-1)
   
@@ -483,9 +486,18 @@ def p_punto_termina_for(p):
   '''
   punto_termina_for : 
   '''
-  global stack_de_operandos, stack_de_tipos, lista_de_cuadruplos
+  global dir_func, stack_de_operandos, stack_de_tipos, lista_de_cuadruplos
 
-  quadruple = Quadruple(10,vControl,1,vControl) # El uno tiene que ir en la tabla como constante y el segundo vControl es dirección de mememoria
+  constant_address = dir_func.get_constant_address(1)
+  if(not constant_address):
+    constant_address = assign_memory(1, current_func, True, False)
+    dir_func.add_constant_variable(1, 1, constant_address)
+
+  temporal_dir_address = assign_memory(1, current_func, False, True)
+  quadruple = Quadruple(10,vControl,constant_address,temporal_dir_address) # El uno tiene que ir en la tabla como constante y el segundo vControl es dirección de mememoria
+  lista_de_cuadruplos.append(quadruple.transform_quadruple())
+
+  quadruple = Quadruple(70,temporal_dir_address,None,vControl)
   lista_de_cuadruplos.append(quadruple.transform_quadruple())
 
   fin = stack_de_saltos.pop()

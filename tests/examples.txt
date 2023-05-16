@@ -2,6 +2,7 @@ programa patito:
 variable entero -> i,j,k;
 variable decimal -> f;
 
+/*
 funcion sinregresar uno (entero a, entero b) {
 	si ( a > 0 ) {
 		
@@ -26,9 +27,11 @@ funcion entero dos (entero a, decimal g){
 	regresar i+k*j;
 
 };
+*/
 
 inicio () {
-	i = 2; 
+	i = 2;
+	/* 
 	k = i + 1; 
 	f = 3.14;
 
@@ -39,4 +42,8 @@ inicio () {
 	leer(i);
 	leer(j);
 	leer(f);
+	*/
+	porcada i = 4 hasta 6 {
+		imprimir("hola imprimiendo for paps");
+	};
 };
