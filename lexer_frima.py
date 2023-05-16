@@ -45,7 +45,7 @@ reserved = {
     'sinregresar' : 'SINREGRESAR',
     'si' : 'SI',
     'sino' : 'SINO',
-    'porcada' : 'PORCADA',
+    'desde' : 'DESDE',
     'hasta' : 'HASTA',
     'mientras' : 'MIENTRAS',
     'funcion' : 'FUNCION',

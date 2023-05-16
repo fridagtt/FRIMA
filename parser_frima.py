@@ -423,7 +423,7 @@ def p_punto_fin_while(p):
 
 def p_ciclo_for(p):
   '''
-  ciclo_for : PORCADA ID punto_existe_id ASSIGN hyper_exp punto_valida_int HASTA hyper_exp punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
+  ciclo_for : DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA  LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
   '''
   p[0] = None
 

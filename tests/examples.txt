@@ -43,7 +43,12 @@ inicio () {
 	leer(j);
 	leer(f);
 	*/
-	porcada i = 4 hasta 6 {
+	
+		
+
+	desde (i = 4) hasta (6) {
 		imprimir("hola imprimiendo for paps");
 	};
+
+	
 };

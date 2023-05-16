@@ -73,7 +73,7 @@ Rule 67    ciclo_while -> MIENTRAS punto_inicio_while LPAREN hyper_exp RPAREN pu
 Rule 68    punto_inicio_while -> <empty>
 Rule 69    punto_medio_while -> <empty>
 Rule 70    punto_fin_while -> <empty>
-Rule 71    ciclo_for -> PORCADA ID punto_existe_id ASSIGN hyper_exp punto_valida_int HASTA hyper_exp punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
+Rule 71    ciclo_for -> DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
 Rule 72    punto_existe_id -> <empty>
 Rule 73    punto_valida_int -> <empty>
 Rule 74    punto_valida_exp -> <empty>
@@ -158,6 +158,7 @@ CTEF                 : 117
 CTEI                 : 25 26 29 29 30 30 116
 CTESTRING            : 139
 DECIMAL              : 19
+DESDE                : 71
 DIVIDE               : 109
 ENTERO               : 18
 EQUAL                : 97
@@ -174,19 +175,18 @@ LEER                 : 64
 LESS                 : 93
 LESSEQ               : 95
 LETRA                : 20
-LPAREN               : 6 33 34 64 67 76 77 110 130 131 137
+LPAREN               : 6 33 34 64 67 71 71 76 77 110 130 131 137
 MIENTRAS             : 67
 MINUS                : 102
 NOTEQUAL             : 96
 O                    : 86
 PLUS                 : 101
-PORCADA              : 71
 PROGRAMA             : 1 2 3 4
 RBRACE               : 6 33 34 67 71 76 77 77
 RBRACKET             : 25 26 29 29 30 30 58 59 59 113 114 114
 REGRESAR             : 54
 RENGLON              : 25
-RPAREN               : 6 33 34 64 67 76 77 110 130 131 137
+RPAREN               : 6 33 34 64 67 71 71 76 77 110 130 131 137
 SEMICOLON            : 6 21 25 29 33 34 54 56 64 67 71 76 77 130 137
 SI                   : 76 77
 SINO                 : 77
@@ -441,7 +441,7 @@ state 10
     FUNCION         reduce using rule 143 (empty -> .)
     REGRESAR        reduce using rule 143 (empty -> .)
     ID              reduce using rule 143 (empty -> .)
-    PORCADA         reduce using rule 143 (empty -> .)
+    DESDE           reduce using rule 143 (empty -> .)
     MIENTRAS        reduce using rule 143 (empty -> .)
     SI              reduce using rule 143 (empty -> .)
     IMPRIMIR        reduce using rule 143 (empty -> .)
@@ -465,7 +465,7 @@ state 11
     FUNCION         reduce using rule 11 (dec_var_cycle -> empty .)
     REGRESAR        reduce using rule 11 (dec_var_cycle -> empty .)
     ID              reduce using rule 11 (dec_var_cycle -> empty .)
-    PORCADA         reduce using rule 11 (dec_var_cycle -> empty .)
+    DESDE           reduce using rule 11 (dec_var_cycle -> empty .)
     MIENTRAS        reduce using rule 11 (dec_var_cycle -> empty .)
     SI              reduce using rule 11 (dec_var_cycle -> empty .)
     IMPRIMIR        reduce using rule 11 (dec_var_cycle -> empty .)
@@ -499,7 +499,7 @@ state 13
     FUNCION         reduce using rule 15 (dec_var -> simple_var .)
     REGRESAR        reduce using rule 15 (dec_var -> simple_var .)
     ID              reduce using rule 15 (dec_var -> simple_var .)
-    PORCADA         reduce using rule 15 (dec_var -> simple_var .)
+    DESDE           reduce using rule 15 (dec_var -> simple_var .)
     MIENTRAS        reduce using rule 15 (dec_var -> simple_var .)
     SI              reduce using rule 15 (dec_var -> simple_var .)
     IMPRIMIR        reduce using rule 15 (dec_var -> simple_var .)
@@ -517,7 +517,7 @@ state 14
     FUNCION         reduce using rule 16 (dec_var -> array .)
     REGRESAR        reduce using rule 16 (dec_var -> array .)
     ID              reduce using rule 16 (dec_var -> array .)
-    PORCADA         reduce using rule 16 (dec_var -> array .)
+    DESDE           reduce using rule 16 (dec_var -> array .)
     MIENTRAS        reduce using rule 16 (dec_var -> array .)
     SI              reduce using rule 16 (dec_var -> array .)
     IMPRIMIR        reduce using rule 16 (dec_var -> array .)
@@ -535,7 +535,7 @@ state 15
     FUNCION         reduce using rule 17 (dec_var -> matrix .)
     REGRESAR        reduce using rule 17 (dec_var -> matrix .)
     ID              reduce using rule 17 (dec_var -> matrix .)
-    PORCADA         reduce using rule 17 (dec_var -> matrix .)
+    DESDE           reduce using rule 17 (dec_var -> matrix .)
     MIENTRAS        reduce using rule 17 (dec_var -> matrix .)
     SI              reduce using rule 17 (dec_var -> matrix .)
     IMPRIMIR        reduce using rule 17 (dec_var -> matrix .)
@@ -634,7 +634,7 @@ state 24
     FUNCION         reduce using rule 10 (dec_var_cycle -> dec_var dec_var_cycle .)
     REGRESAR        reduce using rule 10 (dec_var_cycle -> dec_var dec_var_cycle .)
     ID              reduce using rule 10 (dec_var_cycle -> dec_var dec_var_cycle .)
-    PORCADA         reduce using rule 10 (dec_var_cycle -> dec_var dec_var_cycle .)
+    DESDE           reduce using rule 10 (dec_var_cycle -> dec_var dec_var_cycle .)
     MIENTRAS        reduce using rule 10 (dec_var_cycle -> dec_var dec_var_cycle .)
     SI              reduce using rule 10 (dec_var_cycle -> dec_var dec_var_cycle .)
     IMPRIMIR        reduce using rule 10 (dec_var_cycle -> dec_var dec_var_cycle .)
@@ -796,7 +796,7 @@ state 44
     (9) punto_update_goto -> .
 
     ID              reduce using rule 9 (punto_update_goto -> .)
-    PORCADA         reduce using rule 9 (punto_update_goto -> .)
+    DESDE           reduce using rule 9 (punto_update_goto -> .)
     MIENTRAS        reduce using rule 9 (punto_update_goto -> .)
     SI              reduce using rule 9 (punto_update_goto -> .)
     IMPRIMIR        reduce using rule 9 (punto_update_goto -> .)
@@ -860,7 +860,7 @@ state 50
     (143) empty -> .
     (56) asignar -> . variable ASSIGN push_op_igual hyper_exp check_op_igual SEMICOLON
     (130) llamada_func_void -> . ID LPAREN punto_func_exists punto_validate_isvoid punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub SEMICOLON
-    (71) ciclo_for -> . PORCADA ID punto_existe_id ASSIGN hyper_exp punto_valida_int HASTA hyper_exp punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
+    (71) ciclo_for -> . DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
     (67) ciclo_while -> . MIENTRAS punto_inicio_while LPAREN hyper_exp RPAREN punto_medio_while LBRACE estatutos RBRACE punto_fin_while SEMICOLON
     (76) condicion -> . SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE punto_fin_si SEMICOLON
     (77) condicion -> . SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE SINO punto_sino LBRACE estatutos RBRACE punto_fin_si SEMICOLON
@@ -870,7 +870,7 @@ state 50
 
     RBRACE          reduce using rule 143 (empty -> .)
     ID              shift and go to state 67
-    PORCADA         shift and go to state 68
+    DESDE           shift and go to state 68
     MIENTRAS        shift and go to state 69
     SI              shift and go to state 70
     IMPRIMIR        shift and go to state 71
@@ -963,7 +963,7 @@ state 57
     (143) empty -> .
     (56) asignar -> . variable ASSIGN push_op_igual hyper_exp check_op_igual SEMICOLON
     (130) llamada_func_void -> . ID LPAREN punto_func_exists punto_validate_isvoid punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub SEMICOLON
-    (71) ciclo_for -> . PORCADA ID punto_existe_id ASSIGN hyper_exp punto_valida_int HASTA hyper_exp punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
+    (71) ciclo_for -> . DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
     (67) ciclo_while -> . MIENTRAS punto_inicio_while LPAREN hyper_exp RPAREN punto_medio_while LBRACE estatutos RBRACE punto_fin_while SEMICOLON
     (76) condicion -> . SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE punto_fin_si SEMICOLON
     (77) condicion -> . SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE SINO punto_sino LBRACE estatutos RBRACE punto_fin_si SEMICOLON
@@ -973,7 +973,7 @@ state 57
 
     RBRACE          reduce using rule 143 (empty -> .)
     ID              shift and go to state 67
-    PORCADA         shift and go to state 68
+    DESDE           shift and go to state 68
     MIENTRAS        shift and go to state 69
     SI              shift and go to state 70
     IMPRIMIR        shift and go to state 71
@@ -1003,7 +1003,7 @@ state 59
     (47) estatutos_opciones -> asignar .
 
     ID              reduce using rule 47 (estatutos_opciones -> asignar .)
-    PORCADA         reduce using rule 47 (estatutos_opciones -> asignar .)
+    DESDE           reduce using rule 47 (estatutos_opciones -> asignar .)
     MIENTRAS        reduce using rule 47 (estatutos_opciones -> asignar .)
     SI              reduce using rule 47 (estatutos_opciones -> asignar .)
     IMPRIMIR        reduce using rule 47 (estatutos_opciones -> asignar .)
@@ -1017,7 +1017,7 @@ state 60
     (48) estatutos_opciones -> llamada_func_void .
 
     ID              reduce using rule 48 (estatutos_opciones -> llamada_func_void .)
-    PORCADA         reduce using rule 48 (estatutos_opciones -> llamada_func_void .)
+    DESDE           reduce using rule 48 (estatutos_opciones -> llamada_func_void .)
     MIENTRAS        reduce using rule 48 (estatutos_opciones -> llamada_func_void .)
     SI              reduce using rule 48 (estatutos_opciones -> llamada_func_void .)
     IMPRIMIR        reduce using rule 48 (estatutos_opciones -> llamada_func_void .)
@@ -1031,7 +1031,7 @@ state 61
     (49) estatutos_opciones -> ciclo_for .
 
     ID              reduce using rule 49 (estatutos_opciones -> ciclo_for .)
-    PORCADA         reduce using rule 49 (estatutos_opciones -> ciclo_for .)
+    DESDE           reduce using rule 49 (estatutos_opciones -> ciclo_for .)
     MIENTRAS        reduce using rule 49 (estatutos_opciones -> ciclo_for .)
     SI              reduce using rule 49 (estatutos_opciones -> ciclo_for .)
     IMPRIMIR        reduce using rule 49 (estatutos_opciones -> ciclo_for .)
@@ -1045,7 +1045,7 @@ state 62
     (50) estatutos_opciones -> ciclo_while .
 
     ID              reduce using rule 50 (estatutos_opciones -> ciclo_while .)
-    PORCADA         reduce using rule 50 (estatutos_opciones -> ciclo_while .)
+    DESDE           reduce using rule 50 (estatutos_opciones -> ciclo_while .)
     MIENTRAS        reduce using rule 50 (estatutos_opciones -> ciclo_while .)
     SI              reduce using rule 50 (estatutos_opciones -> ciclo_while .)
     IMPRIMIR        reduce using rule 50 (estatutos_opciones -> ciclo_while .)
@@ -1059,7 +1059,7 @@ state 63
     (51) estatutos_opciones -> condicion .
 
     ID              reduce using rule 51 (estatutos_opciones -> condicion .)
-    PORCADA         reduce using rule 51 (estatutos_opciones -> condicion .)
+    DESDE           reduce using rule 51 (estatutos_opciones -> condicion .)
     MIENTRAS        reduce using rule 51 (estatutos_opciones -> condicion .)
     SI              reduce using rule 51 (estatutos_opciones -> condicion .)
     IMPRIMIR        reduce using rule 51 (estatutos_opciones -> condicion .)
@@ -1073,7 +1073,7 @@ state 64
     (52) estatutos_opciones -> imprimir .
 
     ID              reduce using rule 52 (estatutos_opciones -> imprimir .)
-    PORCADA         reduce using rule 52 (estatutos_opciones -> imprimir .)
+    DESDE           reduce using rule 52 (estatutos_opciones -> imprimir .)
     MIENTRAS        reduce using rule 52 (estatutos_opciones -> imprimir .)
     SI              reduce using rule 52 (estatutos_opciones -> imprimir .)
     IMPRIMIR        reduce using rule 52 (estatutos_opciones -> imprimir .)
@@ -1087,7 +1087,7 @@ state 65
     (53) estatutos_opciones -> leer .
 
     ID              reduce using rule 53 (estatutos_opciones -> leer .)
-    PORCADA         reduce using rule 53 (estatutos_opciones -> leer .)
+    DESDE           reduce using rule 53 (estatutos_opciones -> leer .)
     MIENTRAS        reduce using rule 53 (estatutos_opciones -> leer .)
     SI              reduce using rule 53 (estatutos_opciones -> leer .)
     IMPRIMIR        reduce using rule 53 (estatutos_opciones -> leer .)
@@ -1121,9 +1121,9 @@ state 67
 
 state 68
 
-    (71) ciclo_for -> PORCADA . ID punto_existe_id ASSIGN hyper_exp punto_valida_int HASTA hyper_exp punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
+    (71) ciclo_for -> DESDE . LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
 
-    ID              shift and go to state 89
+    LPAREN          shift and go to state 89
 
 
 state 69
@@ -1318,12 +1318,10 @@ state 88
 
 state 89
 
-    (71) ciclo_for -> PORCADA ID . punto_existe_id ASSIGN hyper_exp punto_valida_int HASTA hyper_exp punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
-    (72) punto_existe_id -> .
+    (71) ciclo_for -> DESDE LPAREN . ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
 
-    ASSIGN          reduce using rule 72 (punto_existe_id -> .)
+    ID              shift and go to state 114
 
-    punto_existe_id                shift and go to state 114
 
 state 90
 
@@ -1441,7 +1439,7 @@ state 97
     FUNCION         reduce using rule 21 (simple_var -> VARIABLE type ARROW ID punto_simple_var simpleVarCycle SEMICOLON .)
     REGRESAR        reduce using rule 21 (simple_var -> VARIABLE type ARROW ID punto_simple_var simpleVarCycle SEMICOLON .)
     ID              reduce using rule 21 (simple_var -> VARIABLE type ARROW ID punto_simple_var simpleVarCycle SEMICOLON .)
-    PORCADA         reduce using rule 21 (simple_var -> VARIABLE type ARROW ID punto_simple_var simpleVarCycle SEMICOLON .)
+    DESDE           reduce using rule 21 (simple_var -> VARIABLE type ARROW ID punto_simple_var simpleVarCycle SEMICOLON .)
     MIENTRAS        reduce using rule 21 (simple_var -> VARIABLE type ARROW ID punto_simple_var simpleVarCycle SEMICOLON .)
     SI              reduce using rule 21 (simple_var -> VARIABLE type ARROW ID punto_simple_var simpleVarCycle SEMICOLON .)
     IMPRIMIR        reduce using rule 21 (simple_var -> VARIABLE type ARROW ID punto_simple_var simpleVarCycle SEMICOLON .)
@@ -1560,8 +1558,6 @@ state 105
     RPAREN          reduce using rule 103 (check_op_masmenos -> .)
     COMMA           reduce using rule 103 (check_op_masmenos -> .)
     SEMICOLON       reduce using rule 103 (check_op_masmenos -> .)
-    HASTA           reduce using rule 103 (check_op_masmenos -> .)
-    LBRACE          reduce using rule 103 (check_op_masmenos -> .)
 
     check_op_masmenos              shift and go to state 132
 
@@ -1591,8 +1587,6 @@ state 106
     RPAREN          reduce using rule 107 (check_op_pordiv -> .)
     COMMA           reduce using rule 107 (check_op_pordiv -> .)
     SEMICOLON       reduce using rule 107 (check_op_pordiv -> .)
-    HASTA           reduce using rule 107 (check_op_pordiv -> .)
-    LBRACE          reduce using rule 107 (check_op_pordiv -> .)
 
     check_op_pordiv                shift and go to state 133
 
@@ -1634,8 +1628,6 @@ state 108
     RPAREN          reduce using rule 111 (factor -> factor_constante .)
     COMMA           reduce using rule 111 (factor -> factor_constante .)
     SEMICOLON       reduce using rule 111 (factor -> factor_constante .)
-    HASTA           reduce using rule 111 (factor -> factor_constante .)
-    LBRACE          reduce using rule 111 (factor -> factor_constante .)
 
 
 state 109
@@ -1663,8 +1655,6 @@ state 109
     RPAREN          reduce using rule 112 (factor -> llamada_func_return .)
     COMMA           reduce using rule 112 (factor -> llamada_func_return .)
     SEMICOLON       reduce using rule 112 (factor -> llamada_func_return .)
-    HASTA           reduce using rule 112 (factor -> llamada_func_return .)
-    LBRACE          reduce using rule 112 (factor -> llamada_func_return .)
 
 
 state 110
@@ -1698,8 +1688,6 @@ state 110
     RPAREN          reduce using rule 123 (push_id -> .)
     COMMA           reduce using rule 123 (push_id -> .)
     SEMICOLON       reduce using rule 123 (push_id -> .)
-    HASTA           reduce using rule 123 (push_id -> .)
-    LBRACE          reduce using rule 123 (push_id -> .)
 
   ! LPAREN          [ reduce using rule 123 (push_id -> .) ]
 
@@ -1731,8 +1719,6 @@ state 111
     RPAREN          reduce using rule 121 (push_int -> .)
     COMMA           reduce using rule 121 (push_int -> .)
     SEMICOLON       reduce using rule 121 (push_int -> .)
-    HASTA           reduce using rule 121 (push_int -> .)
-    LBRACE          reduce using rule 121 (push_int -> .)
 
     push_int                       shift and go to state 138
 
@@ -1762,8 +1748,6 @@ state 112
     RPAREN          reduce using rule 122 (push_float -> .)
     COMMA           reduce using rule 122 (push_float -> .)
     SEMICOLON       reduce using rule 122 (push_float -> .)
-    HASTA           reduce using rule 122 (push_float -> .)
-    LBRACE          reduce using rule 122 (push_float -> .)
 
     push_float                     shift and go to state 139
 
@@ -1793,17 +1777,17 @@ state 113
     RPAREN          reduce using rule 124 (push_char -> .)
     COMMA           reduce using rule 124 (push_char -> .)
     SEMICOLON       reduce using rule 124 (push_char -> .)
-    HASTA           reduce using rule 124 (push_char -> .)
-    LBRACE          reduce using rule 124 (push_char -> .)
 
     push_char                      shift and go to state 140
 
 state 114
 
-    (71) ciclo_for -> PORCADA ID punto_existe_id . ASSIGN hyper_exp punto_valida_int HASTA hyper_exp punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
+    (71) ciclo_for -> DESDE LPAREN ID . punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
+    (72) punto_existe_id -> .
 
-    ASSIGN          shift and go to state 141
+    ASSIGN          reduce using rule 72 (punto_existe_id -> .)
 
+    punto_existe_id                shift and go to state 141
 
 state 115
 
@@ -1860,8 +1844,6 @@ state 117
     RPAREN          reduce using rule 143 (empty -> .)
     SEMICOLON       reduce using rule 143 (empty -> .)
     RBRACKET        reduce using rule 143 (empty -> .)
-    HASTA           reduce using rule 143 (empty -> .)
-    LBRACE          reduce using rule 143 (empty -> .)
     LPAREN          reduce using rule 143 (empty -> .)
     ID              reduce using rule 143 (empty -> .)
     CTEI            reduce using rule 143 (empty -> .)
@@ -1901,8 +1883,6 @@ state 118
     RPAREN          reduce using rule 143 (empty -> .)
     SEMICOLON       reduce using rule 143 (empty -> .)
     RBRACKET        reduce using rule 143 (empty -> .)
-    HASTA           reduce using rule 143 (empty -> .)
-    LBRACE          reduce using rule 143 (empty -> .)
 
     super_exp_aux                  shift and go to state 149
     push_op_relacionales           shift and go to state 150
@@ -1964,7 +1944,7 @@ state 124
 
     REGRESAR        reduce using rule 143 (empty -> .)
     ID              reduce using rule 143 (empty -> .)
-    PORCADA         reduce using rule 143 (empty -> .)
+    DESDE           reduce using rule 143 (empty -> .)
     MIENTRAS        reduce using rule 143 (empty -> .)
     SI              reduce using rule 143 (empty -> .)
     IMPRIMIR        reduce using rule 143 (empty -> .)
@@ -2086,8 +2066,6 @@ state 132
     RPAREN          reduce using rule 143 (empty -> .)
     COMMA           reduce using rule 143 (empty -> .)
     SEMICOLON       reduce using rule 143 (empty -> .)
-    HASTA           reduce using rule 143 (empty -> .)
-    LBRACE          reduce using rule 143 (empty -> .)
 
     exp_aux                        shift and go to state 175
     push_op_exp_masmenos           shift and go to state 176
@@ -2123,8 +2101,6 @@ state 133
     RPAREN          reduce using rule 143 (empty -> .)
     COMMA           reduce using rule 143 (empty -> .)
     SEMICOLON       reduce using rule 143 (empty -> .)
-    HASTA           reduce using rule 143 (empty -> .)
-    LBRACE          reduce using rule 143 (empty -> .)
 
     term_aux                       shift and go to state 180
     push_op_exp_pordiv             shift and go to state 181
@@ -2220,8 +2196,6 @@ state 136
     RPAREN          reduce using rule 115 (factor -> ID push_id .)
     COMMA           reduce using rule 115 (factor -> ID push_id .)
     SEMICOLON       reduce using rule 115 (factor -> ID push_id .)
-    HASTA           reduce using rule 115 (factor -> ID push_id .)
-    LBRACE          reduce using rule 115 (factor -> ID push_id .)
 
 
 state 137
@@ -2263,8 +2237,6 @@ state 138
     RPAREN          reduce using rule 116 (factor_constante -> CTEI push_int .)
     COMMA           reduce using rule 116 (factor_constante -> CTEI push_int .)
     SEMICOLON       reduce using rule 116 (factor_constante -> CTEI push_int .)
-    HASTA           reduce using rule 116 (factor_constante -> CTEI push_int .)
-    LBRACE          reduce using rule 116 (factor_constante -> CTEI push_int .)
 
 
 state 139
@@ -2292,8 +2264,6 @@ state 139
     RPAREN          reduce using rule 117 (factor_constante -> CTEF push_float .)
     COMMA           reduce using rule 117 (factor_constante -> CTEF push_float .)
     SEMICOLON       reduce using rule 117 (factor_constante -> CTEF push_float .)
-    HASTA           reduce using rule 117 (factor_constante -> CTEF push_float .)
-    LBRACE          reduce using rule 117 (factor_constante -> CTEF push_float .)
 
 
 state 140
@@ -2321,41 +2291,14 @@ state 140
     RPAREN          reduce using rule 118 (factor_constante -> CTECHAR push_char .)
     COMMA           reduce using rule 118 (factor_constante -> CTECHAR push_char .)
     SEMICOLON       reduce using rule 118 (factor_constante -> CTECHAR push_char .)
-    HASTA           reduce using rule 118 (factor_constante -> CTECHAR push_char .)
-    LBRACE          reduce using rule 118 (factor_constante -> CTECHAR push_char .)
 
 
 state 141
 
-    (71) ciclo_for -> PORCADA ID punto_existe_id ASSIGN . hyper_exp punto_valida_int HASTA hyper_exp punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
-    (81) hyper_exp -> . super_exp hyper_exp_aux
-    (88) super_exp -> . exp super_exp_aux
-    (98) exp -> . term check_op_masmenos exp_aux
-    (104) term -> . factor check_op_pordiv term_aux
-    (110) factor -> . LPAREN meter_fondo_falso hyper_exp RPAREN quitar_fondo_falso
-    (111) factor -> . factor_constante
-    (112) factor -> . llamada_func_return
-    (113) factor -> . ID LBRACKET hyper_exp RBRACKET
-    (114) factor -> . ID LBRACKET hyper_exp RBRACKET LBRACKET hyper_exp RBRACKET
-    (115) factor -> . ID push_id
-    (116) factor_constante -> . CTEI push_int
-    (117) factor_constante -> . CTEF push_float
-    (118) factor_constante -> . CTECHAR push_char
-    (131) llamada_func_return -> . ID LPAREN punto_func_exists punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub
+    (71) ciclo_for -> DESDE LPAREN ID punto_existe_id . ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
 
-    LPAREN          shift and go to state 107
-    ID              shift and go to state 110
-    CTEI            shift and go to state 111
-    CTEF            shift and go to state 112
-    CTECHAR         shift and go to state 113
+    ASSIGN          shift and go to state 188
 
-    hyper_exp                      shift and go to state 188
-    super_exp                      shift and go to state 117
-    exp                            shift and go to state 118
-    term                           shift and go to state 105
-    factor                         shift and go to state 106
-    factor_constante               shift and go to state 108
-    llamada_func_return            shift and go to state 109
 
 state 142
 
@@ -2381,8 +2324,6 @@ state 144
     RPAREN          reduce using rule 81 (hyper_exp -> super_exp hyper_exp_aux .)
     SEMICOLON       reduce using rule 81 (hyper_exp -> super_exp hyper_exp_aux .)
     RBRACKET        reduce using rule 81 (hyper_exp -> super_exp hyper_exp_aux .)
-    HASTA           reduce using rule 81 (hyper_exp -> super_exp hyper_exp_aux .)
-    LBRACE          reduce using rule 81 (hyper_exp -> super_exp hyper_exp_aux .)
 
 
 state 145
@@ -2423,8 +2364,6 @@ state 146
     RPAREN          reduce using rule 83 (hyper_exp_aux -> empty .)
     SEMICOLON       reduce using rule 83 (hyper_exp_aux -> empty .)
     RBRACKET        reduce using rule 83 (hyper_exp_aux -> empty .)
-    HASTA           reduce using rule 83 (hyper_exp_aux -> empty .)
-    LBRACE          reduce using rule 83 (hyper_exp_aux -> empty .)
     LPAREN          reduce using rule 87 (push_op_logicos -> empty .)
     ID              reduce using rule 87 (push_op_logicos -> empty .)
     CTEI            reduce using rule 87 (push_op_logicos -> empty .)
@@ -2468,8 +2407,6 @@ state 149
     RPAREN          reduce using rule 88 (super_exp -> exp super_exp_aux .)
     SEMICOLON       reduce using rule 88 (super_exp -> exp super_exp_aux .)
     RBRACKET        reduce using rule 88 (super_exp -> exp super_exp_aux .)
-    HASTA           reduce using rule 88 (super_exp -> exp super_exp_aux .)
-    LBRACE          reduce using rule 88 (super_exp -> exp super_exp_aux .)
 
 
 state 150
@@ -2514,8 +2451,6 @@ state 151
     RPAREN          reduce using rule 90 (super_exp_aux -> empty .)
     SEMICOLON       reduce using rule 90 (super_exp_aux -> empty .)
     RBRACKET        reduce using rule 90 (super_exp_aux -> empty .)
-    HASTA           reduce using rule 90 (super_exp_aux -> empty .)
-    LBRACE          reduce using rule 90 (super_exp_aux -> empty .)
 
 
 state 152
@@ -2641,7 +2576,7 @@ state 162
 
     REGRESAR        reduce using rule 143 (empty -> .)
     ID              reduce using rule 143 (empty -> .)
-    PORCADA         reduce using rule 143 (empty -> .)
+    DESDE           reduce using rule 143 (empty -> .)
     MIENTRAS        reduce using rule 143 (empty -> .)
     SI              reduce using rule 143 (empty -> .)
     IMPRIMIR        reduce using rule 143 (empty -> .)
@@ -2674,7 +2609,7 @@ state 163
     (53) estatutos_opciones -> . leer
     (56) asignar -> . variable ASSIGN push_op_igual hyper_exp check_op_igual SEMICOLON
     (130) llamada_func_void -> . ID LPAREN punto_func_exists punto_validate_isvoid punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub SEMICOLON
-    (71) ciclo_for -> . PORCADA ID punto_existe_id ASSIGN hyper_exp punto_valida_int HASTA hyper_exp punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
+    (71) ciclo_for -> . DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
     (67) ciclo_while -> . MIENTRAS punto_inicio_while LPAREN hyper_exp RPAREN punto_medio_while LBRACE estatutos RBRACE punto_fin_while SEMICOLON
     (76) condicion -> . SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE punto_fin_si SEMICOLON
     (77) condicion -> . SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE SINO punto_sino LBRACE estatutos RBRACE punto_fin_si SEMICOLON
@@ -2684,7 +2619,7 @@ state 163
 
     REGRESAR        shift and go to state 204
     ID              shift and go to state 67
-    PORCADA         shift and go to state 68
+    DESDE           shift and go to state 68
     MIENTRAS        shift and go to state 69
     SI              shift and go to state 70
     IMPRIMIR        shift and go to state 71
@@ -2855,8 +2790,6 @@ state 175
     RPAREN          reduce using rule 98 (exp -> term check_op_masmenos exp_aux .)
     COMMA           reduce using rule 98 (exp -> term check_op_masmenos exp_aux .)
     SEMICOLON       reduce using rule 98 (exp -> term check_op_masmenos exp_aux .)
-    HASTA           reduce using rule 98 (exp -> term check_op_masmenos exp_aux .)
-    LBRACE          reduce using rule 98 (exp -> term check_op_masmenos exp_aux .)
 
 
 state 176
@@ -2908,8 +2841,6 @@ state 177
     RPAREN          reduce using rule 100 (exp_aux -> empty .)
     COMMA           reduce using rule 100 (exp_aux -> empty .)
     SEMICOLON       reduce using rule 100 (exp_aux -> empty .)
-    HASTA           reduce using rule 100 (exp_aux -> empty .)
-    LBRACE          reduce using rule 100 (exp_aux -> empty .)
 
 
 state 178
@@ -2957,8 +2888,6 @@ state 180
     RPAREN          reduce using rule 104 (term -> factor check_op_pordiv term_aux .)
     COMMA           reduce using rule 104 (term -> factor check_op_pordiv term_aux .)
     SEMICOLON       reduce using rule 104 (term -> factor check_op_pordiv term_aux .)
-    HASTA           reduce using rule 104 (term -> factor check_op_pordiv term_aux .)
-    LBRACE          reduce using rule 104 (term -> factor check_op_pordiv term_aux .)
 
 
 state 181
@@ -3010,8 +2939,6 @@ state 182
     RPAREN          reduce using rule 106 (term_aux -> empty .)
     COMMA           reduce using rule 106 (term_aux -> empty .)
     SEMICOLON       reduce using rule 106 (term_aux -> empty .)
-    HASTA           reduce using rule 106 (term_aux -> empty .)
-    LBRACE          reduce using rule 106 (term_aux -> empty .)
 
 
 state 183
@@ -3067,12 +2994,35 @@ state 187
 
 state 188
 
-    (71) ciclo_for -> PORCADA ID punto_existe_id ASSIGN hyper_exp . punto_valida_int HASTA hyper_exp punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
-    (73) punto_valida_int -> .
+    (71) ciclo_for -> DESDE LPAREN ID punto_existe_id ASSIGN . hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
+    (81) hyper_exp -> . super_exp hyper_exp_aux
+    (88) super_exp -> . exp super_exp_aux
+    (98) exp -> . term check_op_masmenos exp_aux
+    (104) term -> . factor check_op_pordiv term_aux
+    (110) factor -> . LPAREN meter_fondo_falso hyper_exp RPAREN quitar_fondo_falso
+    (111) factor -> . factor_constante
+    (112) factor -> . llamada_func_return
+    (113) factor -> . ID LBRACKET hyper_exp RBRACKET
+    (114) factor -> . ID LBRACKET hyper_exp RBRACKET LBRACKET hyper_exp RBRACKET
+    (115) factor -> . ID push_id
+    (116) factor_constante -> . CTEI push_int
+    (117) factor_constante -> . CTEF push_float
+    (118) factor_constante -> . CTECHAR push_char
+    (131) llamada_func_return -> . ID LPAREN punto_func_exists punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub
 
-    HASTA           reduce using rule 73 (punto_valida_int -> .)
+    LPAREN          shift and go to state 107
+    ID              shift and go to state 110
+    CTEI            shift and go to state 111
+    CTEF            shift and go to state 112
+    CTECHAR         shift and go to state 113
 
-    punto_valida_int               shift and go to state 219
+    hyper_exp                      shift and go to state 219
+    super_exp                      shift and go to state 117
+    exp                            shift and go to state 118
+    term                           shift and go to state 105
+    factor                         shift and go to state 106
+    factor_constante               shift and go to state 108
+    llamada_func_return            shift and go to state 109
 
 state 189
 
@@ -3099,8 +3049,6 @@ state 191
     RPAREN          reduce using rule 84 (check_op_logicos -> .)
     SEMICOLON       reduce using rule 84 (check_op_logicos -> .)
     RBRACKET        reduce using rule 84 (check_op_logicos -> .)
-    HASTA           reduce using rule 84 (check_op_logicos -> .)
-    LBRACE          reduce using rule 84 (check_op_logicos -> .)
 
     check_op_logicos               shift and go to state 222
 
@@ -3119,8 +3067,6 @@ state 192
     RPAREN          reduce using rule 91 (check_op_relacionales -> .)
     SEMICOLON       reduce using rule 91 (check_op_relacionales -> .)
     RBRACKET        reduce using rule 91 (check_op_relacionales -> .)
-    HASTA           reduce using rule 91 (check_op_relacionales -> .)
-    LBRACE          reduce using rule 91 (check_op_relacionales -> .)
 
     check_op_relacionales          shift and go to state 223
 
@@ -3129,7 +3075,7 @@ state 193
     (137) imprimir -> IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON .
 
     ID              reduce using rule 137 (imprimir -> IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON .)
-    PORCADA         reduce using rule 137 (imprimir -> IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON .)
+    DESDE           reduce using rule 137 (imprimir -> IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON .)
     MIENTRAS        reduce using rule 137 (imprimir -> IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON .)
     SI              reduce using rule 137 (imprimir -> IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON .)
     IMPRIMIR        reduce using rule 137 (imprimir -> IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON .)
@@ -3215,7 +3161,7 @@ state 199
     (53) estatutos_opciones -> . leer
     (56) asignar -> . variable ASSIGN push_op_igual hyper_exp check_op_igual SEMICOLON
     (130) llamada_func_void -> . ID LPAREN punto_func_exists punto_validate_isvoid punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub SEMICOLON
-    (71) ciclo_for -> . PORCADA ID punto_existe_id ASSIGN hyper_exp punto_valida_int HASTA hyper_exp punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
+    (71) ciclo_for -> . DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
     (67) ciclo_while -> . MIENTRAS punto_inicio_while LPAREN hyper_exp RPAREN punto_medio_while LBRACE estatutos RBRACE punto_fin_while SEMICOLON
     (76) condicion -> . SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE punto_fin_si SEMICOLON
     (77) condicion -> . SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE SINO punto_sino LBRACE estatutos RBRACE punto_fin_si SEMICOLON
@@ -3225,7 +3171,7 @@ state 199
 
     REGRESAR        shift and go to state 204
     ID              shift and go to state 67
-    PORCADA         shift and go to state 68
+    DESDE           shift and go to state 68
     MIENTRAS        shift and go to state 69
     SI              shift and go to state 70
     IMPRIMIR        shift and go to state 71
@@ -3283,7 +3229,7 @@ state 203
     (53) estatutos_opciones -> . leer
     (56) asignar -> . variable ASSIGN push_op_igual hyper_exp check_op_igual SEMICOLON
     (130) llamada_func_void -> . ID LPAREN punto_func_exists punto_validate_isvoid punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub SEMICOLON
-    (71) ciclo_for -> . PORCADA ID punto_existe_id ASSIGN hyper_exp punto_valida_int HASTA hyper_exp punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
+    (71) ciclo_for -> . DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
     (67) ciclo_while -> . MIENTRAS punto_inicio_while LPAREN hyper_exp RPAREN punto_medio_while LBRACE estatutos RBRACE punto_fin_while SEMICOLON
     (76) condicion -> . SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE punto_fin_si SEMICOLON
     (77) condicion -> . SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE SINO punto_sino LBRACE estatutos RBRACE punto_fin_si SEMICOLON
@@ -3294,7 +3240,7 @@ state 203
     RBRACE          reduce using rule 46 (estatutosCycle -> estatutos_opciones .)
     REGRESAR        shift and go to state 204
     ID              shift and go to state 67
-    PORCADA         shift and go to state 68
+    DESDE           shift and go to state 68
     MIENTRAS        shift and go to state 69
     SI              shift and go to state 70
     IMPRIMIR        shift and go to state 71
@@ -3359,7 +3305,7 @@ state 206
     FUNCION         reduce using rule 25 (array -> RENGLON type ARROW ID LBRACKET CTEI RBRACKET punto_array arrayCycle SEMICOLON .)
     REGRESAR        reduce using rule 25 (array -> RENGLON type ARROW ID LBRACKET CTEI RBRACKET punto_array arrayCycle SEMICOLON .)
     ID              reduce using rule 25 (array -> RENGLON type ARROW ID LBRACKET CTEI RBRACKET punto_array arrayCycle SEMICOLON .)
-    PORCADA         reduce using rule 25 (array -> RENGLON type ARROW ID LBRACKET CTEI RBRACKET punto_array arrayCycle SEMICOLON .)
+    DESDE           reduce using rule 25 (array -> RENGLON type ARROW ID LBRACKET CTEI RBRACKET punto_array arrayCycle SEMICOLON .)
     MIENTRAS        reduce using rule 25 (array -> RENGLON type ARROW ID LBRACKET CTEI RBRACKET punto_array arrayCycle SEMICOLON .)
     SI              reduce using rule 25 (array -> RENGLON type ARROW ID LBRACKET CTEI RBRACKET punto_array arrayCycle SEMICOLON .)
     IMPRIMIR        reduce using rule 25 (array -> RENGLON type ARROW ID LBRACKET CTEI RBRACKET punto_array arrayCycle SEMICOLON .)
@@ -3388,7 +3334,7 @@ state 209
     (56) asignar -> variable ASSIGN push_op_igual hyper_exp check_op_igual SEMICOLON .
 
     ID              reduce using rule 56 (asignar -> variable ASSIGN push_op_igual hyper_exp check_op_igual SEMICOLON .)
-    PORCADA         reduce using rule 56 (asignar -> variable ASSIGN push_op_igual hyper_exp check_op_igual SEMICOLON .)
+    DESDE           reduce using rule 56 (asignar -> variable ASSIGN push_op_igual hyper_exp check_op_igual SEMICOLON .)
     MIENTRAS        reduce using rule 56 (asignar -> variable ASSIGN push_op_igual hyper_exp check_op_igual SEMICOLON .)
     SI              reduce using rule 56 (asignar -> variable ASSIGN push_op_igual hyper_exp check_op_igual SEMICOLON .)
     IMPRIMIR        reduce using rule 56 (asignar -> variable ASSIGN push_op_igual hyper_exp check_op_igual SEMICOLON .)
@@ -3449,8 +3395,6 @@ state 214
     RPAREN          reduce using rule 99 (exp_aux -> push_op_exp_masmenos exp .)
     COMMA           reduce using rule 99 (exp_aux -> push_op_exp_masmenos exp .)
     SEMICOLON       reduce using rule 99 (exp_aux -> push_op_exp_masmenos exp .)
-    HASTA           reduce using rule 99 (exp_aux -> push_op_exp_masmenos exp .)
-    LBRACE          reduce using rule 99 (exp_aux -> push_op_exp_masmenos exp .)
 
 
 state 215
@@ -3476,8 +3420,6 @@ state 215
     RPAREN          reduce using rule 105 (term_aux -> push_op_exp_pordiv term .)
     COMMA           reduce using rule 105 (term_aux -> push_op_exp_pordiv term .)
     SEMICOLON       reduce using rule 105 (term_aux -> push_op_exp_pordiv term .)
-    HASTA           reduce using rule 105 (term_aux -> push_op_exp_pordiv term .)
-    LBRACE          reduce using rule 105 (term_aux -> push_op_exp_pordiv term .)
 
 
 state 216
@@ -3506,8 +3448,6 @@ state 216
     RPAREN          reduce using rule 120 (quitar_fondo_falso -> .)
     COMMA           reduce using rule 120 (quitar_fondo_falso -> .)
     SEMICOLON       reduce using rule 120 (quitar_fondo_falso -> .)
-    HASTA           reduce using rule 120 (quitar_fondo_falso -> .)
-    LBRACE          reduce using rule 120 (quitar_fondo_falso -> .)
 
     quitar_fondo_falso             shift and go to state 236
 
@@ -3537,8 +3477,6 @@ state 217
     RPAREN          reduce using rule 113 (factor -> ID LBRACKET hyper_exp RBRACKET .)
     COMMA           reduce using rule 113 (factor -> ID LBRACKET hyper_exp RBRACKET .)
     SEMICOLON       reduce using rule 113 (factor -> ID LBRACKET hyper_exp RBRACKET .)
-    HASTA           reduce using rule 113 (factor -> ID LBRACKET hyper_exp RBRACKET .)
-    LBRACE          reduce using rule 113 (factor -> ID LBRACKET hyper_exp RBRACKET .)
     LBRACKET        shift and go to state 237
 
 
@@ -3578,9 +3516,9 @@ state 218
 
 state 219
 
-    (71) ciclo_for -> PORCADA ID punto_existe_id ASSIGN hyper_exp punto_valida_int . HASTA hyper_exp punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
+    (71) ciclo_for -> DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp . RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
 
-    HASTA           shift and go to state 239
+    RPAREN          shift and go to state 239
 
 
 state 220
@@ -3608,7 +3546,7 @@ state 221
     (53) estatutos_opciones -> . leer
     (56) asignar -> . variable ASSIGN push_op_igual hyper_exp check_op_igual SEMICOLON
     (130) llamada_func_void -> . ID LPAREN punto_func_exists punto_validate_isvoid punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub SEMICOLON
-    (71) ciclo_for -> . PORCADA ID punto_existe_id ASSIGN hyper_exp punto_valida_int HASTA hyper_exp punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
+    (71) ciclo_for -> . DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
     (67) ciclo_while -> . MIENTRAS punto_inicio_while LPAREN hyper_exp RPAREN punto_medio_while LBRACE estatutos RBRACE punto_fin_while SEMICOLON
     (76) condicion -> . SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE punto_fin_si SEMICOLON
     (77) condicion -> . SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE SINO punto_sino LBRACE estatutos RBRACE punto_fin_si SEMICOLON
@@ -3618,7 +3556,7 @@ state 221
 
     REGRESAR        shift and go to state 204
     ID              shift and go to state 67
-    PORCADA         shift and go to state 68
+    DESDE           shift and go to state 68
     MIENTRAS        shift and go to state 69
     SI              shift and go to state 70
     IMPRIMIR        shift and go to state 71
@@ -3644,8 +3582,6 @@ state 222
     RPAREN          reduce using rule 82 (hyper_exp_aux -> push_op_logicos super_exp check_op_logicos .)
     SEMICOLON       reduce using rule 82 (hyper_exp_aux -> push_op_logicos super_exp check_op_logicos .)
     RBRACKET        reduce using rule 82 (hyper_exp_aux -> push_op_logicos super_exp check_op_logicos .)
-    HASTA           reduce using rule 82 (hyper_exp_aux -> push_op_logicos super_exp check_op_logicos .)
-    LBRACE          reduce using rule 82 (hyper_exp_aux -> push_op_logicos super_exp check_op_logicos .)
 
 
 state 223
@@ -3662,8 +3598,6 @@ state 223
     RPAREN          reduce using rule 89 (super_exp_aux -> push_op_relacionales exp check_op_relacionales .)
     SEMICOLON       reduce using rule 89 (super_exp_aux -> push_op_relacionales exp check_op_relacionales .)
     RBRACKET        reduce using rule 89 (super_exp_aux -> push_op_relacionales exp check_op_relacionales .)
-    HASTA           reduce using rule 89 (super_exp_aux -> push_op_relacionales exp check_op_relacionales .)
-    LBRACE          reduce using rule 89 (super_exp_aux -> push_op_relacionales exp check_op_relacionales .)
 
 
 state 224
@@ -3792,8 +3726,6 @@ state 236
     RPAREN          reduce using rule 110 (factor -> LPAREN meter_fondo_falso hyper_exp RPAREN quitar_fondo_falso .)
     COMMA           reduce using rule 110 (factor -> LPAREN meter_fondo_falso hyper_exp RPAREN quitar_fondo_falso .)
     SEMICOLON       reduce using rule 110 (factor -> LPAREN meter_fondo_falso hyper_exp RPAREN quitar_fondo_falso .)
-    HASTA           reduce using rule 110 (factor -> LPAREN meter_fondo_falso hyper_exp RPAREN quitar_fondo_falso .)
-    LBRACE          reduce using rule 110 (factor -> LPAREN meter_fondo_falso hyper_exp RPAREN quitar_fondo_falso .)
 
 
 state 237
@@ -3837,35 +3769,12 @@ state 238
 
 state 239
 
-    (71) ciclo_for -> PORCADA ID punto_existe_id ASSIGN hyper_exp punto_valida_int HASTA . hyper_exp punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
-    (81) hyper_exp -> . super_exp hyper_exp_aux
-    (88) super_exp -> . exp super_exp_aux
-    (98) exp -> . term check_op_masmenos exp_aux
-    (104) term -> . factor check_op_pordiv term_aux
-    (110) factor -> . LPAREN meter_fondo_falso hyper_exp RPAREN quitar_fondo_falso
-    (111) factor -> . factor_constante
-    (112) factor -> . llamada_func_return
-    (113) factor -> . ID LBRACKET hyper_exp RBRACKET
-    (114) factor -> . ID LBRACKET hyper_exp RBRACKET LBRACKET hyper_exp RBRACKET
-    (115) factor -> . ID push_id
-    (116) factor_constante -> . CTEI push_int
-    (117) factor_constante -> . CTEF push_float
-    (118) factor_constante -> . CTECHAR push_char
-    (131) llamada_func_return -> . ID LPAREN punto_func_exists punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub
+    (71) ciclo_for -> DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN . punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
+    (73) punto_valida_int -> .
 
-    LPAREN          shift and go to state 107
-    ID              shift and go to state 110
-    CTEI            shift and go to state 111
-    CTEF            shift and go to state 112
-    CTECHAR         shift and go to state 113
+    HASTA           reduce using rule 73 (punto_valida_int -> .)
 
-    hyper_exp                      shift and go to state 257
-    super_exp                      shift and go to state 117
-    exp                            shift and go to state 118
-    term                           shift and go to state 105
-    factor                         shift and go to state 106
-    factor_constante               shift and go to state 108
-    llamada_func_return            shift and go to state 109
+    punto_valida_int               shift and go to state 257
 
 state 240
 
@@ -3884,7 +3793,7 @@ state 240
     (53) estatutos_opciones -> . leer
     (56) asignar -> . variable ASSIGN push_op_igual hyper_exp check_op_igual SEMICOLON
     (130) llamada_func_void -> . ID LPAREN punto_func_exists punto_validate_isvoid punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub SEMICOLON
-    (71) ciclo_for -> . PORCADA ID punto_existe_id ASSIGN hyper_exp punto_valida_int HASTA hyper_exp punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
+    (71) ciclo_for -> . DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
     (67) ciclo_while -> . MIENTRAS punto_inicio_while LPAREN hyper_exp RPAREN punto_medio_while LBRACE estatutos RBRACE punto_fin_while SEMICOLON
     (76) condicion -> . SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE punto_fin_si SEMICOLON
     (77) condicion -> . SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE SINO punto_sino LBRACE estatutos RBRACE punto_fin_si SEMICOLON
@@ -3894,7 +3803,7 @@ state 240
 
     REGRESAR        shift and go to state 204
     ID              shift and go to state 67
-    PORCADA         shift and go to state 68
+    DESDE           shift and go to state 68
     MIENTRAS        shift and go to state 69
     SI              shift and go to state 70
     IMPRIMIR        shift and go to state 71
@@ -3926,7 +3835,7 @@ state 242
     (64) leer -> LEER LPAREN punto_push_leer ID punto_create_leer RPAREN SEMICOLON .
 
     ID              reduce using rule 64 (leer -> LEER LPAREN punto_push_leer ID punto_create_leer RPAREN SEMICOLON .)
-    PORCADA         reduce using rule 64 (leer -> LEER LPAREN punto_push_leer ID punto_create_leer RPAREN SEMICOLON .)
+    DESDE           reduce using rule 64 (leer -> LEER LPAREN punto_push_leer ID punto_create_leer RPAREN SEMICOLON .)
     MIENTRAS        reduce using rule 64 (leer -> LEER LPAREN punto_push_leer ID punto_create_leer RPAREN SEMICOLON .)
     SI              reduce using rule 64 (leer -> LEER LPAREN punto_push_leer ID punto_create_leer RPAREN SEMICOLON .)
     IMPRIMIR        reduce using rule 64 (leer -> LEER LPAREN punto_push_leer ID punto_create_leer RPAREN SEMICOLON .)
@@ -4086,19 +3995,15 @@ state 256
     RPAREN          reduce using rule 135 (punto_check_total_params -> .)
     COMMA           reduce using rule 135 (punto_check_total_params -> .)
     SEMICOLON       reduce using rule 135 (punto_check_total_params -> .)
-    HASTA           reduce using rule 135 (punto_check_total_params -> .)
-    LBRACE          reduce using rule 135 (punto_check_total_params -> .)
 
     punto_check_total_params       shift and go to state 270
 
 state 257
 
-    (71) ciclo_for -> PORCADA ID punto_existe_id ASSIGN hyper_exp punto_valida_int HASTA hyper_exp . punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
-    (74) punto_valida_exp -> .
+    (71) ciclo_for -> DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int . HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
 
-    LBRACE          reduce using rule 74 (punto_valida_exp -> .)
+    HASTA           shift and go to state 271
 
-    punto_valida_exp               shift and go to state 271
 
 state 258
 
@@ -4171,7 +4076,7 @@ state 265
     FUNCION         reduce using rule 29 (matrix -> TABLA type ARROW ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET punto_matrix matrixCycle SEMICOLON .)
     REGRESAR        reduce using rule 29 (matrix -> TABLA type ARROW ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET punto_matrix matrixCycle SEMICOLON .)
     ID              reduce using rule 29 (matrix -> TABLA type ARROW ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET punto_matrix matrixCycle SEMICOLON .)
-    PORCADA         reduce using rule 29 (matrix -> TABLA type ARROW ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET punto_matrix matrixCycle SEMICOLON .)
+    DESDE           reduce using rule 29 (matrix -> TABLA type ARROW ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET punto_matrix matrixCycle SEMICOLON .)
     MIENTRAS        reduce using rule 29 (matrix -> TABLA type ARROW ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET punto_matrix matrixCycle SEMICOLON .)
     SI              reduce using rule 29 (matrix -> TABLA type ARROW ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET punto_matrix matrixCycle SEMICOLON .)
     IMPRIMIR        reduce using rule 29 (matrix -> TABLA type ARROW ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET punto_matrix matrixCycle SEMICOLON .)
@@ -4227,8 +4132,6 @@ state 269
     RPAREN          reduce using rule 114 (factor -> ID LBRACKET hyper_exp RBRACKET LBRACKET hyper_exp RBRACKET .)
     COMMA           reduce using rule 114 (factor -> ID LBRACKET hyper_exp RBRACKET LBRACKET hyper_exp RBRACKET .)
     SEMICOLON       reduce using rule 114 (factor -> ID LBRACKET hyper_exp RBRACKET LBRACKET hyper_exp RBRACKET .)
-    HASTA           reduce using rule 114 (factor -> ID LBRACKET hyper_exp RBRACKET LBRACKET hyper_exp RBRACKET .)
-    LBRACE          reduce using rule 114 (factor -> ID LBRACKET hyper_exp RBRACKET LBRACKET hyper_exp RBRACKET .)
 
 
 state 270
@@ -4257,16 +4160,14 @@ state 270
     RPAREN          reduce using rule 136 (punto_create_gosub -> .)
     COMMA           reduce using rule 136 (punto_create_gosub -> .)
     SEMICOLON       reduce using rule 136 (punto_create_gosub -> .)
-    HASTA           reduce using rule 136 (punto_create_gosub -> .)
-    LBRACE          reduce using rule 136 (punto_create_gosub -> .)
 
     punto_create_gosub             shift and go to state 280
 
 state 271
 
-    (71) ciclo_for -> PORCADA ID punto_existe_id ASSIGN hyper_exp punto_valida_int HASTA hyper_exp punto_valida_exp . LBRACE estatutos RBRACE punto_termina_for SEMICOLON
+    (71) ciclo_for -> DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA . LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
 
-    LBRACE          shift and go to state 281
+    LPAREN          shift and go to state 281
 
 
 state 272
@@ -4327,7 +4228,7 @@ state 278
     (130) llamada_func_void -> ID LPAREN punto_func_exists punto_validate_isvoid punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub SEMICOLON .
 
     ID              reduce using rule 130 (llamada_func_void -> ID LPAREN punto_func_exists punto_validate_isvoid punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub SEMICOLON .)
-    PORCADA         reduce using rule 130 (llamada_func_void -> ID LPAREN punto_func_exists punto_validate_isvoid punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub SEMICOLON .)
+    DESDE           reduce using rule 130 (llamada_func_void -> ID LPAREN punto_func_exists punto_validate_isvoid punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub SEMICOLON .)
     MIENTRAS        reduce using rule 130 (llamada_func_void -> ID LPAREN punto_func_exists punto_validate_isvoid punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub SEMICOLON .)
     SI              reduce using rule 130 (llamada_func_void -> ID LPAREN punto_func_exists punto_validate_isvoid punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub SEMICOLON .)
     IMPRIMIR        reduce using rule 130 (llamada_func_void -> ID LPAREN punto_func_exists punto_validate_isvoid punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub SEMICOLON .)
@@ -4374,55 +4275,39 @@ state 280
     RPAREN          reduce using rule 131 (llamada_func_return -> ID LPAREN punto_func_exists punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub .)
     COMMA           reduce using rule 131 (llamada_func_return -> ID LPAREN punto_func_exists punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub .)
     SEMICOLON       reduce using rule 131 (llamada_func_return -> ID LPAREN punto_func_exists punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub .)
-    HASTA           reduce using rule 131 (llamada_func_return -> ID LPAREN punto_func_exists punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub .)
-    LBRACE          reduce using rule 131 (llamada_func_return -> ID LPAREN punto_func_exists punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub .)
 
 
 state 281
 
-    (71) ciclo_for -> PORCADA ID punto_existe_id ASSIGN hyper_exp punto_valida_int HASTA hyper_exp punto_valida_exp LBRACE . estatutos RBRACE punto_termina_for SEMICOLON
-    (43) estatutos -> . estatutosCycle
-    (44) estatutos -> . func_regresar
-    (45) estatutosCycle -> . estatutos_opciones estatutos
-    (46) estatutosCycle -> . estatutos_opciones
-    (54) func_regresar -> . REGRESAR exp SEMICOLON punto_check_types
-    (47) estatutos_opciones -> . asignar
-    (48) estatutos_opciones -> . llamada_func_void
-    (49) estatutos_opciones -> . ciclo_for
-    (50) estatutos_opciones -> . ciclo_while
-    (51) estatutos_opciones -> . condicion
-    (52) estatutos_opciones -> . imprimir
-    (53) estatutos_opciones -> . leer
-    (56) asignar -> . variable ASSIGN push_op_igual hyper_exp check_op_igual SEMICOLON
-    (130) llamada_func_void -> . ID LPAREN punto_func_exists punto_validate_isvoid punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub SEMICOLON
-    (71) ciclo_for -> . PORCADA ID punto_existe_id ASSIGN hyper_exp punto_valida_int HASTA hyper_exp punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
-    (67) ciclo_while -> . MIENTRAS punto_inicio_while LPAREN hyper_exp RPAREN punto_medio_while LBRACE estatutos RBRACE punto_fin_while SEMICOLON
-    (76) condicion -> . SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE punto_fin_si SEMICOLON
-    (77) condicion -> . SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE SINO punto_sino LBRACE estatutos RBRACE punto_fin_si SEMICOLON
-    (137) imprimir -> . IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON
-    (64) leer -> . LEER LPAREN punto_push_leer ID punto_create_leer RPAREN SEMICOLON
-    (57) variable -> . ID variable_aux
+    (71) ciclo_for -> DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN . hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
+    (81) hyper_exp -> . super_exp hyper_exp_aux
+    (88) super_exp -> . exp super_exp_aux
+    (98) exp -> . term check_op_masmenos exp_aux
+    (104) term -> . factor check_op_pordiv term_aux
+    (110) factor -> . LPAREN meter_fondo_falso hyper_exp RPAREN quitar_fondo_falso
+    (111) factor -> . factor_constante
+    (112) factor -> . llamada_func_return
+    (113) factor -> . ID LBRACKET hyper_exp RBRACKET
+    (114) factor -> . ID LBRACKET hyper_exp RBRACKET LBRACKET hyper_exp RBRACKET
+    (115) factor -> . ID push_id
+    (116) factor_constante -> . CTEI push_int
+    (117) factor_constante -> . CTEF push_float
+    (118) factor_constante -> . CTECHAR push_char
+    (131) llamada_func_return -> . ID LPAREN punto_func_exists punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub
 
-    REGRESAR        shift and go to state 204
-    ID              shift and go to state 67
-    PORCADA         shift and go to state 68
-    MIENTRAS        shift and go to state 69
-    SI              shift and go to state 70
-    IMPRIMIR        shift and go to state 71
-    LEER            shift and go to state 72
+    LPAREN          shift and go to state 107
+    ID              shift and go to state 110
+    CTEI            shift and go to state 111
+    CTEF            shift and go to state 112
+    CTECHAR         shift and go to state 113
 
-    estatutos                      shift and go to state 288
-    estatutosCycle                 shift and go to state 201
-    func_regresar                  shift and go to state 202
-    estatutos_opciones             shift and go to state 203
-    asignar                        shift and go to state 59
-    llamada_func_void              shift and go to state 60
-    ciclo_for                      shift and go to state 61
-    ciclo_while                    shift and go to state 62
-    condicion                      shift and go to state 63
-    imprimir                       shift and go to state 64
-    leer                           shift and go to state 65
-    variable                       shift and go to state 66
+    hyper_exp                      shift and go to state 288
+    super_exp                      shift and go to state 117
+    exp                            shift and go to state 118
+    term                           shift and go to state 105
+    factor                         shift and go to state 106
+    factor_constante               shift and go to state 108
+    llamada_func_return            shift and go to state 109
 
 state 282
 
@@ -4436,7 +4321,7 @@ state 283
     (76) condicion -> SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE punto_fin_si SEMICOLON .
 
     ID              reduce using rule 76 (condicion -> SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE punto_fin_si SEMICOLON .)
-    PORCADA         reduce using rule 76 (condicion -> SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE punto_fin_si SEMICOLON .)
+    DESDE           reduce using rule 76 (condicion -> SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE punto_fin_si SEMICOLON .)
     MIENTRAS        reduce using rule 76 (condicion -> SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE punto_fin_si SEMICOLON .)
     SI              reduce using rule 76 (condicion -> SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE punto_fin_si SEMICOLON .)
     IMPRIMIR        reduce using rule 76 (condicion -> SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE punto_fin_si SEMICOLON .)
@@ -4475,9 +4360,9 @@ state 287
 
 state 288
 
-    (71) ciclo_for -> PORCADA ID punto_existe_id ASSIGN hyper_exp punto_valida_int HASTA hyper_exp punto_valida_exp LBRACE estatutos . RBRACE punto_termina_for SEMICOLON
+    (71) ciclo_for -> DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp . RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
 
-    RBRACE          shift and go to state 292
+    RPAREN          shift and go to state 292
 
 
 state 289
@@ -4485,7 +4370,7 @@ state 289
     (67) ciclo_while -> MIENTRAS punto_inicio_while LPAREN hyper_exp RPAREN punto_medio_while LBRACE estatutos RBRACE punto_fin_while SEMICOLON .
 
     ID              reduce using rule 67 (ciclo_while -> MIENTRAS punto_inicio_while LPAREN hyper_exp RPAREN punto_medio_while LBRACE estatutos RBRACE punto_fin_while SEMICOLON .)
-    PORCADA         reduce using rule 67 (ciclo_while -> MIENTRAS punto_inicio_while LPAREN hyper_exp RPAREN punto_medio_while LBRACE estatutos RBRACE punto_fin_while SEMICOLON .)
+    DESDE           reduce using rule 67 (ciclo_while -> MIENTRAS punto_inicio_while LPAREN hyper_exp RPAREN punto_medio_while LBRACE estatutos RBRACE punto_fin_while SEMICOLON .)
     MIENTRAS        reduce using rule 67 (ciclo_while -> MIENTRAS punto_inicio_while LPAREN hyper_exp RPAREN punto_medio_while LBRACE estatutos RBRACE punto_fin_while SEMICOLON .)
     SI              reduce using rule 67 (ciclo_while -> MIENTRAS punto_inicio_while LPAREN hyper_exp RPAREN punto_medio_while LBRACE estatutos RBRACE punto_fin_while SEMICOLON .)
     IMPRIMIR        reduce using rule 67 (ciclo_while -> MIENTRAS punto_inicio_while LPAREN hyper_exp RPAREN punto_medio_while LBRACE estatutos RBRACE punto_fin_while SEMICOLON .)
@@ -4511,7 +4396,7 @@ state 290
     (53) estatutos_opciones -> . leer
     (56) asignar -> . variable ASSIGN push_op_igual hyper_exp check_op_igual SEMICOLON
     (130) llamada_func_void -> . ID LPAREN punto_func_exists punto_validate_isvoid punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub SEMICOLON
-    (71) ciclo_for -> . PORCADA ID punto_existe_id ASSIGN hyper_exp punto_valida_int HASTA hyper_exp punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
+    (71) ciclo_for -> . DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
     (67) ciclo_while -> . MIENTRAS punto_inicio_while LPAREN hyper_exp RPAREN punto_medio_while LBRACE estatutos RBRACE punto_fin_while SEMICOLON
     (76) condicion -> . SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE punto_fin_si SEMICOLON
     (77) condicion -> . SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE SINO punto_sino LBRACE estatutos RBRACE punto_fin_si SEMICOLON
@@ -4521,7 +4406,7 @@ state 290
 
     REGRESAR        shift and go to state 204
     ID              shift and go to state 67
-    PORCADA         shift and go to state 68
+    DESDE           shift and go to state 68
     MIENTRAS        shift and go to state 69
     SI              shift and go to state 70
     IMPRIMIR        shift and go to state 71
@@ -4549,12 +4434,12 @@ state 291
 
 state 292
 
-    (71) ciclo_for -> PORCADA ID punto_existe_id ASSIGN hyper_exp punto_valida_int HASTA hyper_exp punto_valida_exp LBRACE estatutos RBRACE . punto_termina_for SEMICOLON
-    (75) punto_termina_for -> .
+    (71) ciclo_for -> DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN . punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
+    (74) punto_valida_exp -> .
 
-    SEMICOLON       reduce using rule 75 (punto_termina_for -> .)
+    LBRACE          reduce using rule 74 (punto_valida_exp -> .)
 
-    punto_termina_for              shift and go to state 295
+    punto_valida_exp               shift and go to state 295
 
 state 293
 
@@ -4572,9 +4457,9 @@ state 294
 
 state 295
 
-    (71) ciclo_for -> PORCADA ID punto_existe_id ASSIGN hyper_exp punto_valida_int HASTA hyper_exp punto_valida_exp LBRACE estatutos RBRACE punto_termina_for . SEMICOLON
+    (71) ciclo_for -> DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp . LBRACE estatutos RBRACE punto_termina_for SEMICOLON
 
-    SEMICOLON       shift and go to state 298
+    LBRACE          shift and go to state 298
 
 
 state 296
@@ -4595,23 +4480,55 @@ state 297
 
 state 298
 
-    (71) ciclo_for -> PORCADA ID punto_existe_id ASSIGN hyper_exp punto_valida_int HASTA hyper_exp punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON .
+    (71) ciclo_for -> DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE . estatutos RBRACE punto_termina_for SEMICOLON
+    (43) estatutos -> . estatutosCycle
+    (44) estatutos -> . func_regresar
+    (45) estatutosCycle -> . estatutos_opciones estatutos
+    (46) estatutosCycle -> . estatutos_opciones
+    (54) func_regresar -> . REGRESAR exp SEMICOLON punto_check_types
+    (47) estatutos_opciones -> . asignar
+    (48) estatutos_opciones -> . llamada_func_void
+    (49) estatutos_opciones -> . ciclo_for
+    (50) estatutos_opciones -> . ciclo_while
+    (51) estatutos_opciones -> . condicion
+    (52) estatutos_opciones -> . imprimir
+    (53) estatutos_opciones -> . leer
+    (56) asignar -> . variable ASSIGN push_op_igual hyper_exp check_op_igual SEMICOLON
+    (130) llamada_func_void -> . ID LPAREN punto_func_exists punto_validate_isvoid punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub SEMICOLON
+    (71) ciclo_for -> . DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
+    (67) ciclo_while -> . MIENTRAS punto_inicio_while LPAREN hyper_exp RPAREN punto_medio_while LBRACE estatutos RBRACE punto_fin_while SEMICOLON
+    (76) condicion -> . SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE punto_fin_si SEMICOLON
+    (77) condicion -> . SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE SINO punto_sino LBRACE estatutos RBRACE punto_fin_si SEMICOLON
+    (137) imprimir -> . IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON
+    (64) leer -> . LEER LPAREN punto_push_leer ID punto_create_leer RPAREN SEMICOLON
+    (57) variable -> . ID variable_aux
 
-    ID              reduce using rule 71 (ciclo_for -> PORCADA ID punto_existe_id ASSIGN hyper_exp punto_valida_int HASTA hyper_exp punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON .)
-    PORCADA         reduce using rule 71 (ciclo_for -> PORCADA ID punto_existe_id ASSIGN hyper_exp punto_valida_int HASTA hyper_exp punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON .)
-    MIENTRAS        reduce using rule 71 (ciclo_for -> PORCADA ID punto_existe_id ASSIGN hyper_exp punto_valida_int HASTA hyper_exp punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON .)
-    SI              reduce using rule 71 (ciclo_for -> PORCADA ID punto_existe_id ASSIGN hyper_exp punto_valida_int HASTA hyper_exp punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON .)
-    IMPRIMIR        reduce using rule 71 (ciclo_for -> PORCADA ID punto_existe_id ASSIGN hyper_exp punto_valida_int HASTA hyper_exp punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON .)
-    LEER            reduce using rule 71 (ciclo_for -> PORCADA ID punto_existe_id ASSIGN hyper_exp punto_valida_int HASTA hyper_exp punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON .)
-    RBRACE          reduce using rule 71 (ciclo_for -> PORCADA ID punto_existe_id ASSIGN hyper_exp punto_valida_int HASTA hyper_exp punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON .)
-    REGRESAR        reduce using rule 71 (ciclo_for -> PORCADA ID punto_existe_id ASSIGN hyper_exp punto_valida_int HASTA hyper_exp punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON .)
+    REGRESAR        shift and go to state 204
+    ID              shift and go to state 67
+    DESDE           shift and go to state 68
+    MIENTRAS        shift and go to state 69
+    SI              shift and go to state 70
+    IMPRIMIR        shift and go to state 71
+    LEER            shift and go to state 72
 
+    estatutos                      shift and go to state 301
+    estatutosCycle                 shift and go to state 201
+    func_regresar                  shift and go to state 202
+    estatutos_opciones             shift and go to state 203
+    asignar                        shift and go to state 59
+    llamada_func_void              shift and go to state 60
+    ciclo_for                      shift and go to state 61
+    ciclo_while                    shift and go to state 62
+    condicion                      shift and go to state 63
+    imprimir                       shift and go to state 64
+    leer                           shift and go to state 65
+    variable                       shift and go to state 66
 
 state 299
 
     (77) condicion -> SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE SINO punto_sino LBRACE estatutos RBRACE punto_fin_si . SEMICOLON
 
-    SEMICOLON       shift and go to state 301
+    SEMICOLON       shift and go to state 302
 
 
 state 300
@@ -4622,14 +4539,21 @@ state 300
     COMMA           reduce using rule 32 (punto_matrix -> .)
     SEMICOLON       reduce using rule 32 (punto_matrix -> .)
 
-    punto_matrix                   shift and go to state 302
+    punto_matrix                   shift and go to state 303
 
 state 301
+
+    (71) ciclo_for -> DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos . RBRACE punto_termina_for SEMICOLON
+
+    RBRACE          shift and go to state 304
+
+
+state 302
 
     (77) condicion -> SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE SINO punto_sino LBRACE estatutos RBRACE punto_fin_si SEMICOLON .
 
     ID              reduce using rule 77 (condicion -> SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE SINO punto_sino LBRACE estatutos RBRACE punto_fin_si SEMICOLON .)
-    PORCADA         reduce using rule 77 (condicion -> SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE SINO punto_sino LBRACE estatutos RBRACE punto_fin_si SEMICOLON .)
+    DESDE           reduce using rule 77 (condicion -> SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE SINO punto_sino LBRACE estatutos RBRACE punto_fin_si SEMICOLON .)
     MIENTRAS        reduce using rule 77 (condicion -> SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE SINO punto_sino LBRACE estatutos RBRACE punto_fin_si SEMICOLON .)
     SI              reduce using rule 77 (condicion -> SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE SINO punto_sino LBRACE estatutos RBRACE punto_fin_si SEMICOLON .)
     IMPRIMIR        reduce using rule 77 (condicion -> SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE SINO punto_sino LBRACE estatutos RBRACE punto_fin_si SEMICOLON .)
@@ -4638,7 +4562,7 @@ state 301
     REGRESAR        reduce using rule 77 (condicion -> SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE SINO punto_sino LBRACE estatutos RBRACE punto_fin_si SEMICOLON .)
 
 
-state 302
+state 303
 
     (30) matrixCycle -> COMMA ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET punto_matrix . matrixCycle
     (30) matrixCycle -> . COMMA ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET punto_matrix matrixCycle
@@ -4648,14 +4572,44 @@ state 302
     COMMA           shift and go to state 249
     SEMICOLON       reduce using rule 143 (empty -> .)
 
-    matrixCycle                    shift and go to state 303
+    matrixCycle                    shift and go to state 305
     empty                          shift and go to state 250
 
-state 303
+state 304
+
+    (71) ciclo_for -> DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE . punto_termina_for SEMICOLON
+    (75) punto_termina_for -> .
+
+    SEMICOLON       reduce using rule 75 (punto_termina_for -> .)
+
+    punto_termina_for              shift and go to state 306
+
+state 305
 
     (30) matrixCycle -> COMMA ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET punto_matrix matrixCycle .
 
     SEMICOLON       reduce using rule 30 (matrixCycle -> COMMA ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET punto_matrix matrixCycle .)
+
+
+state 306
+
+    (71) ciclo_for -> DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for . SEMICOLON
+
+    SEMICOLON       shift and go to state 307
+
+
+state 307
+
+    (71) ciclo_for -> DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON .
+
+    ID              reduce using rule 71 (ciclo_for -> DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON .)
+    DESDE           reduce using rule 71 (ciclo_for -> DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON .)
+    MIENTRAS        reduce using rule 71 (ciclo_for -> DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON .)
+    SI              reduce using rule 71 (ciclo_for -> DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON .)
+    IMPRIMIR        reduce using rule 71 (ciclo_for -> DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON .)
+    LEER            reduce using rule 71 (ciclo_for -> DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON .)
+    RBRACE          reduce using rule 71 (ciclo_for -> DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON .)
+    REGRESAR        reduce using rule 71 (ciclo_for -> DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON .)
 
 WARNING: 
 WARNING: Conflicts:
