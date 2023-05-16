@@ -1,6 +1,6 @@
 programa patito:
-variable entero -> i,j,k;
-variable decimal -> f;
+variable entero -> i; // ,j,k;
+// variable decimal -> f;
 
 /*
 funcion sinregresar uno (entero a, entero b) {
@@ -30,7 +30,7 @@ funcion entero dos (entero a, decimal g){
 */
 
 inicio () {
-	i = 2;
+	// i = 2;
 	/* 
 	k = i + 1; 
 	f = 3.14;

@@ -447,7 +447,7 @@ def p_punto_valida_int(p):
   punto_valida_int : 
   '''
   #Validate if the hyper_exp is equal to an integer number
-  global stack_de_operadores, stack_de_operandos, stack_de_tipos, lista_de_cuadruplos
+  global stack_de_operadores, stack_de_operandos, stack_de_tipos, lista_de_cuadruplos, vControl
   result_type = stack_de_tipos.pop()
   id_type = stack_de_tipos.pop()
 
@@ -463,7 +463,7 @@ def p_punto_valida_exp(p):
   '''
   punto_valida_exp : 
   '''
-  global stack_de_operandos, stack_de_tipos, lista_de_cuadruplos
+  global stack_de_operandos, stack_de_tipos, lista_de_cuadruplos, vControl
   tipo_exp = stack_de_tipos.pop()
   if tipo_exp != 1:
     raise Exception(f"ERROR: Type Mismatch. El valor de la expresion debe ser entera") 
