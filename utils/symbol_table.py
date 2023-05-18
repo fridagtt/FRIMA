@@ -247,14 +247,15 @@ class SymbolTable:
     void: modified global variable table with the constant added.
 
     """
-    self.symbol_table['constant_table'][const_value] = {
+    self.symbol_table['constant_table'][const_memory_dir] = {
       'type': const_type,
       'memory_dir': const_memory_dir,
       'value': const_value,
     }
   
   def get_constant_address(self, const_value)-> int:
-    """Fetches the memory address of the requested constant value
+    """Fetches the memory address of the requested constant value.
+    It double checks the type to avoid collisions between doubles and integers e.g. 3 or 3.0
 
     Parameters:
     const_value (string): value of the constant to be fetched
@@ -263,10 +264,10 @@ class SymbolTable:
     int(): memory address of the requested constant
 
     """
-    if(const_value in self.symbol_table['constant_table']):
-      return self.symbol_table['constant_table'][const_value]['memory_dir']
-    else:
-      return None
+    for key, values in self.symbol_table['constant_table'].items():
+      if values["value"] == const_value and type(values["value"]) == type(const_value): 
+        return key
+    return None
 
   def delete_function_var_table(self, current_func):
     """Deletes variable table of function received

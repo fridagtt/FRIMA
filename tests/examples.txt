@@ -1,6 +1,6 @@
 programa patito:
-variable entero -> i; // ,j,k;
-// variable decimal -> f;
+variable entero -> i, j, k,d;
+variable decimal -> f, g;
 
 /*
 funcion sinregresar uno (entero a, entero b) {
@@ -30,11 +30,14 @@ funcion entero dos (entero a, decimal g){
 */
 
 inicio () {
-	// i = 2;
-	/* 
-	k = i + 1; 
+	i = 2;
+	k = 1; 
 	f = 3.14;
+	g = 3.0;
+	d = 3;
 
+	imprimir(2);
+	/*
 	imprimir ( dos ( i+k, f*3) + 3);
 	imprimir ( i, j*2, f*2 +1.5);
 	i = i - k;
@@ -45,10 +48,11 @@ inicio () {
 	*/
 	
 		
-
+	/*
 	desde (i = 4) hasta (6) {
 		imprimir("hola imprimiendo for paps");
 	};
+	*/
 
 	
 };

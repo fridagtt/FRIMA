@@ -265,9 +265,3 @@ def assign_memory_global_local(var_type, func_name):
       return add_global_char()
     else:
       return add_local_char()
-
-
-
-    
-
-
