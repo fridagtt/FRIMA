@@ -216,54 +216,55 @@ def reset_local_temp():
   local_temp_char = 26000
   local_temp_bool = 28000
 
-def assign_memory(var_type, func_name, isConstant, isTemporal): 
+def assign_memory_constant(var_type, func_name):
   if var_type == 1:
-    if isConstant: 
-      return add_const_int()
-    if func_name == "programa": # Add int to global memory
-      if isTemporal:
-        return add_global_temp_int()
-      else:
-        return add_global_int()
-    else: # Add int to local memory
-      if isTemporal:
-        return add_local_temp_int()
-      else:
-        return add_local_int()
+    return add_const_int()
   elif var_type == 2:
-    if isConstant: 
-      return add_const_float()
-    if func_name == "programa": # Add float to  global memory
-      if isTemporal:
-        return add_global_temp_float()
-      else:
-        return add_global_float()
-    else: # Add float to local memory
-      if isTemporal:
-        return add_local_temp_float()
-      else:
-        return add_local_float()
+    return add_const_float()
   elif var_type == 3:
-    if isConstant:
-      return add_const_char()
-    if func_name == "programa": # Add char to global memory
-      if isTemporal:
-        return add_global_temp_char()
-      else:
-        return add_global_char()
+    return add_const_char()
+  elif var_type == 5: # Add string to global constant memory
+    return add_const_string()
+       
+def assign_memory_temporal(var_type, func_name):
+  if var_type == 1:
+    if func_name == "inicio": # Add int to global memory
+      return add_global_temp_int()
+    else: # Add int to local memory
+      return add_local_temp_int()
+  elif var_type == 2:
+    if func_name == "inicio": # Add float to  global memory
+      return add_global_temp_float()
+    else: # Add float to local memory
+      return add_local_temp_float()
+  elif var_type == 3:
+    if func_name == "inicio": # Add char to global memory
+      return add_global_temp_char()
     else: # Add char to local memory
-      if isTemporal:
-        return add_local_temp_char()
-      else:
-        return add_local_char()
+      return add_local_temp_char()
   elif var_type == 4:
-    if func_name == "programa": # Add bool to global memory
+    if func_name == "inicio": # Add bool to global memory
       return add_global_temp_bool()
     else: # Add bool to local memory
       return add_local_temp_bool()
-  elif var_type == 5: # Add string to global constant memory
-    if isConstant:
-      return add_const_string()
+    
+# Only global variables; not const nor temp
+def assign_memory_global_local(var_type, func_name): 
+  if var_type == 1:
+    if func_name == "inicio": # Add int to global memory
+      return add_global_int()
+    else: # Add int to local memory
+      return add_local_int()
+  elif var_type == 2:
+    if func_name == "inicio": # Add float to  global memory
+      return add_global_float()
+    else: # Add float to local memory
+      return add_local_float()
+  elif var_type == 3:
+    if func_name == "inicio": # Add char to global memory
+      return add_global_char()
+    else:
+      return add_local_char()
 
 
 

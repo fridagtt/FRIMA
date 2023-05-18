@@ -37,15 +37,15 @@ def p_programa(p):
   '''
   p[0] = None
 
-# Creates the symbol table with its default structure and adds the function "programa" to the set of functions.
+# Creates the symbol table with its default structure and adds the function "inicio" to the set of functions.
 def p_punto_programa(p):
   '''
   punto_programa : 
   '''
   global dir_func, current_func, lista_de_cuadruplos
   dir_func = SymbolTable() # Create symbol table
-  current_func = "programa" # Sets global scope
-  dir_func.symbol_table['dir_functions']['dir_func_names'].add("programa")
+  current_func = "inicio" # Sets global scope
+  dir_func.symbol_table['dir_functions']['dir_func_names'].add("inicio")
 
   quadruple = Quadruple(80, None, None , None) # Crete GOTO quadruple
   lista_de_cuadruplos.append(quadruple.transform_quadruple())
@@ -72,7 +72,7 @@ def p_punto_update_goto(p):
   punto_update_goto :
   '''
   global current_func, lista_de_cuadruplos
-  current_func = 'programa'
+  current_func = 'inicio'
   lista_de_cuadruplos[0]=(80,None,None,len(lista_de_cuadruplos))
 
 # Allows multiple declaration of variables
@@ -130,7 +130,7 @@ def p_punto_simple_var(p):
   '''
   punto_simple_var :
   '''
-  var_dir_address = assign_memory(current_var_type, current_func, False, False)
+  var_dir_address = assign_memory_global_local(current_var_type, current_func)
   dir_func.add_variable(current_var_type, p[-1], current_func, var_dir_address)
 
 # Declaration of arrays
@@ -180,8 +180,8 @@ def p_punto_global_func_var(p):
   '''
   global dir_func
   current_func_type = convert_type(p[-3])
-  global_func_var_address = assign_memory(current_func_type, 'programa', False, False)
-  dir_func.add_variable(current_func_type, p[-2], 'programa', global_func_var_address)
+  global_func_var_address = assign_memory_global_local(current_func_type, 'inicio')
+  dir_func.add_variable(current_func_type, p[-2], 'inicio', global_func_var_address)
 
 # Deletes the local variables of the function and its variable table.
 # Sets back the scope to be global.
@@ -197,7 +197,7 @@ def p_punto_end_function(p):
   reset_dir_local()
   reset_local_temp()
   dir_func.delete_function_var_table(current_func)
-  current_func = 'programa'
+  current_func = 'inicio'
 
 # Adds function and its return type to the global function's directory.
 # Updates "current_func" pointer as we are accessing a new function.
@@ -231,7 +231,7 @@ def p_punto_add_parameter(p):
   punto_add_parameter :
   '''
   param_type = convert_type(p[-2])
-  parameter_dir_address = assign_memory(param_type, current_func, False, False)
+  parameter_dir_address = assign_memory_global_local(param_type, current_func)
   dir_func.add_function_params(current_func, param_type, p[-1], parameter_dir_address)
 
 # Body for functions
@@ -469,11 +469,11 @@ def p_punto_valida_exp(p):
     raise Exception(f"ERROR: Type Mismatch. El valor de la expresion debe ser entera") 
   else: 
     operando_exp = stack_de_operandos.pop()
-    vFinal = assign_memory(1, current_func, False, True)
+    vFinal = assign_memory_temporal(1, current_func)
     quadruple = Quadruple(70,operando_exp,None,vFinal)
     lista_de_cuadruplos.append(quadruple.transform_quadruple())
 
-    temporal_dir_address = assign_memory(4, current_func, False, True)
+    temporal_dir_address = assign_memory_temporal(4, current_func)
     quadruple2 = Quadruple(35,vControl,vFinal,temporal_dir_address)
     lista_de_cuadruplos.append(quadruple2.transform_quadruple())
     stack_de_saltos.append(len(lista_de_cuadruplos)-1)
@@ -490,10 +490,10 @@ def p_punto_termina_for(p):
 
   constant_address = dir_func.get_constant_address(1)
   if(not constant_address):
-    constant_address = assign_memory(1, current_func, True, False)
+    constant_address = assign_memory_constant(1, current_func)
     dir_func.add_constant_variable(1, 1, constant_address)
 
-  temporal_dir_address = assign_memory(1, current_func, False, True)
+  temporal_dir_address = assign_memory_temporal(1, current_func)
   quadruple = Quadruple(10,vControl,constant_address,temporal_dir_address) # El uno tiene que ir en la tabla como constante y el segundo vControl es dirección de mememoria
   lista_de_cuadruplos.append(quadruple.transform_quadruple())
 
@@ -587,7 +587,7 @@ def p_check_op_logicos(p):
         raise Exception("ERROR: Type Mismatch")
       else:
         # create direction for boolean temporal variable (either globally or locally)
-        temporal_dir_address = assign_memory(4, current_func, False, True)
+        temporal_dir_address = assign_memory_temporal(4, current_func)
         dir_func.add_cont_temp(4, current_func)
 
         quadruple = Quadruple(converted_operador, operando_izq, operando_der, temporal_dir_address)
@@ -642,7 +642,7 @@ def p_check_op_relacionales(p):
       if operation_type == 5:
         raise Exception("ERROR: Type Mismatch")
       else:
-        temporal_dir_address = assign_memory(4, current_func, False, True)
+        temporal_dir_address = assign_memory_temporal(4, current_func)
         dir_func.add_cont_temp(4, current_func)
 
         quadruple = Quadruple(converted_operador, operando_izq, operando_der, temporal_dir_address)
@@ -707,7 +707,7 @@ def p_check_op_masmenos(p):
       if operation_type == 5:
         raise Exception("ERROR: Type mismatch en suma y resta")
       else:
-        temporal_dir_address = assign_memory(operation_type, current_func, False, True)
+        temporal_dir_address = assign_memory_temporal(operation_type, current_func)
         dir_func.add_cont_temp(operation_type, current_func)
         
         quadruple = Quadruple(converted_operador, operando_izq, operando_der, temporal_dir_address)
@@ -751,7 +751,7 @@ def p_check_op_pordiv(p):
       if operation_type == 5:
         raise Exception("ERROR: Type mismatch multiplicacion y division")
       else:
-        temporal_dir_address = assign_memory(operation_type, current_func, False, True)
+        temporal_dir_address = assign_memory_temporal(operation_type, current_func)
         dir_func.add_cont_temp(operation_type, current_func)
 
         quadruple = Quadruple(converted_operador, operando_izq, operando_der, temporal_dir_address)
@@ -815,7 +815,7 @@ def p_push_int(p) :
     constant = p[-1]
     constant_address = dir_func.get_constant_address(constant)
     if(not constant_address):
-      constant_address = assign_memory(1, current_func, True, False)
+      constant_address = assign_memory_constant(1, current_func)
       dir_func.add_constant_variable(1, constant, constant_address)
     stack_de_operandos.append(constant_address)
     stack_de_tipos.append(1)
@@ -831,7 +831,7 @@ def p_push_float(p) :
     constant = p[-1]
     constant_address = dir_func.get_constant_address(constant)
     if(not constant_address):
-      constant_address = assign_memory(2, current_func, True, False)
+      constant_address = assign_memory_constant(2, current_func)
       dir_func.add_constant_variable(2, constant, constant_address)
     stack_de_operandos.append(constant_address)
     stack_de_tipos.append(2)
@@ -863,7 +863,7 @@ def p_push_char(p) :
     constant = p[-1]
     constant_address = dir_func.get_constant_address(constant)
     if(not constant_address):
-      constant_address = assign_memory(1, current_func, True, False)
+      constant_address = assign_memory_constant(1, current_func)
       dir_func.add_constant_variable(1, constant, constant_address)
     stack_de_operandos.append(constant_address)
     stack_de_tipos.append(3)
@@ -949,7 +949,7 @@ def p_punto_create_era(p):
 
   func_return_type = dir_func.symbol_table['dir_functions'][called_func]['return_type']
   if(func_return_type != 0):
-    func_global_var = dir_func.get_variable_address('programa', called_func)
+    func_global_var = dir_func.get_variable_address('inicio', called_func)
     stack_de_tipos.append(func_return_type)
     stack_de_operandos.append(func_global_var)
 
@@ -978,7 +978,7 @@ def p_punto_create_gosub(p):
   if(func_return_type != 0):
     var_address = stack_de_operandos.pop() #adress of global func variable
     var_type = stack_de_tipos.pop()
-    temp_var = assign_memory(var_type, current_func, False, True)
+    temp_var = assign_memory_temporal(var_type, current_func)
     quadruple = Quadruple(70, var_address, None , temp_var)
     lista_de_cuadruplos.append(quadruple.transform_quadruple())
     
@@ -1012,7 +1012,7 @@ def p_push_imprimir(p):
     constant = p[-1]
     constant_address = dir_func.get_constant_address(constant)
     if(not constant_address):
-      constant_address = assign_memory(5, current_func, True, False)
+      constant_address = assign_memory_constant(5, current_func)
       dir_func.add_constant_variable(5, constant, constant_address)
     quadruple = Quadruple(converted_operador, None, None, constant_address)
     lista_de_cuadruplos.append(quadruple.transform_quadruple())

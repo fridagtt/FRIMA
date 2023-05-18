@@ -3,10 +3,9 @@ class SymbolTable:
     self.symbol_table = {
       'dir_functions': {
         'dir_func_names': set(),
-        'programa': {
-          'param_types': [], # en programa este siempre estará vacío
+        'inicio': {
+          'param_types': [], # en inicio este siempre estará vacío
           'return_type': 0,
-          'kind': 'np', # np -> nombre of program
           'variables': {
             'var_names': set(),
             'vars_info' : [],
@@ -99,7 +98,6 @@ class SymbolTable:
       self.symbol_table["dir_functions"][func_name] = {
         'param_types': [],
         'return_type': return_type,
-        'kind': 'function',
         'variables': {
           'var_names': set(),
           'vars_info' : [],
@@ -157,8 +155,8 @@ class SymbolTable:
         list_of_variables = self.symbol_table["dir_functions"][func_name]["variables"]['vars_info']
         variable_object = next((variable for variable in list_of_variables if variable['name'] == variable_name),None)
         return variable_object['type']
-    elif func_name != "programa":
-        list_of_variables = self.symbol_table["dir_functions"]['programa']["variables"]['vars_info']
+    elif func_name != "inicio":
+        list_of_variables = self.symbol_table["dir_functions"]['inicio']["variables"]['vars_info']
         variable_object = next((variable for variable in list_of_variables if variable['name'] == variable_name),None)
         return variable_object['type']
     
@@ -179,8 +177,8 @@ class SymbolTable:
         list_of_variables = self.symbol_table["dir_functions"][func_name]["variables"]['vars_info']
         variable_object = next((variable for variable in list_of_variables if variable['name'] == variable_name),None)
         return variable_object['memory_dir']
-    elif func_name != "programa":
-        list_of_variables = self.symbol_table["dir_functions"]['programa']["variables"]['vars_info']
+    elif func_name != "inicio":
+        list_of_variables = self.symbol_table["dir_functions"]['inicio']["variables"]['vars_info']
         variable_object = next((variable for variable in list_of_variables if variable['name'] == variable_name),None)
         return variable_object['memory_dir']
 
@@ -208,8 +206,8 @@ class SymbolTable:
 
     """
     set_of_variables = self.get_function_variables(func_name)
-    if variable_name not in set_of_variables and func_name != 'programa':
-        return variable_name in self.get_function_variables('programa')
+    if variable_name not in set_of_variables and func_name != 'inicio':
+        return variable_name in self.get_function_variables('inicio')
     else:
         return True
 
