@@ -53,18 +53,12 @@ def p_punto_programa(p):
 
 def p_inicio(p):
   '''
-  inicio : INICIO LPAREN RPAREN LBRACE punto_update_goto inicio_estatutos RBRACE SEMICOLON punto_generar_vm
+  inicio : INICIO LPAREN RPAREN LBRACE punto_update_goto inicio_estatutos RBRACE SEMICOLON
   '''
   p[0] = None
   print("TABLA DE VARIABLES", dir_func.symbol_table)
   for quadruple in lista_de_cuadruplos: 
     print(quadruple)
-
-def p_punto_generar_vm(p):
-  global lista_de_cuadruplos, dir_func
-  virtual_machine = VirtualMachine(lista_de_cuadruplos, dir_func)
-
-  virtual_machine.execute()
 
 # Body for inicio (without the return option)
 def p_inicio_estatutos(p):

@@ -206,10 +206,11 @@ class SymbolTable:
 
     """
     set_of_variables = self.get_function_variables(func_name)
-    if variable_name not in set_of_variables and func_name != 'inicio':
+    variable_declared = variable_name in set_of_variables
+    if not variable_declared and func_name != 'inicio': # search on the global scope only when not found locally
         return variable_name in self.get_function_variables('inicio')
     else:
-        return True
+        return variable_declared
 
   def is_function_declared(self, func_name) -> bool:
     """Validates if the function requested exists in the symbol table
