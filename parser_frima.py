@@ -53,12 +53,24 @@ def p_punto_programa(p):
 
 def p_inicio(p):
   '''
-  inicio : INICIO LPAREN RPAREN LBRACE punto_update_goto inicio_estatutos RBRACE SEMICOLON
+  inicio : INICIO LPAREN RPAREN LBRACE punto_update_goto inicio_estatutos RBRACE SEMICOLON punto_generar_vm
   '''
   p[0] = None
+  # Segment for testing dir_func and quadruples
+  """
   print("TABLA DE VARIABLES", dir_func.symbol_table)
   for quadruple in lista_de_cuadruplos: 
     print(quadruple)
+  """
+
+def p_punto_generar_vm(p):
+  '''
+  punto_generar_vm :
+  '''
+  global lista_de_cuadruplos, dir_func
+  virtual_machine = VirtualMachine(lista_de_cuadruplos, dir_func.symbol_table)
+
+  virtual_machine.execute()
 
 # Body for inicio (without the return option)
 def p_inicio_estatutos(p):
@@ -175,6 +187,7 @@ def p_dec_func(p):
             | FUNCION SINREGRESAR ID punto_add_func LPAREN parameter RPAREN LBRACE dec_var_cycle estatutos RBRACE SEMICOLON punto_end_function
   '''
 
+# Creates global var with the same name as the declared function
 def p_punto_global_func_var(p):
   '''
   punto_global_func_var : 
@@ -864,8 +877,8 @@ def p_push_char(p) :
     constant = p[-1]
     constant_address = dir_func.get_constant_address(constant)
     if(not constant_address):
-      constant_address = assign_memory_constant(1, current_func)
-      dir_func.add_constant_variable(1, constant, constant_address)
+      constant_address = assign_memory_constant(3, current_func)
+      dir_func.add_constant_variable(3, constant, constant_address)
     stack_de_operandos.append(constant_address)
     stack_de_tipos.append(3)
 
