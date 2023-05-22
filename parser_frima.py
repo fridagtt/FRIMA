@@ -57,11 +57,9 @@ def p_inicio(p):
   '''
   p[0] = None
   # Segment for testing dir_func and quadruples
-  """
-  print("TABLA DE VARIABLES", dir_func.symbol_table)
+  # print("TABLA DE VARIABLES", dir_func.symbol_table)
   for quadruple in lista_de_cuadruplos: 
     print(quadruple)
-  """
 
 def p_punto_generar_vm(p):
   '''
@@ -70,7 +68,7 @@ def p_punto_generar_vm(p):
   global lista_de_cuadruplos, dir_func
   virtual_machine = VirtualMachine(lista_de_cuadruplos, dir_func.symbol_table)
 
-  virtual_machine.execute()
+  # virtual_machine.execute()
 
 # Body for inicio (without the return option)
 def p_inicio_estatutos(p):
@@ -961,12 +959,6 @@ def p_punto_create_era(p):
   quadruple = Quadruple(100, None, None, func_quadruple_pos)
   lista_de_cuadruplos.append(quadruple.transform_quadruple())
 
-  func_return_type = dir_func.symbol_table['dir_functions'][called_func]['return_type']
-  if(func_return_type != 0):
-    func_global_var = dir_func.get_variable_address('inicio', called_func)
-    stack_de_tipos.append(func_return_type)
-    stack_de_operandos.append(func_global_var)
-
 def p_punto_check_total_params(p):
   '''
   punto_check_total_params :
@@ -990,14 +982,13 @@ def p_punto_create_gosub(p):
 
   func_return_type = dir_func.symbol_table['dir_functions'][called_func]['return_type']
   if(func_return_type != 0):
-    var_address = stack_de_operandos.pop() #adress of global func variable
-    var_type = stack_de_tipos.pop()
-    temp_var = assign_memory_temporal(var_type, current_func)
-    quadruple = Quadruple(70, var_address, None , temp_var)
+    func_global_var_address = dir_func.get_variable_address('inicio', called_func)
+    temp_var = assign_memory_temporal(func_return_type, current_func)
+    quadruple = Quadruple(70, func_global_var_address, None , temp_var) #adress of global func variable
     lista_de_cuadruplos.append(quadruple.transform_quadruple())
     
     stack_de_operandos.append(temp_var)
-    stack_de_tipos.append(var_type)
+    stack_de_tipos.append(func_return_type)
 
 def p_imprimir(p):
   '''
