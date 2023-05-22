@@ -1,27 +1,44 @@
 from collections import deque
 
 class Memory:
-  def __init__(self, func_name, dir_func):
-    self.dir_func = dir_func
+  def __init__(self, func_name, func_info):
+    self.func_info = func_info
     self.function_name = func_name
     self.vars_int = dict()
     self.vars_float = dict()
     self.vars_char = dict()
     self.vars_bool = dict()
-    self.vars_string = dict() 
-    self.init_quadruple = None
-    self.param_types = None 
-    self.return_type = None
+    self.vars_string = dict()
+  
+  def init_constant_memory(self):
+    """The constant variables are initialized with its corresponding value.
+
+    Returns:
+    void: modified constant memory
+
+    """ 
+    for memory_address in self.func_info:
+      # const strings
+      if memory_address >= 30000 and memory_address < 32000:
+        self.vars_string[memory_address] = self.func_info[memory_address]['value']
+      # const ints
+      elif memory_address >= 32000 and memory_address < 34000:
+        self.vars_int[memory_address] = self.func_info[memory_address]['value']
+      # const floats
+      elif memory_address >= 34000 and memory_address < 36000:
+        self.vars_float[memory_address] = self.func_info[memory_address]['value']
+      # const chars
+      elif memory_address >= 36000 and memory_address < 38000:
+        self.vars_char[memory_address] = self.func_info[memory_address]['value']
 
   def init_global_memory(self):
     """Splits global variables into its types and initializes them in empty values.
-    The constant variables are initialized with its corresponding value.
 
     Returns:
     void: modified global memory
 
     """
-    for var in self.dir_func['dir_functions']['inicio']['variables']['vars_info']:
+    for var in self.func_info['variables']['vars_info']:
       memory_address = var['memory_dir']
       # global ints
       if memory_address >= 2000 and memory_address < 4000:
@@ -32,20 +49,6 @@ class Memory:
       # global chars
       elif memory_address >= 6000 and memory_address < 8000:
         self.vars_char[memory_address] = None
-  
-    for memory_address in self.dir_func['constant_table']:
-      # const strings
-      if memory_address >= 30000 and memory_address < 32000:
-        self.vars_string[memory_address] = self.dir_func['constant_table'][memory_address]['value']
-      # const ints
-      elif memory_address >= 32000 and memory_address < 34000:
-        self.vars_int[memory_address] = self.dir_func['constant_table'][memory_address]['value']
-      # const floats
-      elif memory_address >= 34000 and memory_address < 36000:
-        self.vars_float[memory_address] = self.dir_func['constant_table'][memory_address]['value']
-      # const chars
-      elif memory_address >= 36000 and memory_address < 38000:
-        self.vars_char[memory_address] = self.dir_func['constant_table'][memory_address]['value']
   
   def get_value(self, memory_address):
     if (memory_address >= 8000 and memory_address < 10000) or (memory_address >= 22000 and memory_address < 24000)	or (memory_address >= 2000 and memory_address < 4000) or (memory_address >= 14000 and memory_address < 16000) or (memory_address >= 32000 and memory_address < 34000):
@@ -80,9 +83,10 @@ class VirtualMachine:
   def __init__(self, quadruples, dir_func):
     self.list_quadruples = quadruples
     self.dir_func = dir_func
-    self.global_memory = Memory('inicio', dir_func)
-    self.execution_stack = deque()
+    self.global_memory = Memory('inicio', dir_func['dir_functions']['inicio'])
+    self.constant_memory = Memory('constants', dir_func['constant_table'])
     self.local_memory = Memory(None, None)
+    self.execution_stack = deque()
 
   def get_memory(self, memory_address) -> Memory:
     """According to the memory address received, it returns either the vm's local or global memory
@@ -91,12 +95,15 @@ class VirtualMachine:
     memory_address (int): memory address stored in the quadruple.
 
     Returns:
-    Memory: either a global or local memory
+    Memory: either a global, constant, or local memory
 
     """
-    # global, global temps, and constants
-    if (memory_address >= 2000 and memory_address < 8000) or (memory_address >= 14000 and memory_address < 22000) or (memory_address >= 30000 and memory_address < 38000):
+    # global, global temps
+    if (memory_address >= 2000 and memory_address < 8000) or (memory_address >= 14000 and memory_address < 22000):
       return self.global_memory
+    # constants
+    elif (memory_address >= 30000 and memory_address < 38000):
+      return self.constant_memory
     # local and local temps
     elif (memory_address >= 8000 and memory_address < 14000) or (memory_address >= 22000 and memory_address < 30000):
       return self.local_memory
@@ -249,6 +256,7 @@ class VirtualMachine:
     
   def execute(self):
     print("-------------------CORRIENDO MAQUINA VIRTUAL-----------------------")
+    self.constant_memory.init_constant_memory()
     self.global_memory.init_global_memory()
     self.read_quadruples()
     print("global_memory", self.global_memory.vars_int, self.global_memory.vars_float)
