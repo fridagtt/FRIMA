@@ -37,7 +37,8 @@ inicio () {
 	f = 3.14;
 	
 	g = k - i + (f * k) / k;
-	h = 'd';
+	// h = 'd';
+	imprimir(g);
 	// i = h + i;
 	// imprimir("holaaa");
 	// g = 3.0;

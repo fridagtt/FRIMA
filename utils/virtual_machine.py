@@ -154,6 +154,78 @@ class VirtualMachine:
           instruction_pointer += 1
         except:
           raise Exception("ERROR: Variable sin valor")
+      elif operator == 30: # >
+        try:
+          left_value = self.get_memory_value(left_operand)
+          right_value = self.get_memory_value(right_operand)
+          result = left_value > right_value
+          self.set_memory_value(quad_res, result)
+          instruction_pointer += 1
+        except:
+          raise Exception("ERROR: Variable sin valor")
+      elif operator == 35: # <
+        try:
+          left_value = self.get_memory_value(left_operand)
+          right_value = self.get_memory_value(right_operand)
+          result = left_value < right_value
+          self.set_memory_value(quad_res, result)
+          instruction_pointer += 1
+        except:
+          raise Exception("ERROR: Variable sin valor")
+      elif operator == 40: # >=
+        try:
+          left_value = self.get_memory_value(left_operand)
+          right_value = self.get_memory_value(right_operand)
+          result = left_value >= right_value
+          self.set_memory_value(quad_res, result)
+          instruction_pointer += 1
+        except:
+          raise Exception("ERROR: Variable sin valor")
+      elif operator == 45: # <=
+        try:
+          left_value = self.get_memory_value(left_operand)
+          right_value = self.get_memory_value(right_operand)
+          result = left_value <= right_value
+          self.set_memory_value(quad_res, result)
+          instruction_pointer += 1
+        except:
+          raise Exception("ERROR: Variable sin valor")
+      elif operator == 50: # !=
+        try:
+          left_value = self.get_memory_value(left_operand)
+          right_value = self.get_memory_value(right_operand)
+          result = left_value != right_value
+          self.set_memory_value(quad_res, result)
+          instruction_pointer += 1
+        except:
+          raise Exception("ERROR: Variable sin valor")
+      elif operator == 55: # ==
+        try:
+          left_value = self.get_memory_value(left_operand)
+          right_value = self.get_memory_value(right_operand)
+          result = left_value == right_value
+          self.set_memory_value(quad_res, result)
+          instruction_pointer += 1
+        except:
+          raise Exception("ERROR: Variable sin valor")
+      elif operator == 60: # y
+        try:
+          left_value = self.get_memory_value(left_operand)
+          right_value = self.get_memory_value(right_operand)
+          result = left_value and right_value
+          self.set_memory_value(quad_res, result)
+          instruction_pointer += 1
+        except:
+          raise Exception("ERROR: Variable sin valor")
+      elif operator == 65: # o
+        try:
+          left_value = self.get_memory_value(left_operand)
+          right_value = self.get_memory_value(right_operand)
+          result = left_value or right_value
+          self.set_memory_value(quad_res, result)
+          instruction_pointer += 1
+        except:
+          raise Exception("ERROR: Variable sin valor")
       elif operator == 70: # Assign
         try:
           value = self.get_memory_value(left_operand)
@@ -164,6 +236,16 @@ class VirtualMachine:
       elif operator == 80: # GOTO
         goto_quadruple = self.list_quadruples[instruction_pointer][3]
         instruction_pointer = goto_quadruple
+      elif operator == 90: # IMPRIMIR
+        try:
+          if type(quad_res) is str:
+            value_memory =  self.global_memory.get_memory_value(quad_res)
+          else:
+            value_memory = self.get_memory_value(quad_res)
+          print("ARITMETICA -> ", value_memory)
+          instruction_pointer += 1
+        except:
+          raise Exception("ERROR: Variable sin valor")
     
   def execute(self):
     print("-------------------CORRIENDO MAQUINA VIRTUAL-----------------------")
