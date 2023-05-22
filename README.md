@@ -116,5 +116,11 @@ Mayo 14, 2023
 
 Desarrollo de semántica para la creación de cuádruplos de funciones. 
 
+<h1>  ${\color{gray} Avance  }$  ${\color{gray} 5  }$</h1> 
+Mayo 21, 2023
+
+Desarrollo de Mapa de Memoria para ejecución de Maquina Virtual
+Maquina Virtual para expresiones aritmeticas y estatutos secuenciales
+
 
 
