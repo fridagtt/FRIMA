@@ -1,47 +1,35 @@
 programa patito:
-variable entero -> i, j,d, k;
-// variable decimal -> f, g;
-// variable letra -> h;
+variable entero -> i, j, d;
+variable decimal -> k, g, f;
 
-funcion entero factorial(entero j){
-	variable entero -> i;
-	i = j + (k-j*2+j);
-	si(j == 1){
-		regresar j;
-	} sino {
-		regresar factorial(j-1);
-	};
+/*
+funcion entero fibonacci(entero n){
+  si(n == 0){
+    regresar 0;
+  };
+
+  si ((n == 1) o (n == 2)){
+      regresar 1;
+  }
+  sino{
+      regresar fibonacci(n - 1)+ fibonacci(n - 2);
+  };
 };
+*/
+
+/*
+funcion sinregresar uno() {
+	imprimir(10);
+
+	regresar 3;
+};
+*/
 
 inicio () {
-	i = factorial(5);
-	/*
+	// i = fibonacci(5);
 	i = 2;
 	k = 1.5; 
 	f = 3.14;
 
 	g = k - i + (f * k) / k;
-	h = 'd';
-	imprimir(g);
-	i = h + i;
-	imprimir("holaaa");
-	g = 3.0;
-	d = 3;
-
-	imprimir(2);
-	imprimir ( dos ( i+k, f*3) + 3);
-	imprimir ( i, j*2, f*2 +1.5);
-	i = i - k;
-
-	leer(i);
-	leer(j);
-	leer(f);
-	*/
-	
-		
-	/*
-	desde (i = 4) hasta (6) {
-		imprimir("hola imprimiendo for paps");
-	};
-	*/
 };

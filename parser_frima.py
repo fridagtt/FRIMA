@@ -68,7 +68,7 @@ def p_punto_generar_vm(p):
   global lista_de_cuadruplos, dir_func
   virtual_machine = VirtualMachine(lista_de_cuadruplos, dir_func.symbol_table)
 
-  # virtual_machine.execute()
+  virtual_machine.execute()
 
 # Body for inicio (without the return option)
 def p_inicio_estatutos(p):
@@ -286,10 +286,12 @@ def p_punto_check_types(p):
   punto_check_types :
   '''
   global stack_de_tipos, stack_de_operandos, lista_de_cuadruplos
-  exp_type = stack_de_tipos.pop()
   func_return_type = dir_func.symbol_table['dir_functions'][current_func]['return_type']
+  if(func_return_type == 0):
+    raise Exception(f"ERROR: La función {current_func} es de tipo sinregresar.")
+  exp_type = stack_de_tipos.pop()
   if (exp_type != func_return_type):
-    raise Exception(f"ERROR: Type mismatch en función {current_func}.")
+    raise Exception(f"ERROR: El valor regresado no coincide con el tipo de la función {current_func}.")
   else:
     result = stack_de_operandos.pop()
     quadruple = Quadruple(110, None, None, result)
