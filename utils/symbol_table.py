@@ -194,6 +194,21 @@ class SymbolTable:
     """
      return self.symbol_table["dir_functions"][func_name]["param_types"]
   
+  def is_variable_dimensioned(self, func_name, variable_name) -> bool:
+    """Validates if the variables is non-atomic or not
+
+      Parameters:
+      func_name (string): name of the function
+      variable_name (string): name of the variable
+
+      Returns:
+      bool(): whether the variable is non-atomic
+
+    """
+    list_of_variables = self.symbol_table["dir_functions"][func_name]["variables"]['vars_info']
+    variable_object = next((variable for variable in list_of_variables if variable['name'] == variable_name),None)
+    return variable_object['is_array']
+
   def is_variable_declared(self, func_name, variable_name) -> bool:
     """Validates if the variables is either declared within the local or global scope
 

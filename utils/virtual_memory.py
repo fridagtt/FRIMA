@@ -216,7 +216,7 @@ def reset_local_temp():
   local_temp_char = 26000
   local_temp_bool = 28000
 
-def assign_memory_constant(var_type, func_name):
+def assign_memory_constant(var_type):
   if var_type == 1:
     return add_const_int()
   elif var_type == 2:

@@ -17,11 +17,13 @@ stack_de_operadores = deque()
 stack_de_operandos = deque()
 stack_de_tipos = deque()
 stack_de_saltos = deque()
+stack_de_dimensiones = deque()
 
 lista_de_cuadruplos = []
 vControl = current_func = current_var_type = called_func = None
 
 contador_params = 0
+is_array = False
 
 #__________PARSER____________
 
@@ -57,7 +59,7 @@ def p_inicio(p):
   '''
   p[0] = None
   # Segment for testing dir_func and quadruples
-  # print("TABLA DE VARIABLES", dir_func.symbol_table)
+  print("TABLA DE VARIABLES", dir_func.symbol_table)
   for quadruple in lista_de_cuadruplos: 
     print(quadruple)
 
@@ -68,7 +70,7 @@ def p_punto_generar_vm(p):
   global lista_de_cuadruplos, dir_func
   virtual_machine = VirtualMachine(lista_de_cuadruplos, dir_func.symbol_table)
 
-  virtual_machine.execute()
+  # virtual_machine.execute()
 
 # Body for inicio (without the return option)
 def p_inicio_estatutos(p):
@@ -141,25 +143,45 @@ def p_punto_simple_var(p):
   '''
   punto_simple_var :
   '''
+  global is_array
+  is_array = False
+
   var_dir_address = assign_memory_global_local(current_var_type, current_func)
   dir_func.add_variable(current_var_type, p[-1], current_func, var_dir_address)
 
 # Declaration of arrays
 def p_array(p):
   '''
-  array : RENGLON type ARROW ID LBRACKET CTEI RBRACKET punto_array arrayCycle SEMICOLON
-  arrayCycle : COMMA ID LBRACKET CTEI RBRACKET punto_array arrayCycle
+  array : RENGLON type ARROW ID LBRACKET CTEI punto_validate_size RBRACKET punto_save_array arrayCycle SEMICOLON
+  arrayCycle : COMMA ID LBRACKET CTEI punto_validate_size RBRACKET punto_save_array arrayCycle
               | empty
   '''
   p[0] = None
 
-# Adds arrays to the variable table of the corresponding and current function.
+def p_punto_validate_size(p):
+  '''
+  punto_validate_size :
+  '''
+  global is_array
+  is_array = True
+
+  if p[-1] < 1:
+    raise Exception(f"ERROR: Estás creando un arreglo con un tamaño de {p[-1]}. Los arreglos deben siempre tener un tamaño mayor que 1.")
+
+# Adds array to the variable table of the current function.
 # It sends additional values such as its dimension and size. 
-def p_punto_array(p):
+def p_punto_save_array(p):
   '''
-  punto_array :
+  punto_save_array :
   '''
-  dir_func.add_variable(current_var_type, p[-4], current_func, 1, p[-2])
+  # Add size of array to constant table to only work with addresses
+  """
+  constant_address = dir_func.get_constant_address(p[-2])
+  if(not constant_address):
+    constant_address = assign_memory_constant(1)
+    dir_func.add_constant_variable(1, p[-2], constant_address)
+  """
+  dir_func.add_variable(current_var_type, p[-4], current_func, None, 1, p[-2])
 
 # Declaration of matrix
 def p_matrix(p):
@@ -176,7 +198,7 @@ def p_punto_matrix(p):
   '''
   punto_matrix :
   '''
-  dir_func.add_variable(current_var_type, p[-7], current_func, 2, (p[-5],p[-2]))
+  dir_func.add_variable(current_var_type, p[-7], current_func, None, 2, (p[-5], p[-2]))
 
 # Declares a function
 def p_dec_func(p):
@@ -190,7 +212,9 @@ def p_punto_global_func_var(p):
   '''
   punto_global_func_var : 
   '''
-  global dir_func
+  global dir_func, is_array
+  is_array = False
+
   current_func_type = convert_type(p[-3])
   global_func_var_address = assign_memory_global_local(current_func_type, 'inicio')
   dir_func.add_variable(current_func_type, p[-2], 'inicio', global_func_var_address)
@@ -504,7 +528,7 @@ def p_punto_termina_for(p):
 
   constant_address = dir_func.get_constant_address(1)
   if(not constant_address):
-    constant_address = assign_memory_constant(1, current_func)
+    constant_address = assign_memory_constant(1)
     dir_func.add_constant_variable(1, 1, constant_address)
 
   temporal_dir_address = assign_memory_temporal(1, current_func)
@@ -789,11 +813,23 @@ def p_factor(p) :
   factor : LPAREN meter_fondo_falso hyper_exp RPAREN quitar_fondo_falso
           | factor_constante
           | llamada_func_return
-          | ID LBRACKET hyper_exp RBRACKET
-          | ID LBRACKET hyper_exp RBRACKET LBRACKET hyper_exp RBRACKET
+          | ID LBRACKET punto_valida_var hyper_exp RBRACKET
+          | ID LBRACKET punto_valida_var hyper_exp RBRACKET LBRACKET hyper_exp RBRACKET
           | ID push_id
   '''
   p[0] = p[1]
+
+# Validate variable is dimensioned
+def p_punto_valida_var(p):
+  '''
+  punto_valida_var :
+  '''
+  # Validate if the id exists either locally or globally
+  if not dir_func.is_variable_declared(current_func, p[-2]):
+    raise Exception(f"ERROR: La variable {p[-1]} no está declarada.")
+  # Validate if id is dimensioned
+  if not dir_func.is_variable_dimensioned(current_func, p[-2]):
+    raise Exception(f"ERROR: La variable {p[-1]} no es dimensionada.")
 
 # Constant values
 def p_factor_constante(p) :
@@ -829,7 +865,7 @@ def p_push_int(p) :
     constant = p[-1]
     constant_address = dir_func.get_constant_address(constant)
     if(not constant_address):
-      constant_address = assign_memory_constant(1, current_func)
+      constant_address = assign_memory_constant(1)
       dir_func.add_constant_variable(1, constant, constant_address)
     stack_de_operandos.append(constant_address)
     stack_de_tipos.append(1)
@@ -845,7 +881,7 @@ def p_push_float(p) :
     constant = p[-1]
     constant_address = dir_func.get_constant_address(constant)
     if(not constant_address):
-      constant_address = assign_memory_constant(2, current_func)
+      constant_address = assign_memory_constant(2)
       dir_func.add_constant_variable(2, constant, constant_address)
     stack_de_operandos.append(constant_address)
     stack_de_tipos.append(2)
@@ -877,7 +913,7 @@ def p_push_char(p) :
     constant = p[-1]
     constant_address = dir_func.get_constant_address(constant)
     if(not constant_address):
-      constant_address = assign_memory_constant(3, current_func)
+      constant_address = assign_memory_constant(3)
       dir_func.add_constant_variable(3, constant, constant_address)
     stack_de_operandos.append(constant_address)
     stack_de_tipos.append(3)
@@ -922,13 +958,13 @@ def p_punto_check_param(p):
 # Does not return a value
 def p_llamada_func_void(p):
   '''
-  llamada_func_void : ID LPAREN punto_func_exists punto_validate_isvoid punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub SEMICOLON
+  llamada_func_void : ID LPAREN punto_func_exists punto_validate_isvoid  punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub SEMICOLON
   '''
 
 # Return a value used in expressions
 def p_llamada_func_return(p):
   '''
-  llamada_func_return : ID LPAREN punto_func_exists punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub
+  llamada_func_return : ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
   '''
 
 # Validates called function exists and updates name of called_func to keep track
@@ -1019,7 +1055,7 @@ def p_push_imprimir(p):
     constant = p[-1]
     constant_address = dir_func.get_constant_address(constant)
     if(not constant_address):
-      constant_address = assign_memory_constant(5, current_func)
+      constant_address = assign_memory_constant(5)
       dir_func.add_constant_variable(5, constant, constant_address)
     quadruple = Quadruple(converted_operador, None, None, constant_address)
     lista_de_cuadruplos.append(quadruple.transform_quadruple())
