@@ -56,7 +56,7 @@ class SymbolTable:
     elif type == 3:
       self.symbol_table["dir_functions"][func_name]['cont_var'][2] += 1 # chars
     
-  def add_variable(self, type, name, func_name, memory_dir, dimension=0, size=0):
+  def add_variable(self, type, name, func_name, memory_dir, size, dimension=0):
     """Adds the variable to the variable table of the corresponding function
 
     Parameters:

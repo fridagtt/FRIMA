@@ -23,61 +23,67 @@ const_float = 34000
 const_char = 36000
 
 #Add global_int
-def add_global_int():
+def add_global_int(size):
   global global_int
   if global_int < 4000:
-    global_int += 1
-    return global_int
+    prev_cont = global_int
+    global_int += size
+    return prev_cont
   else: 
     raise Exception("ERROR: No hay memoria disponible para Enteros Globales")
     
 #Add global_float
-def add_global_float():
+def add_global_float(size):
   global global_float
 
   if global_float < 6000:
-    global_float += 1
-    return global_float
+    prev_cont = global_float
+    global_float += size
+    return prev_cont
   else: 
     raise Exception("ERROR: No hay memoria disponible para Decimales Globales")
     
 #Add global_char
-def add_global_char():
+def add_global_char(size):
   global global_char
   
   if global_char < 8000:
-    global_char += 1
-    return global_char
+    prev_cont = global_char
+    global_char += size
+    return prev_cont
   else: 
     raise Exception("ERROR: No hay memoria disponible para Letras Globales")
     
 #Add local_int
-def add_local_int():
+def add_local_int(size):
   global local_int 
 
   if local_int < 10000:
-    local_int += 1
-    return local_int
+    prev_cont = local_int
+    local_int += size
+    return prev_cont
   else: 
     raise Exception("ERROR: No hay memoria disponible para Enteros Locales")
     
 #Add local_float
-def add_local_float():
+def add_local_float(size):
   global local_float
   
   if local_float < 12000:
-    local_float += 1
-    return local_float
+    prev_cont = local_float
+    local_float += size
+    return prev_cont
   else: 
     raise Exception("ERROR: No hay memoria disponible para Decimales Locales")
 
 #Add local_char
-def add_local_char():
+def add_local_char(size):
   global local_char
 
   if local_char < 14000:
-    local_char += 1
-    return local_char
+    prev_cont = local_char
+    local_char += size
+    return prev_cont
   else: 
     raise Exception("ERROR: No hay memoria disponible para Letras Locales")   
 
@@ -249,19 +255,19 @@ def assign_memory_temporal(var_type, func_name):
       return add_local_temp_bool()
     
 # Only global variables; not const nor temp
-def assign_memory_global_local(var_type, func_name): 
+def assign_memory_global_local(var_type, func_name, size): 
   if var_type == 1:
     if func_name == "inicio": # Add int to global memory
-      return add_global_int()
+      return add_global_int(size)
     else: # Add int to local memory
-      return add_local_int()
+      return add_local_int(size)
   elif var_type == 2:
     if func_name == "inicio": # Add float to  global memory
-      return add_global_float()
+      return add_global_float(size)
     else: # Add float to local memory
-      return add_local_float()
+      return add_local_float(size)
   elif var_type == 3:
     if func_name == "inicio": # Add char to global memory
-      return add_global_char()
+      return add_global_char(size)
     else:
-      return add_local_char()
+      return add_local_char(size)

@@ -23,7 +23,7 @@ lista_de_cuadruplos = []
 vControl = current_func = current_var_type = called_func = None
 
 contador_params = 0
-is_array = False
+cont_size = 1
 
 #__________PARSER____________
 
@@ -143,11 +143,11 @@ def p_punto_simple_var(p):
   '''
   punto_simple_var :
   '''
-  global is_array
-  is_array = False
+  global cont_size
+  cont_size = 1
 
-  var_dir_address = assign_memory_global_local(current_var_type, current_func)
-  dir_func.add_variable(current_var_type, p[-1], current_func, var_dir_address)
+  var_dir_address = assign_memory_global_local(current_var_type, current_func, 1)
+  dir_func.add_variable(current_var_type, p[-1], current_func, var_dir_address, cont_size)
 
 # Declaration of arrays
 def p_array(p):
@@ -162,11 +162,10 @@ def p_punto_validate_size(p):
   '''
   punto_validate_size :
   '''
-  global is_array
-  is_array = True
 
   if p[-1] < 1:
-    raise Exception(f"ERROR: Estás creando un arreglo con un tamaño de {p[-1]}. Los arreglos deben siempre tener un tamaño mayor que 1.")
+    raise Exception(f"ERROR: Estás creando una conjunto de datos con un tamaño de {p[-1]}. Deben siempre tener un tamaño mayor que 1.")
+  
 
 # Adds array to the variable table of the current function.
 # It sends additional values such as its dimension and size. 
@@ -174,6 +173,8 @@ def p_punto_save_array(p):
   '''
   punto_save_array :
   '''
+  global cont_size
+  cont_size = p[-3]
   # Add size of array to constant table to only work with addresses
   """
   constant_address = dir_func.get_constant_address(p[-2])
@@ -181,24 +182,26 @@ def p_punto_save_array(p):
     constant_address = assign_memory_constant(1)
     dir_func.add_constant_variable(1, p[-2], constant_address)
   """
-  dir_func.add_variable(current_var_type, p[-4], current_func, None, 1, p[-2])
+  var_dir_address = assign_memory_global_local(current_var_type, current_func, cont_size)
+  dir_func.add_variable(current_var_type, p[-4], current_func, var_dir_address, p[-3], 1)
 
 # Declaration of matrix
 def p_matrix(p):
   '''
-  matrix : TABLA type ARROW ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET punto_matrix matrixCycle SEMICOLON
-  matrixCycle : COMMA ID LBRACKET CTEI RBRACKET LBRACKET CTEI RBRACKET punto_matrix matrixCycle
+  matrix : TABLA type ARROW ID LBRACKET CTEI punto_validate_size RBRACKET LBRACKET CTEI punto_validate_size RBRACKET punto_save_matrix matrixCycle SEMICOLON
+  matrixCycle : COMMA ID LBRACKET CTEI punto_validate_size RBRACKET LBRACKET CTEI punto_validate_size RBRACKET punto_save_matrix matrixCycle
               | empty
   '''
   p[0] = None
 
 # Adds matrix to the variable table of the corresponding and current function.
 # It sends additional values such as its dimension and its size as a tuple. 
-def p_punto_matrix(p):
+def p_punto_save_matrix(p):
   '''
-  punto_matrix :
+  punto_save_matrix :
   '''
-  dir_func.add_variable(current_var_type, p[-7], current_func, None, 2, (p[-5], p[-2]))
+  var_dir_address = assign_memory_global_local(current_var_type, current_func, p[-5]*p[-2])
+  dir_func.add_variable(current_var_type, p[-7], current_func, var_dir_address, (p[-5], p[-2]), 2)
 
 # Declares a function
 def p_dec_func(p):
@@ -216,8 +219,8 @@ def p_punto_global_func_var(p):
   is_array = False
 
   current_func_type = convert_type(p[-3])
-  global_func_var_address = assign_memory_global_local(current_func_type, 'inicio')
-  dir_func.add_variable(current_func_type, p[-2], 'inicio', global_func_var_address)
+  global_func_var_address = assign_memory_global_local(current_func_type, 'inicio', 1)
+  dir_func.add_variable(current_func_type, p[-2], 'inicio', global_func_var_address, 1)
 
 # Deletes the local variables of the function and its variable table.
 # Sets back the scope to be global.
@@ -267,7 +270,7 @@ def p_punto_add_parameter(p):
   punto_add_parameter :
   '''
   param_type = convert_type(p[-2])
-  parameter_dir_address = assign_memory_global_local(param_type, current_func)
+  parameter_dir_address = assign_memory_global_local(param_type, current_func, 1)
   dir_func.add_function_params(current_func, param_type, p[-1], parameter_dir_address)
 
 # Body for functions
