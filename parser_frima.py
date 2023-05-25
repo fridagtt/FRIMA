@@ -152,8 +152,8 @@ def p_punto_simple_var(p):
 # Declaration of arrays
 def p_array(p):
   '''
-  array : RENGLON type ARROW ID LBRACKET CTEI punto_validate_size RBRACKET punto_save_array arrayCycle SEMICOLON
-  arrayCycle : COMMA ID LBRACKET CTEI punto_validate_size RBRACKET punto_save_array arrayCycle
+  array : RENGLON type ARROW ID LBRACKET meter_fondo_falso CTEI punto_validate_size RBRACKET quitar_fondo_falso punto_save_array arrayCycle SEMICOLON
+  arrayCycle : COMMA ID LBRACKET meter_fondo_falso CTEI punto_validate_size RBRACKET quitar_fondo_falso punto_save_array arrayCycle
               | empty
   '''
   p[0] = None
@@ -188,8 +188,8 @@ def p_punto_save_array(p):
 # Declaration of matrix
 def p_matrix(p):
   '''
-  matrix : TABLA type ARROW ID LBRACKET CTEI punto_validate_size RBRACKET LBRACKET CTEI punto_validate_size RBRACKET punto_save_matrix matrixCycle SEMICOLON
-  matrixCycle : COMMA ID LBRACKET CTEI punto_validate_size RBRACKET LBRACKET CTEI punto_validate_size RBRACKET punto_save_matrix matrixCycle
+  matrix : TABLA type ARROW ID LBRACKET meter_fondo_falso CTEI punto_validate_size RBRACKET quitar_fondo_falso LBRACKET  meter_fondo_falso CTEI punto_validate_size RBRACKET quitar_fondo_falso punto_save_matrix matrixCycle SEMICOLON
+  matrixCycle : COMMA ID LBRACKET meter_fondo_falso CTEI punto_validate_size RBRACKET quitar_fondo_falso LBRACKET meter_fondo_falso CTEI punto_validate_size RBRACKET quitar_fondo_falso punto_save_matrix matrixCycle
               | empty
   '''
   p[0] = None
