@@ -179,7 +179,7 @@ def p_punto_save_array(p):
   cont_size = p[-3]
   # Add size of array to constant table to only work with addresses
   var_dir_address = assign_memory_global_local(current_var_type, current_func, cont_size)
-  dir_func.add_variable(current_var_type, p[-4], current_func, var_dir_address, p[-3], 1)
+  dir_func.add_variable(current_var_type, p[-5], current_func, var_dir_address, p[-3], 1)
 
   constant_address = dir_func.get_constant_address(p[-3])
   if(not constant_address):
@@ -189,8 +189,8 @@ def p_punto_save_array(p):
 # Declaration of matrix
 def p_matrix(p):
   '''
-  matrix : TABLA type ARROW ID LBRACKET CTEI punto_validate_size RBRACKET LBRACKET  CTEI punto_validate_size RBRACKET punto_save_matrix matrixCycle SEMICOLON
-  matrixCycle : COMMA ID LBRACKET CTEI punto_validate_size RBRACKET LBRACKET  CTEI punto_validate_size RBRACKET punto_save_matrix matrixCycle
+  matrix : TABLA type ARROW ID LBRACKET CTEI punto_validate_size RBRACKET LBRACKET CTEI punto_validate_size RBRACKET punto_save_matrix matrixCycle SEMICOLON
+  matrixCycle : COMMA ID LBRACKET CTEI punto_validate_size RBRACKET LBRACKET CTEI punto_validate_size RBRACKET punto_save_matrix matrixCycle
               | empty
   '''
   p[0] = None
@@ -201,16 +201,16 @@ def p_punto_save_matrix(p):
   '''
   punto_save_matrix :
   '''
-  var_dir_address = assign_memory_global_local(current_var_type, current_func, p[-5]*p[-2])
-  dir_func.add_variable(current_var_type, p[-7], current_func, var_dir_address, (p[-5], p[-2]), 2)
+  var_dir_address = assign_memory_global_local(current_var_type, current_func, p[-7]*p[-3])
+  dir_func.add_variable(current_var_type, p[-9], current_func, var_dir_address, (p[-7], p[-3]), 2)
 
-  if(not dir_func.get_constant_address(p[-5])):
+  if(not dir_func.get_constant_address(p[-7])):
     constant_address = assign_memory_constant(1)
-    dir_func.add_constant_variable(1, p[-5], constant_address)
+    dir_func.add_constant_variable(1, p[-7], constant_address)
   
-  if(not dir_func.get_constant_address(p[-2])):
+  if(not dir_func.get_constant_address(p[-3])):
     constant_address = assign_memory_constant(1)
-    dir_func.add_constant_variable(1, p[-2], constant_address)
+    dir_func.add_constant_variable(1, p[-3], constant_address)
 
 # Declares a function
 def p_dec_func(p):
@@ -341,29 +341,11 @@ def p_asignar(p):
 
 def p_variable(p):
   '''
-  variable : ID variable_aux
+  variable : ID punto_save_ID LBRACKET punto_valida_var meter_fondo_falso punto_meter_pilaDim hyper_exp punto_create_firstDim_cuadruplo RBRACKET quitar_fondo_falso LBRACKET meter_fondo_falso hyper_exp punto_create_lastDim_cuadruplo RBRACKET quitar_fondo_falso punto_valida_matrix
+            | ID punto_save_ID LBRACKET punto_valida_var meter_fondo_falso punto_meter_pilaDim hyper_exp punto_create_arr_cuadruplo RBRACKET quitar_fondo_falso punto_valida_array
+            | ID push_id
   '''
   p[0] = p[1]
-
-# To assign a variable it can either be a simple var or an array and matrix position
-def p_variable_aux(p):
-  '''
-  variable_aux : LBRACKET exp RBRACKET
-              | LBRACKET exp RBRACKET LBRACKET exp RBRACKET
-              | punto_push_id
-  '''
-  p[0] = p[1]
-
-def p_punto_push_id(p):
-  '''
-  punto_push_id : 
-  '''
-  global stack_de_operandos, stack_de_tipos, semantic_var, current_func
-  id_address = dir_func.get_variable_address(current_func, p[-1])
-  id_type = dir_func.get_variable_type(current_func, p[-1])
-
-  stack_de_operandos.append(id_address)
-  stack_de_tipos.append(id_type)
 
 # Push the "=" operator to the stack of operators.
 def p_push_op_igual(p):
@@ -825,9 +807,7 @@ def p_factor(p) :
   factor : LPAREN meter_fondo_falso hyper_exp RPAREN quitar_fondo_falso
           | factor_constante
           | llamada_func_return
-          | ID punto_save_ID LBRACKET punto_valida_var meter_fondo_falso punto_meter_pilaDim hyper_exp punto_create_arr_cuadruplo RBRACKET quitar_fondo_falso punto_valida_array
-          | ID punto_save_ID LBRACKET punto_valida_var meter_fondo_falso punto_meter_pilaDim hyper_exp punto_create_firstDim_cuadruplo RBRACKET quitar_fondo_falso LBRACKET meter_fondo_falso hyper_exp punto_create_lastDim_cuadruplo RBRACKET quitar_fondo_falso punto_valida_matrix
-          | ID push_id
+          | variable
   '''
   p[0] = p[1]
 
@@ -842,6 +822,8 @@ def generate_address_quadruple():
 
   quadruple = Quadruple(10, top_operando, dirBase, dim_pointer)
   lista_de_cuadruplos.append(quadruple.transform_quadruple())
+  stack_de_operandos.append(dim_pointer)
+  stack_de_tipos.append(1)
 
 def p_punto_create_arr_cuadruplo(p):
   '''
@@ -857,14 +839,13 @@ def p_punto_create_arr_cuadruplo(p):
 
   quadruple = Quadruple(120, stack_de_operandos[-1], constant_address_inf, constant_address_sup)
   lista_de_cuadruplos.append(quadruple.transform_quadruple())
-
   generate_address_quadruple()
 
 def p_punto_create_firstDim_cuadruplo(p):
   '''
   punto_create_firstDim_cuadruplo :
   '''
-
+  print("punto_create_firstDim_cuadruplo")
   global stack_de_tipos, stack_de_operandos, stack_de_dimensiones, lista_de_cuadruplos, first_dim_temp
   tipo_operando_der = stack_de_tipos.pop()
   if tipo_operando_der != 1:

@@ -1,35 +1,8 @@
-programa patito:
-variable entero -> i, j, d;
-variable decimal -> k, g, f;
-renglon entero  -> arr[5];
-tabla entero -> mat[4][5];
-
-funcion entero fibonacci(entero n){
-  si(n == 0){
-    regresar 0;
-  };
-
-  si ((n == 1) o (n == 2)){
-      regresar 1;
-  }
-  sino{
-      regresar fibonacci(n - 1)+ fibonacci(n - 2);
-  };
-};
-
-/*
-funcion sinregresar uno() {
-	imprimir(10);
-
-	regresar 3;
-};
-*/
+programa bolsas:
+renglon entero -> a[10];
+variable entero -> i,p,j;
+tabla entero -> b[10][10];
 
 inicio () {
-	i = i * fibonacci(5);
-	/*i = 2;
-	k = 1.5; 
-	f = 3.14;
-
-	g = k - i + (f * k) / k;*/
+	b[5][5] = 5;
 };
