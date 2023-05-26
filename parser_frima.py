@@ -25,7 +25,7 @@ vControl = current_func = current_var_type = called_func = None
 contador_params = 0
 cont_size = 1
 current_var = None
-first_dim_temp = None
+
 
 #__________PARSER____________
 
@@ -186,6 +186,11 @@ def p_punto_save_array(p):
     constant_address = assign_memory_constant(1)
     dir_func.add_constant_variable(1, p[-3], constant_address)
 
+  constant_address = dir_func.get_constant_address(0)
+  if(not constant_address):
+    constant_address = assign_memory_constant(1)
+    dir_func.add_constant_variable(1, 0, constant_address)
+
 # Declaration of matrix
 def p_matrix(p):
   '''
@@ -211,6 +216,12 @@ def p_punto_save_matrix(p):
   if(not dir_func.get_constant_address(p[-3])):
     constant_address = assign_memory_constant(1)
     dir_func.add_constant_variable(1, p[-3], constant_address)
+
+  constant_address = dir_func.get_constant_address(0)
+  if(not constant_address):
+    constant_address = assign_memory_constant(1)
+    dir_func.add_constant_variable(1, 0, constant_address)
+  
 
 # Declares a function
 def p_dec_func(p):
@@ -335,14 +346,21 @@ def p_punto_check_types(p):
     
 def p_asignar(p):
   '''
-  asignar : variable ASSIGN push_op_igual hyper_exp check_op_igual SEMICOLON
+  asignar : variable ASSIGN push_op_igual hyper_exp punto_arreglo check_op_igual SEMICOLON
   '''
   p[0] = None
 
+def p_punto_arreglo(p):
+  '''
+  punto_arreglo : 
+  '''
+  print("HOLA entro al punto antes del checkop igual")
+  print(stack_de_operandos)
+
 def p_variable(p):
   '''
-  variable : ID punto_save_ID LBRACKET punto_valida_var meter_fondo_falso punto_meter_pilaDim hyper_exp punto_create_firstDim_cuadruplo RBRACKET quitar_fondo_falso LBRACKET meter_fondo_falso hyper_exp punto_create_lastDim_cuadruplo RBRACKET quitar_fondo_falso punto_valida_matrix
-            | ID punto_save_ID LBRACKET punto_valida_var meter_fondo_falso punto_meter_pilaDim hyper_exp punto_create_arr_cuadruplo RBRACKET quitar_fondo_falso punto_valida_array
+  variable : ID punto_save_ID LBRACKET punto_valida_var meter_fondo_falso punto_meter_pilaDim hyper_exp punto_create_cuadruplo RBRACKET quitar_fondo_falso LBRACKET meter_fondo_falso hyper_exp punto_create_lastDim_cuadruplo generate_address_quadruple RBRACKET quitar_fondo_falso punto_valida_matrix
+            | ID punto_save_ID LBRACKET punto_valida_var meter_fondo_falso punto_meter_pilaDim hyper_exp punto_create_cuadruplo generate_address_quadruple RBRACKET quitar_fondo_falso punto_valida_array
             | ID push_id
   '''
   p[0] = p[1]
@@ -354,6 +372,7 @@ def p_push_op_igual(p):
   '''
   global stack_de_operadores
   stack_de_operadores.append(p[-1])
+  print("POPO stack operadores push_op_igual",stack_de_operandos)
 
 # Creates the quadruple for the assignation process.
 def p_check_op_igual(p):
@@ -363,8 +382,15 @@ def p_check_op_igual(p):
   global stack_de_operadores, stack_de_operandos, stack_de_tipos, lista_de_cuadruplos, dir_func
   top_operador = stack_de_operadores.pop()
 
+  print("Check up igual",stack_de_operandos)
+  
+
   operando_der = stack_de_operandos.pop()
+  print("operando_der",operando_der)
   operando_izq = stack_de_operandos.pop()
+
+  
+  print("operando_izq",operando_izq)
 
   tipo_operando_der = stack_de_tipos.pop()
   tipo_operando_izq = stack_de_tipos.pop()
@@ -811,9 +837,17 @@ def p_factor(p) :
   '''
   p[0] = p[1]
 
-def generate_address_quadruple():
+def p_generate_address_quadruple(p):
+  '''
+  generate_address_quadruple :
+  '''
   global stack_de_tipos, stack_de_operandos, stack_de_dimensiones, lista_de_cuadruplos
   top_operando = stack_de_operandos.pop()
+
+  print("Stack tipos -> address ", stack_de_tipos)
+  print("Operando_pop", top_operando)
+  print("Stack operandos -> address ", stack_de_operandos)
+  print("Stack tipos -> address ", stack_de_tipos)
 
   top_dim = stack_de_dimensiones.pop()
   dirBase = top_dim[0]
@@ -822,53 +856,82 @@ def generate_address_quadruple():
 
   quadruple = Quadruple(10, top_operando, dirBase, dim_pointer)
   lista_de_cuadruplos.append(quadruple.transform_quadruple())
+  print("agregra nuevos")
   stack_de_operandos.append(dim_pointer)
   stack_de_tipos.append(1)
+  
 
-def p_punto_create_arr_cuadruplo(p):
+  print("Stack operandos -> address final ", stack_de_operandos)
+  print("Stack tipos -> address final ", stack_de_tipos)
+
+def p_punto_create_cuadruplo(p):
   '''
-  punto_create_arr_cuadruplo : 
+  punto_create_cuadruplo : 
   '''
   global stack_de_tipos, stack_de_operandos, stack_de_dimensiones, lista_de_cuadruplos
-  tipo_operando_der = stack_de_tipos.pop()
-  if tipo_operando_der != 1:
-    raise Exception(f"ERROR: El índice de acceso para {current_var} deber ser entero.")
+ 
+  print ("currentvar",current_var)
+  var_dimension = dir_func.get_variable_dimension(current_func, current_var)
+  print("Stack operandos2", stack_de_operandos)
+  print("Stack tipos2", stack_de_tipos)
+
   
-  constant_address_inf = dir_func.get_constant_address(0)
-  constant_address_sup = dir_func.get_constant_address(stack_de_dimensiones[-1][2])
+  
+  if var_dimension == 1: 
+    
+    tipo_operando_der = stack_de_tipos.pop()
 
-  quadruple = Quadruple(120, stack_de_operandos[-1], constant_address_inf, constant_address_sup)
-  lista_de_cuadruplos.append(quadruple.transform_quadruple())
-  generate_address_quadruple()
+    if tipo_operando_der != 1:
+      raise Exception(f"ERROR: El índice de acceso para {current_var} deber ser entero.")
+  
+    constant_address_inf = dir_func.get_constant_address(0)
+    constant_address_sup = dir_func.get_constant_address(stack_de_dimensiones[-1][2])
 
-def p_punto_create_firstDim_cuadruplo(p):
-  '''
-  punto_create_firstDim_cuadruplo :
-  '''
-  print("punto_create_firstDim_cuadruplo")
-  global stack_de_tipos, stack_de_operandos, stack_de_dimensiones, lista_de_cuadruplos, first_dim_temp
-  tipo_operando_der = stack_de_tipos.pop()
-  if tipo_operando_der != 1:
-    raise Exception(f"ERROR: El índice de acceso para {current_var} deber ser entero.")
+    quadruple = Quadruple(120, stack_de_operandos[-1], constant_address_inf, constant_address_sup)
+    lista_de_cuadruplos.append(quadruple.transform_quadruple())
+    print ("termina array")
 
-  constant_address_inf = dir_func.get_constant_address(0)
-  constant_address_sup = dir_func.get_constant_address(stack_de_dimensiones[-1][1])
 
-  operando_exp = stack_de_operandos.pop()
-  quadruple = Quadruple(120, operando_exp, constant_address_inf, constant_address_sup)
-  lista_de_cuadruplos.append(quadruple.transform_quadruple())
+  elif var_dimension == 2: 
 
-  temp_var = assign_memory_temporal(1, current_func)
-  quadruple = Quadruple(20, operando_exp, stack_de_dimensiones[-1][2], temp_var)
-  first_dim_temp = temp_var
-  lista_de_cuadruplos.append(quadruple.transform_quadruple())
+    print("Es matriz")
+    print("Stack tipos", stack_de_tipos)
+    print("Stack operandos", stack_de_operandos)
+
+    tipo_operando_der = stack_de_tipos.pop()
+
+    if tipo_operando_der != 1:
+      raise Exception(f"ERROR: El índice de acceso para {current_var} deber ser entero.")
+
+    constant_address_inf = dir_func.get_constant_address(0)
+    constant_address_sup = dir_func.get_constant_address(stack_de_dimensiones[-1][1])
+
+
+    operando_exp = stack_de_operandos.pop()
+    quadruple = Quadruple(120, operando_exp, constant_address_inf, constant_address_sup)
+    lista_de_cuadruplos.append(quadruple.transform_quadruple())
+
+    temp_var = assign_memory_temporal(1, current_func)
+    quadruple = Quadruple(20, operando_exp, stack_de_dimensiones[-1][2], temp_var)
+   
+    stack_de_operandos.append(temp_var) 
+    stack_de_tipos.append(1)
+    lista_de_cuadruplos.append(quadruple.transform_quadruple())
+
+    print("stack dimensiones",stack_de_dimensiones)
+    print("stack operandos m1", stack_de_operandos)
+    print("stack tipos m1", stack_de_tipos)
+
 
 def p_punto_create_lastDim_cuadruplo(p):
   '''
   punto_create_lastDim_cuadruplo :
   '''
-
+  
   global stack_de_tipos, stack_de_operandos, stack_de_dimensiones, lista_de_cuadruplos
+  print("Stack tipos",stack_de_tipos)
+  print("Stack operandos", stack_de_operandos)
+  print("YA FUNCIONA")
   tipo_operando_der = stack_de_tipos.pop()
   if tipo_operando_der != 1:
     raise Exception(f"ERROR: El índice de acceso para {current_var} deber ser entero.")
@@ -876,14 +939,27 @@ def p_punto_create_lastDim_cuadruplo(p):
   constant_address_inf = dir_func.get_constant_address(0)
   constant_address_sup = dir_func.get_constant_address(stack_de_dimensiones[-1][2])
 
-  quadruple = Quadruple(120, stack_de_operandos[-1], constant_address_inf, constant_address_sup)
+  operando_exp = stack_de_operandos.pop()
+  quadruple = Quadruple(120, operando_exp, constant_address_inf, constant_address_sup)
   lista_de_cuadruplos.append(quadruple.transform_quadruple())
+
+  print("ontamos")
+  print("Stack tipos ontamos",stack_de_tipos)
+  print("Stack operandos ontamos", stack_de_operandos)
+
+  sm = stack_de_operandos.pop()
+  stack_de_tipos.pop() #sm_type
 
   temp_var = assign_memory_temporal(1, current_func)
-  quadruple = Quadruple(10, first_dim_temp, stack_de_operandos[-1], temp_var)
+
+  quadruple = Quadruple(10, sm, operando_exp, temp_var)
   lista_de_cuadruplos.append(quadruple.transform_quadruple())
 
-  generate_address_quadruple()
+  print("sm")
+  print("Stack tipos sm",stack_de_tipos)
+  print("Stack operandos sm", stack_de_operandos)
+
+  top_tipo = stack_de_tipos.pop()
 
 def p_punto_meter_pilaDim(p):
   '''
@@ -934,6 +1010,9 @@ def p_punto_valida_matrix(p):
   var_dimension = dir_func.get_variable_dimension(current_func, current_var)
   if(var_dimension != 2):
     raise Exception(f"ERROR: La variable {current_var} es de una dimensión.")
+
+  print("stack operandos valida mt",stack_de_operandos)
+  print("stack tipos valida mt",stack_de_tipos)
 
 # Constant values
 def p_factor_constante(p) :

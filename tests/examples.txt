@@ -1,8 +1,8 @@
 programa bolsas:
-renglon entero -> a[10];
-variable entero -> i,p,j;
-tabla entero -> b[10][10];
+renglon entero -> a[5];
+variable entero -> i,p,j,f;
+tabla entero -> b[10][9];
 
 inicio () {
-	b[5][5] = 5;
+	a[i+p*j] = j * b[i+j][p];
 };
