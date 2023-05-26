@@ -4,5 +4,5 @@ variable entero -> i,p,j,f;
 tabla entero -> b[10][9];
 
 inicio () {
-	a[i+p*j] = j * b[i+j][p];
+	a[i+p*j] = f * b[i+j][p];
 };

@@ -103,9 +103,10 @@ def add_local_char(size):
 def add_global_temp_int():
   global global_temp_int 
 
-  if  global_temp_int < 16000:
+  if global_temp_int < 16000:
+    prev_cont = global_temp_int
     global_temp_int += 1
-    return global_temp_int
+    return prev_cont
   else: 
     raise Exception("ERROR: No hay memoria disponible para Enteros Temporales Globales") 
 
@@ -114,8 +115,9 @@ def add_global_temp_float():
   global global_temp_float
   
   if global_temp_float < 18000:
+    prev_cont = global_temp_float
     global_temp_float += 1
-    return global_temp_float
+    return prev_cont
   else: 
     raise Exception("ERROR: No hay memoria disponible para Decimales Temporales Globales") 
     
@@ -124,8 +126,9 @@ def add_global_temp_char():
   global global_temp_char
 
   if global_temp_char < 20000:
+    prev_cont = global_temp_char
     global_temp_char += 1
-    return global_temp_float
+    return prev_cont
   else: 
     raise Exception("ERROR: No hay memoria disponible para Letras Temporales Globales")  
 
@@ -134,8 +137,9 @@ def add_global_temp_bool():
   global global_temp_bool 
 
   if global_temp_bool < 22000:
-    global_temp_bool+= 1
-    return global_temp_bool
+    prev_cont = global_temp_bool
+    global_temp_bool += 1
+    return prev_cont
   else: 
     raise Exception("ERROR: No hay memoria disponible para Booleanos Temporales Globales") 
 
@@ -144,8 +148,9 @@ def add_local_temp_int():
   global local_temp_int 
 
   if local_temp_int < 24000:
+    prev_cont = local_temp_int
     local_temp_int += 1
-    return local_temp_int
+    return prev_cont
   else: 
     raise Exception("ERROR: No hay memoria disponible para Enteros Temporales Locales") 
 
@@ -154,8 +159,9 @@ def add_local_temp_float():
   global local_temp_float 
 
   if local_temp_float < 26000:
+    prev_cont = local_temp_float
     local_temp_float += 1
-    return local_temp_float
+    return prev_cont
   else: 
     raise Exception("ERROR: No hay memoria disponible para Decimales Temporales Locales") 
     
@@ -164,8 +170,9 @@ def add_local_temp_char():
   global local_temp_char 
 
   if local_temp_char < 28000:
+    prev_cont = local_temp_char
     local_temp_char += 1
-    return local_temp_float
+    return prev_cont
   else: 
     raise Exception("ERROR: No hay memoria disponible para Letras Temporales Locales")  
 
@@ -174,8 +181,9 @@ def add_local_temp_bool():
   global local_temp_bool
 
   if local_temp_bool < 30000:
+    prev_cont = local_temp_bool
     local_temp_bool += 1
-    return local_temp_bool
+    return prev_cont
   else: 
     raise Exception("ERROR: No hay memoria disponible para Booleanos Temporales Globales")  
 
@@ -184,8 +192,9 @@ def add_const_string():
   global const_string 
 
   if const_string < 32000:
+    prev_cont = const_string
     const_string += 1
-    return const_string
+    return prev_cont
   else: 
     raise Exception("ERROR: No hay memoria disponible para los Letreros")  
     
@@ -194,8 +203,9 @@ def add_const_int():
   global const_int 
 
   if const_int < 34000:
+    prev_cont = const_int
     const_int += 1
-    return const_int
+    return prev_cont
   else: 
     raise Exception("ERROR: No hay memoria disponible para Enteros Constantes")  
     
@@ -204,18 +214,20 @@ def add_const_float():
   global const_float
 
   if const_float < 36000:
+    prev_cont = const_float
     const_float += 1
-    return const_float
+    return prev_cont
   else: 
     raise Exception("ERROR: No hay memoria disponible para Decimales Constantes")  
     
 #Add const char
 def add_const_char():
   global const_char
-  
+
   if const_char < 38000:
+    prev_cont = const_char
     const_char += 1
-    return const_char
+    return prev_cont
   else: 
     raise Exception("ERROR: No hay memoria disponible para Letras Constantes")  
 
