@@ -145,11 +145,8 @@ def p_punto_simple_var(p):
   '''
   punto_simple_var :
   '''
-  global cont_size
-  cont_size = 1
-
   var_dir_address = assign_memory_global_local(current_var_type, current_func, 1)
-  dir_func.add_variable(current_var_type, p[-1], current_func, var_dir_address, cont_size)
+  dir_func.add_variable(current_var_type, p[-1], current_func, var_dir_address, [1], 0)
 
 # Declaration of arrays
 def p_array(p):
@@ -164,22 +161,18 @@ def p_punto_validate_size(p):
   '''
   punto_validate_size :
   '''
-
   if p[-1] < 1:
     raise Exception(f"ERROR: Estás creando una conjunto de datos con un tamaño de {p[-1]}. Deben siempre tener un tamaño mayor que 1.")
   
-
 # Adds array to the variable table of the current function.
 # It sends additional values such as its dimension and size. 
 def p_punto_save_array(p):
   '''
   punto_save_array :
   '''
-  global cont_size
-  cont_size = p[-3]
   # Add size of array to constant table to only work with addresses
-  var_dir_address = assign_memory_global_local(current_var_type, current_func, cont_size)
-  dir_func.add_variable(current_var_type, p[-5], current_func, var_dir_address, p[-3], 1)
+  var_dir_address = assign_memory_global_local(current_var_type, current_func,  p[-3])
+  dir_func.add_variable(current_var_type, p[-5], current_func, var_dir_address, [p[-3]], 1)
 
   constant_address = dir_func.get_constant_address(p[-3])
   if(not constant_address):
@@ -203,11 +196,9 @@ def p_matrix(p):
 # Adds matrix to the variable table of the corresponding and current function.
 # It sends additional values such as its dimension and its size as a tuple. 
 def p_punto_save_matrix(p):
-  '''
-  punto_save_matrix :
-  '''
+  '''punto_save_matrix : '''
   var_dir_address = assign_memory_global_local(current_var_type, current_func, p[-7]*p[-3])
-  dir_func.add_variable(current_var_type, p[-9], current_func, var_dir_address, (p[-7], p[-3]), 2)
+  dir_func.add_variable(current_var_type, p[-9], current_func, var_dir_address, [p[-7], p[-3]], 2)
 
   if(not dir_func.get_constant_address(p[-7])):
     constant_address = assign_memory_constant(1)
@@ -235,12 +226,9 @@ def p_punto_global_func_var(p):
   '''
   punto_global_func_var : 
   '''
-  global dir_func, is_array
-  is_array = False
-
   current_func_type = convert_type(p[-3])
   global_func_var_address = assign_memory_global_local(current_func_type, 'inicio', 1)
-  dir_func.add_variable(current_func_type, p[-2], 'inicio', global_func_var_address, 1)
+  dir_func.add_variable(current_func_type, p[-2], 'inicio', global_func_var_address, [1], 0)
 
 # Deletes the local variables of the function and its variable table.
 # Sets back the scope to be global.
@@ -346,24 +334,27 @@ def p_punto_check_types(p):
     
 def p_asignar(p):
   '''
-  asignar : variable ASSIGN push_op_igual hyper_exp punto_arreglo check_op_igual SEMICOLON
+  asignar : variable ASSIGN hyper_exp push_op_igual check_op_igual SEMICOLON
   '''
   p[0] = None
 
-def p_punto_arreglo(p):
-  '''
-  punto_arreglo : 
-  '''
-  print("HOLA entro al punto antes del checkop igual")
-  print(stack_de_operandos)
-
 def p_variable(p):
   '''
-  variable : ID punto_save_ID LBRACKET punto_valida_var meter_fondo_falso punto_meter_pilaDim hyper_exp punto_create_cuadruplo RBRACKET quitar_fondo_falso LBRACKET meter_fondo_falso hyper_exp punto_create_lastDim_cuadruplo generate_address_quadruple RBRACKET quitar_fondo_falso punto_valida_matrix
-            | ID punto_save_ID LBRACKET punto_valida_var meter_fondo_falso punto_meter_pilaDim hyper_exp punto_create_cuadruplo generate_address_quadruple RBRACKET quitar_fondo_falso punto_valida_array
-            | ID push_id
+  variable : ID push_id variable_aux
   '''
   p[0] = p[1]
+
+def p_variable_aux(p):
+  '''
+  variable_aux : LBRACKET punto_valida_var meter_fondo_falso punto_meter_pilaDim hyper_exp punto_create_cuadruplo RBRACKET quitar_fondo_falso variable_aux_dim
+                | empty
+  '''
+
+def p_variable_aux_dim(p):
+  '''
+  variable_aux_dim : LBRACKET meter_fondo_falso hyper_exp punto_create_lastDim_cuadruplo RBRACKET quitar_fondo_falso generate_address_quadruple
+                | generate_address_quadruple empty
+  '''
 
 # Push the "=" operator to the stack of operators.
 def p_push_op_igual(p):
@@ -371,8 +362,8 @@ def p_push_op_igual(p):
   push_op_igual :
   '''
   global stack_de_operadores
-  stack_de_operadores.append(p[-1])
-  print("POPO stack operadores push_op_igual",stack_de_operandos)
+  stack_de_operadores.append(p[-2])
+  print("POPO stack operadores push_op_igual",stack_de_operadores)
 
 # Creates the quadruple for the assignation process.
 def p_check_op_igual(p):
@@ -407,6 +398,8 @@ def p_check_op_igual(p):
   else:
     quadruple = Quadruple(converted_operador, operando_der, None , operando_izq)
     lista_de_cuadruplos.append(quadruple.transform_quadruple())
+  
+  print(stack_de_operandos, stack_de_tipos)
 
 def p_leer(p):
   '''
@@ -800,6 +793,8 @@ def p_check_op_pordiv(p):
       operando_der = stack_de_operandos.pop()
       operando_izq = stack_de_operandos.pop()
 
+      print(operando_der, operando_izq, "div por")
+
       tipo_operando_der = stack_de_tipos.pop()
       tipo_operando_izq = stack_de_tipos.pop()
 
@@ -844,11 +839,6 @@ def p_generate_address_quadruple(p):
   global stack_de_tipos, stack_de_operandos, stack_de_dimensiones, lista_de_cuadruplos
   top_operando = stack_de_operandos.pop()
 
-  print("Stack tipos -> address ", stack_de_tipos)
-  print("Operando_pop", top_operando)
-  print("Stack operandos -> address ", stack_de_operandos)
-  print("Stack tipos -> address ", stack_de_tipos)
-
   top_dim = stack_de_dimensiones.pop()
   dirBase = top_dim[0]
 
@@ -856,56 +846,37 @@ def p_generate_address_quadruple(p):
 
   quadruple = Quadruple(10, top_operando, dirBase, dim_pointer)
   lista_de_cuadruplos.append(quadruple.transform_quadruple())
-  print("agregra nuevos")
   stack_de_operandos.append(dim_pointer)
   stack_de_tipos.append(1)
-  
-
-  print("Stack operandos -> address final ", stack_de_operandos)
-  print("Stack tipos -> address final ", stack_de_tipos)
+  print("array",stack_de_operandos, stack_de_dimensiones, stack_de_tipos)
 
 def p_punto_create_cuadruplo(p):
   '''
   punto_create_cuadruplo : 
   '''
   global stack_de_tipos, stack_de_operandos, stack_de_dimensiones, lista_de_cuadruplos
- 
-  print ("currentvar",current_var)
-  var_dimension = dir_func.get_variable_dimension(current_func, current_var)
-  print("Stack operandos2", stack_de_operandos)
-  print("Stack tipos2", stack_de_tipos)
+  var_dimension = dir_func.get_variable_dimension(current_func, p[-7])
 
-  
-  
   if var_dimension == 1: 
-    
     tipo_operando_der = stack_de_tipos.pop()
 
     if tipo_operando_der != 1:
-      raise Exception(f"ERROR: El índice de acceso para {current_var} deber ser entero.")
+      raise Exception(f"ERROR: El índice de acceso para {p[-7]} deber ser entero.")
   
-    constant_address_inf = dir_func.get_constant_address(0)
-    constant_address_sup = dir_func.get_constant_address(stack_de_dimensiones[-1][2])
-
-    quadruple = Quadruple(120, stack_de_operandos[-1], constant_address_inf, constant_address_sup)
-    lista_de_cuadruplos.append(quadruple.transform_quadruple())
-    print ("termina array")
-
-
-  elif var_dimension == 2: 
-
-    print("Es matriz")
-    print("Stack tipos", stack_de_tipos)
-    print("Stack operandos", stack_de_operandos)
-
-    tipo_operando_der = stack_de_tipos.pop()
-
-    if tipo_operando_der != 1:
-      raise Exception(f"ERROR: El índice de acceso para {current_var} deber ser entero.")
-
     constant_address_inf = dir_func.get_constant_address(0)
     constant_address_sup = dir_func.get_constant_address(stack_de_dimensiones[-1][1])
 
+    quadruple = Quadruple(120, stack_de_operandos[-1], constant_address_inf, constant_address_sup)
+    lista_de_cuadruplos.append(quadruple.transform_quadruple())
+
+  elif var_dimension == 2:
+    tipo_operando_der = stack_de_tipos.pop()
+
+    if tipo_operando_der != 1:
+      raise Exception(f"ERROR: El índice de acceso para {p[-7]} deber ser entero.")
+
+    constant_address_inf = dir_func.get_constant_address(0)
+    constant_address_sup = dir_func.get_constant_address(stack_de_dimensiones[-1][1])
 
     operando_exp = stack_de_operandos.pop()
     quadruple = Quadruple(120, operando_exp, constant_address_inf, constant_address_sup)
@@ -918,20 +889,12 @@ def p_punto_create_cuadruplo(p):
     stack_de_tipos.append(1)
     lista_de_cuadruplos.append(quadruple.transform_quadruple())
 
-    print("stack dimensiones",stack_de_dimensiones)
-    print("stack operandos m1", stack_de_operandos)
-    print("stack tipos m1", stack_de_tipos)
-
-
 def p_punto_create_lastDim_cuadruplo(p):
   '''
   punto_create_lastDim_cuadruplo :
   '''
   
   global stack_de_tipos, stack_de_operandos, stack_de_dimensiones, lista_de_cuadruplos
-  print("Stack tipos",stack_de_tipos)
-  print("Stack operandos", stack_de_operandos)
-  print("YA FUNCIONA")
   tipo_operando_der = stack_de_tipos.pop()
   if tipo_operando_der != 1:
     raise Exception(f"ERROR: El índice de acceso para {current_var} deber ser entero.")
@@ -943,10 +906,6 @@ def p_punto_create_lastDim_cuadruplo(p):
   quadruple = Quadruple(120, operando_exp, constant_address_inf, constant_address_sup)
   lista_de_cuadruplos.append(quadruple.transform_quadruple())
 
-  print("ontamos")
-  print("Stack tipos ontamos",stack_de_tipos)
-  print("Stack operandos ontamos", stack_de_operandos)
-
   sm = stack_de_operandos.pop()
   stack_de_tipos.pop() #sm_type
 
@@ -955,32 +914,21 @@ def p_punto_create_lastDim_cuadruplo(p):
   quadruple = Quadruple(10, sm, operando_exp, temp_var)
   lista_de_cuadruplos.append(quadruple.transform_quadruple())
 
-  print("sm")
-  print("Stack tipos sm",stack_de_tipos)
-  print("Stack operandos sm", stack_de_operandos)
-
   top_tipo = stack_de_tipos.pop()
 
 def p_punto_meter_pilaDim(p):
   '''
   punto_meter_pilaDim : 
   '''
+  global stack_de_dimensiones
 
-  global stack_de_dimensiones, current_var
-  var_dimension = dir_func.get_variable_dimension(current_func, current_var)
-  var_info = dir_func.get_variable_var_dimInfo(current_func, current_var)
+  var_dimension = dir_func.get_variable_dimension(current_func, p[-5])
+  var_info = dir_func.get_variable_var_dimInfo(current_func, p[-5])
 
   if var_dimension == 1:
-    stack_de_dimensiones.append((var_info[1], 0, var_info[0])) #var_info[1] = DirBase , var_info[0] = Size
+    stack_de_dimensiones.append((var_info[1], var_info[0][0])) #var_info[1] = DirBase , var_info[0] = Size
   elif var_dimension == 2:
     stack_de_dimensiones.append((var_info[1], var_info[0][0], var_info[0][1])) #var_info[1] = DirBase, var_[0][0] = size1, var[0][1] = size2 
-
-def p_punto_save_ID(p):
-  '''
-  punto_save_ID : 
-  '''
-  global current_var
-  current_var = p[-1] #var id 
 
 # Validate variable is dimensioned
 def p_punto_valida_var(p):
@@ -988,32 +936,31 @@ def p_punto_valida_var(p):
   punto_valida_var :
   '''
   # Validate if the id exists either locally or globally
-  if not dir_func.is_variable_declared(current_func, current_var):
+  if not dir_func.is_variable_declared(current_func, p[-3]):
     raise Exception(f"ERROR: La variable {current_var} no está declarada.")
   # Validate if id is dimensioned
-  var_dimension = dir_func.get_variable_dimension(current_func, current_var)
+  var_dimension = dir_func.get_variable_dimension(current_func, p[-3])
   if var_dimension == 0:
     raise Exception(f"ERROR: La variable {current_var} no es dimensionada.")
-
+"""
 def p_punto_valida_array(p):
   '''
   punto_valida_array : 
   '''
-  var_dimension = dir_func.get_variable_dimension(current_func, current_var)
+  var_dimension = dir_func.get_variable_dimension(current_func, p[-11])
+  print("var_dimension", var_dimension)
   if(var_dimension != 1):
-    raise Exception(f"ERROR: La variable {current_var} es de dos dimensiones.")
-    
+    raise Exception(f"ERROR: La variable {p[-11]} es de dos dimensiones.")
+"""
+"""
 def p_punto_valida_matrix(p):
   '''
   punto_valida_matrix : 
   '''
-  var_dimension = dir_func.get_variable_dimension(current_func, current_var)
+  var_dimension = dir_func.get_variable_dimension(current_func, p[-6])
   if(var_dimension != 2):
-    raise Exception(f"ERROR: La variable {current_var} es de una dimensión.")
-
-  print("stack operandos valida mt",stack_de_operandos)
-  print("stack tipos valida mt",stack_de_tipos)
-
+    raise Exception(f"ERROR: La variable {p[-6]} es de una dimensión.")
+  """
 # Constant values
 def p_factor_constante(p) :
   '''
@@ -1079,6 +1026,7 @@ def p_push_id(p) :
     raise Exception(f"ERROR: La variable {p[-1]} no está declarada.")
 
   global stack_de_operandos, stack_de_tipos
+
   if p[-1] != None:
     id_address = dir_func.get_variable_address(current_func, p[-1])
     stack_de_operandos.append(id_address)
