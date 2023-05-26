@@ -911,7 +911,8 @@ def p_punto_create_cuadruplo(p):
     stack_de_tipos.pop()
     print("punto_create_cuadruplo", stack_de_tipos, stack_de_operandos, result_exp)
     temp_var = assign_memory_temporal(1, current_func)
-    quadruple = Quadruple(20, result_exp, stack_de_dimensiones[-1][1][1], temp_var)
+    constant_address_columns = dir_func.get_constant_address(stack_de_dimensiones[-1][1][1])
+    quadruple = Quadruple(20, result_exp, constant_address_columns, temp_var)
    
     stack_de_operandos.append(temp_var) 
     stack_de_tipos.append(1)
@@ -978,9 +979,7 @@ def p_quitar_fondo_falso(p) :
 # Creates the address memory of the int constant (if it doesn't have one yet) 
 # and push it to the stack of operands.
 def p_push_int(p) : 
-  '''
-  push_int :
-  '''
+  '''push_int :'''
   global stack_de_operandos, stack_de_tipos, dir_func
   if p[-1] != None:
     constant = p[-1]
@@ -994,9 +993,7 @@ def p_push_int(p) :
 # Creates the address memory of the float constant (if it doesn't have one yet)
 # and push it to the stack of operands.
 def p_push_float(p) : 
-  '''
-  push_float :
-  '''
+  '''push_float :'''
   global stack_de_operandos, stack_de_tipos, dir_func
   if p[-1] != None:
     constant = p[-1]
@@ -1009,9 +1006,7 @@ def p_push_float(p) :
 
 # Push of IDs
 def p_push_id(p) : 
-  '''
-  push_id :
-  '''
+  '''push_id :'''
   # Validate if the id exists either locally or globally
   if not dir_func.is_variable_declared(current_func, p[-1]):
     raise Exception(f"ERROR: La variable {p[-1]} no está declarada.")
@@ -1027,9 +1022,7 @@ def p_push_id(p) :
 # Creates the address memory of the char constant (if it doesn't have one yet) 
 # and push it to the stack of operands.
 def p_push_char(p) : 
-  '''
-  push_char :
-  '''
+  '''push_char :'''
   global stack_de_operandos, stack_de_tipos, dir_func
   if p[-1] != None:
     constant = p[-1]
@@ -1057,9 +1050,7 @@ def p_func_params(p):
 # Validates type of param with function's signature, and
 # updates the param's global counter.
 def p_punto_check_param(p):
-  '''
-  punto_check_param :
-  '''
+  ''' punto_check_param :'''
   global contador_params, stack_de_tipos, stack_de_operandos, lista_de_cuadruplos, called_func
   function_param_signature = dir_func.get_param_types(called_func)
   try:
