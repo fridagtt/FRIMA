@@ -21,6 +21,18 @@ const_string = 30000
 const_int = 32000
 const_float = 34000
 const_char = 36000
+# memory for dimensional variables
+dim_pointer = 38000
+
+#Add global_int
+def get_dim_pointer():
+  global dim_pointer
+  if dim_pointer < 40000:
+    prev_cont = dim_pointer
+    dim_pointer += 1
+    return prev_cont
+  else: 
+    raise Exception("ERROR: No hay memoria disponible para almacenar variables dimensionales")
 
 #Add global_int
 def add_global_int(size):

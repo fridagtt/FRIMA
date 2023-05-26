@@ -24,6 +24,8 @@ vControl = current_func = current_var_type = called_func = None
 
 contador_params = 0
 cont_size = 1
+current_var = None
+first_dim_temp = None
 
 #__________PARSER____________
 
@@ -152,8 +154,8 @@ def p_punto_simple_var(p):
 # Declaration of arrays
 def p_array(p):
   '''
-  array : RENGLON type ARROW ID LBRACKET meter_fondo_falso CTEI punto_validate_size RBRACKET quitar_fondo_falso punto_save_array arrayCycle SEMICOLON
-  arrayCycle : COMMA ID LBRACKET meter_fondo_falso CTEI punto_validate_size RBRACKET quitar_fondo_falso punto_save_array arrayCycle
+  array : RENGLON type ARROW ID LBRACKET CTEI punto_validate_size RBRACKET punto_save_array arrayCycle SEMICOLON
+  arrayCycle : COMMA ID LBRACKET CTEI punto_validate_size RBRACKET punto_save_array arrayCycle
               | empty
   '''
   p[0] = None
@@ -176,20 +178,19 @@ def p_punto_save_array(p):
   global cont_size
   cont_size = p[-3]
   # Add size of array to constant table to only work with addresses
-  """
-  constant_address = dir_func.get_constant_address(p[-2])
-  if(not constant_address):
-    constant_address = assign_memory_constant(1)
-    dir_func.add_constant_variable(1, p[-2], constant_address)
-  """
   var_dir_address = assign_memory_global_local(current_var_type, current_func, cont_size)
   dir_func.add_variable(current_var_type, p[-4], current_func, var_dir_address, p[-3], 1)
+
+  constant_address = dir_func.get_constant_address(p[-3])
+  if(not constant_address):
+    constant_address = assign_memory_constant(1)
+    dir_func.add_constant_variable(1, p[-3], constant_address)
 
 # Declaration of matrix
 def p_matrix(p):
   '''
-  matrix : TABLA type ARROW ID LBRACKET meter_fondo_falso CTEI punto_validate_size RBRACKET quitar_fondo_falso LBRACKET  meter_fondo_falso CTEI punto_validate_size RBRACKET quitar_fondo_falso punto_save_matrix matrixCycle SEMICOLON
-  matrixCycle : COMMA ID LBRACKET meter_fondo_falso CTEI punto_validate_size RBRACKET quitar_fondo_falso LBRACKET meter_fondo_falso CTEI punto_validate_size RBRACKET quitar_fondo_falso punto_save_matrix matrixCycle
+  matrix : TABLA type ARROW ID LBRACKET CTEI punto_validate_size RBRACKET LBRACKET  CTEI punto_validate_size RBRACKET punto_save_matrix matrixCycle SEMICOLON
+  matrixCycle : COMMA ID LBRACKET CTEI punto_validate_size RBRACKET LBRACKET  CTEI punto_validate_size RBRACKET punto_save_matrix matrixCycle
               | empty
   '''
   p[0] = None
@@ -202,6 +203,14 @@ def p_punto_save_matrix(p):
   '''
   var_dir_address = assign_memory_global_local(current_var_type, current_func, p[-5]*p[-2])
   dir_func.add_variable(current_var_type, p[-7], current_func, var_dir_address, (p[-5], p[-2]), 2)
+
+  if(not dir_func.get_constant_address(p[-5])):
+    constant_address = assign_memory_constant(1)
+    dir_func.add_constant_variable(1, p[-5], constant_address)
+  
+  if(not dir_func.get_constant_address(p[-2])):
+    constant_address = assign_memory_constant(1)
+    dir_func.add_constant_variable(1, p[-2], constant_address)
 
 # Declares a function
 def p_dec_func(p):
@@ -816,11 +825,105 @@ def p_factor(p) :
   factor : LPAREN meter_fondo_falso hyper_exp RPAREN quitar_fondo_falso
           | factor_constante
           | llamada_func_return
-          | ID LBRACKET punto_valida_var hyper_exp RBRACKET
-          | ID LBRACKET punto_valida_var hyper_exp RBRACKET LBRACKET hyper_exp RBRACKET
+          | ID punto_save_ID LBRACKET punto_valida_var meter_fondo_falso punto_meter_pilaDim hyper_exp punto_create_arr_cuadruplo RBRACKET quitar_fondo_falso punto_valida_array
+          | ID punto_save_ID LBRACKET punto_valida_var meter_fondo_falso punto_meter_pilaDim hyper_exp punto_create_firstDim_cuadruplo RBRACKET quitar_fondo_falso LBRACKET meter_fondo_falso hyper_exp punto_create_lastDim_cuadruplo RBRACKET quitar_fondo_falso punto_valida_matrix
           | ID push_id
   '''
   p[0] = p[1]
+
+def generate_address_quadruple():
+  global stack_de_tipos, stack_de_operandos, stack_de_dimensiones, lista_de_cuadruplos
+  top_operando = stack_de_operandos.pop()
+
+  top_dim = stack_de_dimensiones.pop()
+  dirBase = top_dim[0]
+
+  dim_pointer = get_dim_pointer()
+
+  quadruple = Quadruple(10, top_operando, dirBase, dim_pointer)
+  lista_de_cuadruplos.append(quadruple.transform_quadruple())
+
+def p_punto_create_arr_cuadruplo(p):
+  '''
+  punto_create_arr_cuadruplo : 
+  '''
+  global stack_de_tipos, stack_de_operandos, stack_de_dimensiones, lista_de_cuadruplos
+  tipo_operando_der = stack_de_tipos.pop()
+  if tipo_operando_der != 1:
+    raise Exception(f"ERROR: El índice de acceso para {current_var} deber ser entero.")
+  
+  constant_address_inf = dir_func.get_constant_address(0)
+  constant_address_sup = dir_func.get_constant_address(stack_de_dimensiones[-1][2])
+
+  quadruple = Quadruple(120, stack_de_operandos[-1], constant_address_inf, constant_address_sup)
+  lista_de_cuadruplos.append(quadruple.transform_quadruple())
+
+  generate_address_quadruple()
+
+def p_punto_create_firstDim_cuadruplo(p):
+  '''
+  punto_create_firstDim_cuadruplo :
+  '''
+
+  global stack_de_tipos, stack_de_operandos, stack_de_dimensiones, lista_de_cuadruplos, first_dim_temp
+  tipo_operando_der = stack_de_tipos.pop()
+  if tipo_operando_der != 1:
+    raise Exception(f"ERROR: El índice de acceso para {current_var} deber ser entero.")
+
+  constant_address_inf = dir_func.get_constant_address(0)
+  constant_address_sup = dir_func.get_constant_address(stack_de_dimensiones[-1][1])
+
+  operando_exp = stack_de_operandos.pop()
+  quadruple = Quadruple(120, operando_exp, constant_address_inf, constant_address_sup)
+  lista_de_cuadruplos.append(quadruple.transform_quadruple())
+
+  temp_var = assign_memory_temporal(1, current_func)
+  quadruple = Quadruple(20, operando_exp, stack_de_dimensiones[-1][2], temp_var)
+  first_dim_temp = temp_var
+  lista_de_cuadruplos.append(quadruple.transform_quadruple())
+
+def p_punto_create_lastDim_cuadruplo(p):
+  '''
+  punto_create_lastDim_cuadruplo :
+  '''
+
+  global stack_de_tipos, stack_de_operandos, stack_de_dimensiones, lista_de_cuadruplos
+  tipo_operando_der = stack_de_tipos.pop()
+  if tipo_operando_der != 1:
+    raise Exception(f"ERROR: El índice de acceso para {current_var} deber ser entero.")
+
+  constant_address_inf = dir_func.get_constant_address(0)
+  constant_address_sup = dir_func.get_constant_address(stack_de_dimensiones[-1][2])
+
+  quadruple = Quadruple(120, stack_de_operandos[-1], constant_address_inf, constant_address_sup)
+  lista_de_cuadruplos.append(quadruple.transform_quadruple())
+
+  temp_var = assign_memory_temporal(1, current_func)
+  quadruple = Quadruple(10, first_dim_temp, stack_de_operandos[-1], temp_var)
+  lista_de_cuadruplos.append(quadruple.transform_quadruple())
+
+  generate_address_quadruple()
+
+def p_punto_meter_pilaDim(p):
+  '''
+  punto_meter_pilaDim : 
+  '''
+
+  global stack_de_dimensiones, current_var
+  var_dimension = dir_func.get_variable_dimension(current_func, current_var)
+  var_info = dir_func.get_variable_var_dimInfo(current_func, current_var)
+
+  if var_dimension == 1:
+    stack_de_dimensiones.append((var_info[1], 0, var_info[0])) #var_info[1] = DirBase , var_info[0] = Size
+  elif var_dimension == 2:
+    stack_de_dimensiones.append((var_info[1], var_info[0][0], var_info[0][1])) #var_info[1] = DirBase, var_[0][0] = size1, var[0][1] = size2 
+
+def p_punto_save_ID(p):
+  '''
+  punto_save_ID : 
+  '''
+  global current_var
+  current_var = p[-1] #var id 
 
 # Validate variable is dimensioned
 def p_punto_valida_var(p):
@@ -828,11 +931,28 @@ def p_punto_valida_var(p):
   punto_valida_var :
   '''
   # Validate if the id exists either locally or globally
-  if not dir_func.is_variable_declared(current_func, p[-2]):
-    raise Exception(f"ERROR: La variable {p[-1]} no está declarada.")
+  if not dir_func.is_variable_declared(current_func, current_var):
+    raise Exception(f"ERROR: La variable {current_var} no está declarada.")
   # Validate if id is dimensioned
-  if not dir_func.is_variable_dimensioned(current_func, p[-2]):
-    raise Exception(f"ERROR: La variable {p[-1]} no es dimensionada.")
+  var_dimension = dir_func.get_variable_dimension(current_func, current_var)
+  if var_dimension == 0:
+    raise Exception(f"ERROR: La variable {current_var} no es dimensionada.")
+
+def p_punto_valida_array(p):
+  '''
+  punto_valida_array : 
+  '''
+  var_dimension = dir_func.get_variable_dimension(current_func, current_var)
+  if(var_dimension != 1):
+    raise Exception(f"ERROR: La variable {current_var} es de dos dimensiones.")
+    
+def p_punto_valida_matrix(p):
+  '''
+  punto_valida_matrix : 
+  '''
+  var_dimension = dir_func.get_variable_dimension(current_func, current_var)
+  if(var_dimension != 2):
+    raise Exception(f"ERROR: La variable {current_var} es de una dimensión.")
 
 # Constant values
 def p_factor_constante(p) :
