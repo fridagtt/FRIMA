@@ -1,8 +1,13 @@
 programa bolsas:
 variable entero -> i,p,j,f;
 
+funcion entero uno() {
+	regresar(8);
+};
+
 funcion entero prueba() {
-	regresar (4);
+	p = 2;
+	regresar (p * uno());
 };
 
 inicio () {

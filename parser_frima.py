@@ -1114,8 +1114,7 @@ def p_punto_create_gosub(p):
   '''
   global lista_de_cuadruplos, stack_de_operandos, stack_de_tipos
   func_quadruple_pos = dir_func.get_func_quadruple_init(called_func)
-  func_global_var_address = dir_func.get_variable_address('inicio', called_func)
-  quadruple = Quadruple(95, called_func, func_global_var_address, func_quadruple_pos)
+  quadruple = Quadruple(95, called_func, None, func_quadruple_pos)
   lista_de_cuadruplos.append(quadruple.transform_quadruple())
 
   func_return_type = dir_func.symbol_table['dir_functions'][called_func]['return_type']

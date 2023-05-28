@@ -80,12 +80,6 @@ class Memory:
           self.vars_float[value[1]] = value
         else:
           print("Error - El parámetro #", index +1, "en", self.function_name, "no es del tipo esperado.")
-
-  def add_return_value(self, value, return_type, function_name_address):
-    if return_type == 1:
-      self.vars_int[function_name_address] = value
-    elif return_type == 2:
-      self.vars_float[function_name_address] = value
     
 class VirtualMachine:
   def __init__(self, quadruples, dir_func):
@@ -96,6 +90,18 @@ class VirtualMachine:
     self.local_memory = Memory(None, None)
     self.execution_stack = deque()
     self.stack_pointers = deque()
+
+  def get_function_global_var_address(self, func_name):
+    list_of_variables = self.global_memory.func_info["variables"]['vars_info']
+    variable_object = next((variable for variable in list_of_variables if variable['name'] == func_name),None)
+    return variable_object['memory_dir']
+
+  def set_func_name_value(self, value, return_type, function_name):
+    global_var_address = self.get_function_global_var_address(function_name)
+    if return_type == 1:
+      self.global_memory.vars_int[global_var_address] = value
+    elif return_type == 2:
+      self.global_memory.vars_float[global_var_address] = value
 
   def get_memory(self, memory_address) -> Memory:
     """According to the memory address received, it returns either the vm's local or global memory
@@ -118,7 +124,6 @@ class VirtualMachine:
       return self.local_memory
 
   def set_memory_value(self, memory_address, value):
-    print("set_memory_value", memory_address, value)
     self.get_memory(memory_address).set_value(memory_address, value)
 
   def get_memory_value(self, memory_address):
@@ -281,11 +286,7 @@ class VirtualMachine:
         instruction_pointer +=1
       elif operator == 110: # RET
         value = self.get_memory_value(quad_res)
-        print("value", value)
-        print("value", right_operand)
-        print("operator", quad_res, value, right_operand)
-        self.set_memory_value(quad_res, value)
-        self.global_memory.add_return_value(value, self.local_memory.func_info['return_type'], right_operand) # right_operand -> func_name_address
+        self.set_func_name_value(value, self.local_memory.func_info['return_type'], self.local_memory.function_name)
         instruction_pointer += 1
       elif operator == 85: # END FUNC
         if(len(self.execution_stack)!=0):
