@@ -272,7 +272,7 @@ class VirtualMachine:
           instruction_pointer += 1
       elif operator == 80: # GOTO
         if instruction_pointer == 0:
-          self.local_memory = Memory('inicio', self.dir_func['dir_functions']['inicio'])
+          self.local_memory = self.global_memory
         instruction_pointer = quad_res
       elif operator == 90: # IMPRIMIR
         try:
@@ -280,7 +280,7 @@ class VirtualMachine:
             value_memory =  self.global_memory.get_memory_value(quad_res)
           else:
             value_memory = self.get_memory_value(quad_res)
-          print("FIBONACCI DE 9 -> ", value_memory)
+          print("Imprimir: ", value_memory)
           instruction_pointer += 1
         except:
           raise Exception("ERROR: Variable sin valor")

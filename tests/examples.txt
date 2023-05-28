@@ -1,19 +1,24 @@
-programa fibonacciRecursivo:
-variable entero -> a;
+programa frima:
 
-funcion entero fibonacci(entero n) {
-  si(n == 0){
-    regresar(0);
-  };
+variable entero -> a,b,c,d,e,f,g,h,j,k;
 
-  si ((n == 1) o (n == 2)){
-    regresar (1);
-  } sino{
-    regresar (fibonacci(n - 1)+ fibonacci(n - 2));
-  };
+funcion sinregresar imprime (){
+  imprimir ("hola");
 };
 
-inicio(){
-	a = fibonacci(9);
-	imprimir(a);
+funcion entero uno(entero n) { 
+
+  desde (a = 4) hasta (n+5*6) {
+    imprimir (a);
+    imprime();
+  };
+
+  regresar (a);
+};
+
+inicio () {
+
+ 
+	imprimir(uno(10));
+
 };
