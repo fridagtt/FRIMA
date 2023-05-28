@@ -9,6 +9,8 @@ class Memory:
     self.vars_float = dict()
     self.vars_bool = dict()
     self.vars_string = dict()
+    self.local_int = 8000
+    self.local_float = 10000
   
   def init_constant_memory(self):
     """The constant variables are initialized with its corresponding value.
@@ -70,17 +72,19 @@ class Memory:
   
   def add_params_to_function(self, params_list):
     for index, value in enumerate(params_list):
-      if type(value[0]) is int:
-        if self.func_info['param_types'][index] != 1:
-          self.vars_int[value[1]] = value
+      if type(value) is int:
+        if self.func_info['param_types'][index] == 1:
+          self.vars_int[self.local_int] = value
+          self.local_int += 1
         else:
-          print("Error - El parámetro #", index +1, "en", self.function_name, "no es del tipo esperado.")
-      elif type(value[0]) is float:
-        if self.param_types['param_types'][index] != 2:
-          self.vars_float[value[1]] = value
+          print("Error - parametro #", index+1, "en", self.function_name, "esta incorrecto")
+      elif type(value) is float:
+        if self.param_types[index] != 1:
+          self.vars_int[self.local_float] = value
+          self.local_float += 1
         else:
-          print("Error - El parámetro #", index +1, "en", self.function_name, "no es del tipo esperado.")
-    
+          print("Error - parametro #", index+1, "en", self.function_name, "esta incorrecto")
+	
 class VirtualMachine:
   def __init__(self, quadruples, dir_func):
     self.list_quadruples = quadruples
@@ -136,6 +140,7 @@ class VirtualMachine:
     instruction_pointer = 0
     params_list = []
     while (instruction_pointer < len(self.list_quadruples)):
+      print("instruction_pointer", instruction_pointer)
       operator, left_operand, right_operand, quad_res = self.get_quadruple_values(self.list_quadruples[instruction_pointer])
       if operator == 10: # Add
         try:
@@ -281,8 +286,8 @@ class VirtualMachine:
         self.local_memory = Memory(left_operand, self.dir_func['dir_functions'][left_operand])
         instruction_pointer +=1
       elif operator == 105: # PARAM
-        value = self.get_memory_value(left_operand)
-        params_list.append((value, left_operand)) # save (value, address)
+        value = self.get_memory_value(left_operand) # get value stored in address
+        params_list.append(value)
         instruction_pointer +=1
       elif operator == 110: # RET
         value = self.get_memory_value(quad_res)

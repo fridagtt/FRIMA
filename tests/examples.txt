@@ -5,11 +5,10 @@ funcion entero uno() {
 	regresar(8);
 };
 
-funcion entero prueba() {
-	p = 2;
-	regresar (p * uno());
+funcion entero prueba(entero n) {
+	regresar ((n * uno()));
 };
 
 inicio () {
-	imprimir(prueba());
+	imprimir(prueba(2));
 };

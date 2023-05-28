@@ -1,11 +1,9 @@
 # memory for global variables
 global_int = 2000 
 global_float = 4000
-
 # memory for local variables
 local_int = 8000
 local_float = 10000
-
 # memory for global temp variables
 global_temp_int = 14000
 global_temp_float = 16000
