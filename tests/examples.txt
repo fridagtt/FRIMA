@@ -1,8 +1,10 @@
 programa bolsas:
-renglon entero -> a[5];
 variable entero -> i,p,j,f;
-tabla entero -> b[10][9];
+
+funcion entero prueba() {
+	regresar (4);
+};
 
 inicio () {
-	b[i+j][a[i*p]*p] = 4;
+	imprimir(prueba());
 };

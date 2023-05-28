@@ -27,7 +27,6 @@ tokens = [
     'ID',
     'CTEI',
     'CTEF',
-    'CTECHAR',
     'CTESTRING',
     'ARROW',
 ]
@@ -38,7 +37,6 @@ reserved = {
     'inicio' : 'INICIO',
     'entero' : 'ENTERO',
     'decimal' : 'DECIMAL',
-    'letra' : 'LETRA',
     'variable' : 'VARIABLE',
     'renglon' : 'RENGLON',
     'tabla' : 'TABLA',
@@ -101,10 +99,6 @@ def t_CTESTRING(t):
     t.type = 'CTESTRING'
     return t
 
-def t_CTECHAR(t):
-    r'\'[0-9A-Za-z*+-/=!¡¿?#$%&|_{}()]\''
-    t.value = str(t.value)
-    return t
 
 # C or C++ comment (ignored characters)    
 def t_code_comment(t):

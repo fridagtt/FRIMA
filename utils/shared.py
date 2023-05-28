@@ -15,8 +15,6 @@ def convert_type(type):
       return 1
     case 'decimal':
       return 2
-    case 'letra':
-      return 3
     case 'bool':
       return 4
     case 'letrero':

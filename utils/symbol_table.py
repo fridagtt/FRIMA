@@ -22,7 +22,7 @@ class SymbolTable:
     """Adds 1 to the temporal counter of variables of the type received
 
     Parameters:
-    type (int): type of the temporal variable (int - 1, float - 2, char - 3)
+    type (int): type of the temporal variable (int - 1, float - 2)
     func_name (string): current function where the temporal counter is going to be added
 
     Returns:
@@ -33,8 +33,6 @@ class SymbolTable:
       self.symbol_table["dir_functions"][func_name]['cont_temp'][0] += 1 # enteros
     elif type == 2:
       self.symbol_table["dir_functions"][func_name]['cont_temp'][1] += 1 # flotantes
-    elif type == 3:
-      self.symbol_table["dir_functions"][func_name]['cont_temp'][2] += 1 # chars
     elif type == 4:
       self.symbol_table["dir_functions"][func_name]['cont_temp'][3] += 1 # booleans
 
@@ -42,7 +40,7 @@ class SymbolTable:
     """Adds 1 to the counter of variables of the type received
 
     Parameters:
-    type (int): type of the variable (int - 1, float - 2, char - 3)
+    type (int): type of the variable (int - 1, float - 2)
     func_name (string): current function where the counter is going to be added
 
     Returns:
@@ -60,7 +58,7 @@ class SymbolTable:
     """Adds the variable to the variable table of the corresponding function
 
     Parameters:
-    type (int): type of the variable (int - 1, float - 2, char - 3)
+    type (int): type of the variable (int - 1, float - 2)
     name (string): name of the variable to be added
     func_name (string): current function where the variable is going to be added
     dimension (int): dimension of the variable (0 - simple_var, 1 - array, 2 - matrix)
@@ -270,7 +268,7 @@ class SymbolTable:
     """Adds the constant variable and its memory direction to the global variable table
 
     Parameters:
-    const_type (int): type of the constant (int - 1, float - 2, char - 3, string - 5)
+    const_type (int): type of the constant (int - 1, float - 2, string - 5)
     const_value (string): value of the constant to be added
     const_memory_dir (int): assigned memory of the constant
 
