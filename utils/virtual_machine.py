@@ -91,7 +91,8 @@ class VirtualMachine:
     self.dir_func = dir_func
     self.global_memory = Memory('inicio', dir_func['dir_functions']['inicio'])
     self.constant_memory = Memory('constants', dir_func['constant_table'])
-    self.local_memory = Memory(None, None)
+    self.prev_memory = None
+    self.local_memory = None
     self.execution_stack = deque()
     self.stack_pointers = deque()
 
@@ -124,8 +125,13 @@ class VirtualMachine:
     elif (memory_address >= 30000 and memory_address < 38000):
       return self.constant_memory
     # local and local temps
-    elif (memory_address >= 8000 and memory_address < 14000) or (memory_address >= 22000 and memory_address < 30000):
+    elif ((memory_address >= 8000 and memory_address < 14000) or (memory_address >= 22000 and memory_address < 30000)) and self.prev_memory == None:
       return self.local_memory
+    else:
+      if self.prev_memory.get_value(memory_address) != None:
+        return self.prev_memory
+      else:
+        return self.local_memory
 
   def set_memory_value(self, memory_address, value):
     self.get_memory(memory_address).set_value(memory_address, value)
@@ -140,7 +146,6 @@ class VirtualMachine:
     instruction_pointer = 0
     params_list = []
     while (instruction_pointer < len(self.list_quadruples)):
-      print("instruction_pointer", instruction_pointer)
       operator, left_operand, right_operand, quad_res = self.get_quadruple_values(self.list_quadruples[instruction_pointer])
       if operator == 10: # Add
         try:
@@ -259,7 +264,15 @@ class VirtualMachine:
           instruction_pointer += 1
         except:
           raise Exception("ERROR: Variable sin valor")
+      elif operator == 75: # GOTOF
+        boolean_result = self.get_memory_value(left_operand)
+        if boolean_result == False:
+          instruction_pointer = quad_res
+        else:
+          instruction_pointer += 1
       elif operator == 80: # GOTO
+        if instruction_pointer == 0:
+          self.local_memory = Memory('inicio', self.dir_func['dir_functions']['inicio'])
         instruction_pointer = quad_res
       elif operator == 90: # IMPRIMIR
         try:
@@ -267,11 +280,12 @@ class VirtualMachine:
             value_memory =  self.global_memory.get_memory_value(quad_res)
           else:
             value_memory = self.get_memory_value(quad_res)
-          print("ARITMETICA -> ", value_memory)
+          print("FIBONACCI DE 9 -> ", value_memory)
           instruction_pointer += 1
         except:
           raise Exception("ERROR: Variable sin valor")
       elif operator == 95: # GOSUB
+        self.prev_memory = None
         self.stack_pointers.append(instruction_pointer + 1) # guardar migajita de pan
         instruction_pointer = quad_res # quadruple where the next function starts
         self.local_memory.add_params_to_function(params_list)
@@ -280,7 +294,6 @@ class VirtualMachine:
         self.prev_memory = deepcopy(self.local_memory)
         if (len(self.execution_stack) < 100):
           self.execution_stack.append(self.prev_memory)
-          self.prev_memory = None
         else:
           raise Exception("ERROR: Stack Overflow")
         self.local_memory = Memory(left_operand, self.dir_func['dir_functions'][left_operand])
@@ -293,13 +306,16 @@ class VirtualMachine:
         value = self.get_memory_value(quad_res)
         self.set_func_name_value(value, self.local_memory.func_info['return_type'], self.local_memory.function_name)
         instruction_pointer += 1
+        if(len(self.execution_stack)!=0):
+          self.local_memory = self.execution_stack.pop()
+          instruction_pointer = self.stack_pointers.pop()
       elif operator == 85: # END FUNC
         if(len(self.execution_stack)!=0):
           self.local_memory = self.execution_stack.pop()
           instruction_pointer = self.stack_pointers.pop()
 
   def execute(self):
-    print("-------------------CORRIENDO MAQUINA VIRTUAL-----------------------")
+    print("------MAQUINA VIRTUAL------")
     self.constant_memory.init_constant_memory()
     self.global_memory.init_global_memory()
     self.read_quadruples()

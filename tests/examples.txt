@@ -1,14 +1,19 @@
-programa bolsas:
-variable entero -> i,p,j,f;
+programa fibonacciRecursivo:
+variable entero -> a;
 
-funcion entero uno() {
-	regresar(8);
+funcion entero fibonacci(entero n) {
+  si(n == 0){
+    regresar(0);
+  };
+
+  si ((n == 1) o (n == 2)){
+    regresar (1);
+  } sino{
+    regresar (fibonacci(n - 1)+ fibonacci(n - 2));
+  };
 };
 
-funcion entero prueba(entero n) {
-	regresar ((n * uno()));
-};
-
-inicio () {
-	imprimir(prueba(2));
+inicio(){
+	a = fibonacci(9);
+	imprimir(a);
 };
