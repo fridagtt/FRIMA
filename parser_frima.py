@@ -383,7 +383,7 @@ def p_punto_termina_arr(p):
 
     dim_pointer = get_dim_pointer()
 
-    quadruple = Quadruple(10, top_operando, dirBase, dim_pointer)
+    quadruple = Quadruple(125, top_operando, dirBase, dim_pointer)
     lista_de_cuadruplos.append(quadruple.transform_quadruple())
     stack_de_operandos.append(dim_pointer)
     stack_de_tipos.append(1)
@@ -877,7 +877,7 @@ def p_generate_address_quadruple(p):
 
   dim_pointer = get_dim_pointer()
 
-  quadruple = Quadruple(10, top_operando, dirBase, dim_pointer)
+  quadruple = Quadruple(125, top_operando, dirBase, dim_pointer)
   lista_de_cuadruplos.append(quadruple.transform_quadruple())
   stack_de_operandos.append(dim_pointer)
   stack_de_tipos.append(1)

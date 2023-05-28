@@ -1,24 +1,12 @@
-programa frima:
-
-variable entero -> a,b,c,d,e,f,g,h,j,k;
-
-funcion sinregresar imprime (){
-  imprimir ("hola");
-};
-
-funcion entero uno(entero n) { 
-
-  desde (a = 4) hasta (n+5*6) {
-    imprimir (a);
-    imprime();
-  };
-
-  regresar (a);
-};
+programa patito:
+renglon entero  -> arr[5];
+tabla entero -> mat[2][10];
+variable entero -> i, a;
 
 inicio () {
-
- 
-	imprimir(uno(10));
+  i = 4;
+  mat[1][i] = 5;
+  a = mat[1][i];
+  imprimir(a);
 
 };

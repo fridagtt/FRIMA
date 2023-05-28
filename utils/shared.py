@@ -65,6 +65,8 @@ def convert_type(type):
       return 115
     case 'VER':
       return 120
+    case 'DIM':
+      return 125
     case _:
       return -1
 
