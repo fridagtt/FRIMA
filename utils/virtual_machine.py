@@ -272,7 +272,15 @@ class VirtualMachine:
             dim_dir = self.get_memory_value(quad_res) # Grab pointer's address
             value = self.get_memory_value(left_operand)
             self.set_memory_value(dim_dir, value)
+
+          elif left_operand >= 38000: # It's a pointer
+            dim_dir = self.get_memory_value(left_operand) # Grab pointer's address
+            value = self.get_memory_value(left_operand)
+            self.set_memory_value(dim_dir, value)
+
           else:
+            print("cuadruplo",operator, left_operand,right_operand,quad_res)
+            print("left_operand",left_operand)
             value = self.get_memory_value(left_operand)
             print("valuevaluevalue", value, quad_res)
             self.set_memory_value(quad_res, value)
@@ -343,6 +351,8 @@ class VirtualMachine:
         dir_final = value + dir_base
         self.set_memory_value(quad_res, dir_final)
         instruction_pointer += 1
+
+        
       else: 
         instruction_pointer += 1
         
