@@ -122,5 +122,11 @@ Mayo 21, 2023
 Desarrollo de Mapa de Memoria para ejecución de Maquina Virtual
 Maquina Virtual para expresiones aritmeticas y estatutos secuenciales
 
+<h1>  ${\color{gray} Avance  }$  ${\color{gray} 5  }$</h1> 
+Mayo 28, 2023
+
+Generación de Código de Arreglos y tipos estructurados
+Maquina Virtual para funciones, estatutos condicionales y arreglos/matrices
+
 
 
