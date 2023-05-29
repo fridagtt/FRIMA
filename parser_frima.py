@@ -516,7 +516,7 @@ def p_punto_existe_id(p):
     id_address = dir_func.get_variable_address(current_func, p[-1])
     id_type = dir_func.get_variable_type(current_func, p[-1])
     stack_de_operandos.append(id_address)
-    stack_de_tipos.append(id_address)
+    stack_de_tipos.append(id_type)
 
 def p_punto_valida_int(p):
   '''

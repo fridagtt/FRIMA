@@ -1,19 +1,18 @@
 programa patito:
-tabla entero -> mat[1][0];
+tabla entero -> mat[2][2];
 variable entero -> i,j,x;
-
-
+variable entero -> a,b;
 
 inicio () {
+  mat[0][1] = 4;
+  mat[0][0] = 3; 
+  a = mat[0][1];
+  b = mat[0][0];
 
- mat[0][0] = 15;
- mat[0][1] = 16;
-
-
-i = mat[0][0];
-j = mat[0][1];
-
-
-imprimir(j);
+  si (a == b o a == a) {
+    imprimir (" y ");
+  } sino {
+    imprimir ("Ups");
+  };
 
 };
