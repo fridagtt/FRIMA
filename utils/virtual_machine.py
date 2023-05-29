@@ -371,7 +371,7 @@ class VirtualMachine:
         value = self.get_memory_value(left_operand)
         value_inf = self.get_memory_value(right_operand)
         value_sup = self.get_memory_value(quad_res)
-        if (value >= value_inf) and (value < value_sup):
+        if (value >= value_inf) and (value <= value_sup):
           instruction_pointer += 1
         else: 
           raise Exception("ERROR: Fuera de rango")
