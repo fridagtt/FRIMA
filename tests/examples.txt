@@ -1,7 +1,17 @@
 programa patito:
-tabla decimal -> mat[2][2];
+tabla entero -> mat[2][2];
+variable entero -> i,j,x;
+
+
 
 inicio () {
-  mat[1][1] = 2.5* 2;
-  imprimir(mat[1][1]);
+
+  desde (i = 0) hasta (4) {
+    desde (j = 0) hasta (4) {
+       imprimir("funciona");
+  };
+};
+
+ imprimir(mat[1][1]);
+
 };

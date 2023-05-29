@@ -20,7 +20,8 @@ stack_de_saltos = deque()
 stack_de_dimensiones = deque()
 
 lista_de_cuadruplos = []
-vControl = current_func = current_var_type = called_func = current_var = None
+vControl = []
+current_func = current_var_type = called_func = current_var = None
 
 contador_params = 0
 dimensiones = []
@@ -530,8 +531,8 @@ def p_punto_valida_int(p):
     raise Exception(f"ERROR: Type Mismatch. El ID y su valor deben ser enteros") 
   else: 
     result_operando = stack_de_operandos.pop()
-    vControl = stack_de_operandos.pop()
-    quadruple = Quadruple(70, result_operando, None , vControl)
+    vControl.append(stack_de_operandos.pop())
+    quadruple = Quadruple(70, result_operando, None , vControl[-1])
     lista_de_cuadruplos.append(quadruple.transform_quadruple())
 
 def p_punto_valida_exp(p):
@@ -549,7 +550,7 @@ def p_punto_valida_exp(p):
     lista_de_cuadruplos.append(quadruple.transform_quadruple())
 
     temporal_dir_address = assign_memory_temporal(4, current_func)
-    quadruple2 = Quadruple(35,vControl,vFinal,temporal_dir_address)
+    quadruple2 = Quadruple(35,vControl[-1],vFinal,temporal_dir_address)
     lista_de_cuadruplos.append(quadruple2.transform_quadruple())
     stack_de_saltos.append(len(lista_de_cuadruplos)-1)
 
@@ -569,12 +570,12 @@ def p_punto_termina_for(p):
     dir_func.add_constant_variable(1, 1, constant_address)
 
   temporal_dir_address = assign_memory_temporal(1, current_func)
-  quadruple = Quadruple(10,vControl,constant_address,temporal_dir_address) # El uno tiene que ir en la tabla como constante y el segundo vControl es dirección de mememoria
+  quadruple = Quadruple(10,vControl[-1],constant_address,temporal_dir_address) # El uno tiene que ir en la tabla como constante y el segundo vControl es dirección de mememoria
   lista_de_cuadruplos.append(quadruple.transform_quadruple())
 
-  quadruple = Quadruple(70,temporal_dir_address,None,vControl)
+  quadruple = Quadruple(70,temporal_dir_address,None,vControl[-1])
   lista_de_cuadruplos.append(quadruple.transform_quadruple())
-
+  vControl.pop()
   fin = stack_de_saltos.pop()
   retorno = stack_de_saltos.pop()
   quadruple2 = Quadruple(80,None,None,retorno)
