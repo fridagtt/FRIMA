@@ -1,15 +1,7 @@
 programa patito:
-renglon entero -> arr[10];
-tabla entero -> mat[2][2];
-variable entero -> i, a, b;
+tabla decimal -> mat[2][2];
 
 inicio () {
-  i = 1;
-  /*arr[i] = 2;
-  a = arr[i];*/
-  mat[1][i] = 2;
-  a = 2 * mat[1][i];
-  b = 3 * a;
-  imprimir(a);
-  imprimir(b);
+  mat[1][1] = 2.5* 2;
+  imprimir(mat[1][1]);
 };

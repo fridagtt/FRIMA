@@ -152,6 +152,7 @@ class SymbolTable:
     if variable_name in set_of_variables:
         list_of_variables = self.symbol_table["dir_functions"][func_name]["variables"]['vars_info']
         variable_object = next((variable for variable in list_of_variables if variable['name'] == variable_name),None)
+        print("variable_name",variable_object,variable_name )
         return variable_object['type']
     elif func_name != "inicio":
         list_of_variables = self.symbol_table["dir_functions"]['inicio']["variables"]['vars_info']

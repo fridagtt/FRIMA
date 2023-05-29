@@ -161,7 +161,7 @@ class VirtualMachine:
       operator, left_operand, right_operand, quad_res = self.get_quadruple_values(self.list_quadruples[instruction_pointer])
       if operator == 10: # Add
         try:
-          if left_operand >= 38000 or right_operand >= 38000:
+          if left_operand >= 38000 or right_operand >= 38000: # Pointer
             if left_operand >= 38000 :
               left_value = self.access_through_pointers(left_operand)
               right_value = self.get_memory_value(right_operand)

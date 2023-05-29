@@ -20,7 +20,7 @@ stack_de_saltos = deque()
 stack_de_dimensiones = deque()
 
 lista_de_cuadruplos = []
-vControl = current_func = current_var_type = called_func = None
+vControl = current_func = current_var_type = called_func = current_var = None
 
 contador_params = 0
 dimensiones = []
@@ -351,16 +351,16 @@ def p_asignar(p):
 def p_variable(p):
   '''
   variable : ID push_id variable_aux
-  variable_aux : LBRACKET punto_arreglos_1 meter_fondo_falso hyper_exp punto_create_cuadruplo punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim
+  variable_aux : LBRACKET punto_arreglos meter_fondo_falso hyper_exp punto_create_cuadruplo punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim
                 | empty
   variable_aux_dim : LBRACKET meter_fondo_falso hyper_exp punto_create_lastDim_cuadruplo RBRACKET quitar_fondo_falso generate_address_quadruple
                 | empty
   '''
   p[0] = p[1]
 
-def p_punto_arreglos_1(p):
+def p_punto_arreglos(p):
   '''
-  punto_arreglos_1 :
+  punto_arreglos :
   '''
   global stack_de_operandos, stack_de_dimensiones
   var_info = dir_func.get_variable_var_dimInfo(current_func, p[-3])
@@ -380,13 +380,13 @@ def p_punto_termina_arr(p):
     stack_de_tipos.pop()
     
     dirBase = top_dim[0]
-
+    dirBase_type = dir_func.get_variable_type(current_func, current_var)
     dim_pointer = get_dim_pointer()
 
     quadruple = Quadruple(125, top_operando, dirBase, dim_pointer)
     lista_de_cuadruplos.append(quadruple.transform_quadruple())
     stack_de_operandos.append(dim_pointer)
-    stack_de_tipos.append(1)
+    stack_de_tipos.append(dirBase_type)
 
 # Push the "=" operator to the stack of operators.
 def p_push_op_igual(p):
@@ -409,6 +409,8 @@ def p_check_op_igual(p):
 
   tipo_operando_der = stack_de_tipos.pop()
   tipo_operando_izq = stack_de_tipos.pop()
+
+  print("check_op_igual", operando_der, operando_izq, tipo_operando_der, tipo_operando_izq)
 
   converted_operador = convert_type(top_operador)
   # Validate if the variable to assign exists either locally or globally
@@ -815,8 +817,6 @@ def p_check_op_pordiv(p):
       operando_der = stack_de_operandos.pop()
       operando_izq = stack_de_operandos.pop()
 
-    
-
       tipo_operando_der = stack_de_tipos.pop()
       tipo_operando_izq = stack_de_tipos.pop()
 
@@ -864,12 +864,13 @@ def p_generate_address_quadruple(p):
   top_dim = stack_de_dimensiones.pop()
   dirBase = top_dim[0]
 
+  dirBase_type = dir_func.get_variable_type(current_func, current_var)
   dim_pointer = get_dim_pointer()
 
   quadruple = Quadruple(125, top_operando, dirBase, dim_pointer)
   lista_de_cuadruplos.append(quadruple.transform_quadruple())
   stack_de_operandos.append(dim_pointer)
-  stack_de_tipos.append(1)
+  stack_de_tipos.append(dirBase_type)
 
 def p_punto_create_cuadruplo(p):
   '''
@@ -981,12 +982,14 @@ def p_push_float(p) :
 # Push of IDs
 def p_push_id(p) : 
   '''push_id :'''
+
   # Validate if the id exists either locally or globally
   if not dir_func.is_variable_declared(current_func, p[-1]):
     raise Exception(f"ERROR: La variable {p[-1]} no está declarada.")
 
-  global stack_de_operandos, stack_de_tipos
+  global stack_de_operandos, stack_de_tipos, current_var
 
+  current_var = p[-1]
   if p[-1] != None:
     id_address = dir_func.get_variable_address(current_func, p[-1])
     stack_de_operandos.append(id_address)
@@ -1031,7 +1034,7 @@ def p_punto_check_param(p):
 # Does not return a value
 def p_llamada_func_void(p):
   '''
-  llamada_func_void : ID LPAREN punto_func_exists punto_validate_isvoid  punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub SEMICOLON
+  llamada_func_void : ID LPAREN punto_func_exists punto_validate_isvoid punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub SEMICOLON
   '''
 
 # Return a value used in expressions
