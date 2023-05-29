@@ -125,7 +125,6 @@ class VirtualMachine:
     # pointers for arrays and matrix
     if(memory_address >= 38000):
       return self.local_memory
-    
     # global, global temps
     if (memory_address >= 2000 and memory_address < 8000) or (memory_address >= 14000 and memory_address < 22000):
       return self.global_memory
@@ -140,7 +139,6 @@ class VirtualMachine:
         return self.prev_memory
       else:
         return self.local_memory
-    
 
   def set_memory_value(self, memory_address, value):
     self.get_memory(memory_address).set_value(memory_address, value)
@@ -268,21 +266,16 @@ class VirtualMachine:
           raise Exception("ERROR: Variable sin valor")
       elif operator == 70: # Assign
         try:
-          if quad_res >= 38000: # It's a pointer
+          if quad_res >= 38000: # Assign to a pointer
             dim_dir = self.get_memory_value(quad_res) # Grab pointer's address
             value = self.get_memory_value(left_operand)
             self.set_memory_value(dim_dir, value)
-
-          elif left_operand >= 38000: # It's a pointer
+          elif left_operand >= 38000: # Assign pointer to a normal variable
             dim_dir = self.get_memory_value(left_operand) # Grab pointer's address
-            value = self.get_memory_value(left_operand)
-            self.set_memory_value(dim_dir, value)
-
+            value = self.get_memory_value(dim_dir)
+            self.set_memory_value(quad_res, value)
           else:
-            print("cuadruplo",operator, left_operand,right_operand,quad_res)
-            print("left_operand",left_operand)
             value = self.get_memory_value(left_operand)
-            print("valuevaluevalue", value, quad_res)
             self.set_memory_value(quad_res, value)
           instruction_pointer += 1
         except:

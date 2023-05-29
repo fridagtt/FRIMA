@@ -387,7 +387,6 @@ def p_punto_termina_arr(p):
     lista_de_cuadruplos.append(quadruple.transform_quadruple())
     stack_de_operandos.append(dim_pointer)
     stack_de_tipos.append(1)
-   
 
 # Push the "=" operator to the stack of operators.
 def p_push_op_igual(p):
@@ -396,7 +395,6 @@ def p_push_op_igual(p):
   '''
   global stack_de_operadores
   stack_de_operadores.append(p[-2])
-  
 
 # Creates the quadruple for the assignation process.
 def p_check_op_igual(p):
@@ -406,15 +404,8 @@ def p_check_op_igual(p):
   global stack_de_operadores, stack_de_operandos, stack_de_tipos, lista_de_cuadruplos, dir_func
   top_operador = stack_de_operadores.pop()
 
-  
-  
-
   operando_der = stack_de_operandos.pop()
-  
   operando_izq = stack_de_operandos.pop()
-
-  
-  
 
   tipo_operando_der = stack_de_tipos.pop()
   tipo_operando_izq = stack_de_tipos.pop()
@@ -431,8 +422,6 @@ def p_check_op_igual(p):
   else:
     quadruple = Quadruple(converted_operador, operando_der, None , operando_izq)
     lista_de_cuadruplos.append(quadruple.transform_quadruple())
-  
-  
 
 def p_leer(p):
   '''
@@ -896,7 +885,6 @@ def p_punto_create_cuadruplo(p):
 
   constant_address_inf = dir_func.get_constant_address(0)
   constant_address_sup = dir_func.get_constant_address(stack_de_dimensiones[-1][1][0])
-
   
   quadruple = Quadruple(120, stack_de_operandos[-1], constant_address_inf, constant_address_sup)
   lista_de_cuadruplos.append(quadruple.transform_quadruple())
@@ -912,7 +900,6 @@ def p_punto_create_cuadruplo(p):
     stack_de_operandos.append(temp_var) 
     stack_de_tipos.append(1)
     lista_de_cuadruplos.append(quadruple.transform_quadruple())
-   
 
 def p_punto_create_lastDim_cuadruplo(p):
   '''
@@ -929,7 +916,6 @@ def p_punto_create_lastDim_cuadruplo(p):
   quadruple = Quadruple(120, stack_de_operandos[-1], constant_address_inf, constant_address_sup)
   lista_de_cuadruplos.append(quadruple.transform_quadruple())
   
-
   res_exp = stack_de_operandos.pop()
   sm = stack_de_operandos.pop()
   stack_de_tipos.pop() #sm_type
@@ -939,10 +925,9 @@ def p_punto_create_lastDim_cuadruplo(p):
 
   quadruple = Quadruple(10, sm, res_exp, temp_var)
   lista_de_cuadruplos.append(quadruple.transform_quadruple())
-  
-
   stack_de_tipos.append(1)
   stack_de_operandos.append(temp_var)
+
 # Constant values
 def p_factor_constante(p) :
   '''
@@ -1007,7 +992,6 @@ def p_push_id(p) :
     stack_de_operandos.append(id_address)
     id_type = dir_func.get_variable_type(current_func, p[-1])
     stack_de_tipos.append(id_type)
-
 
 # Allows multiple declaration of parameters
 def p_func_params_aux(p):
