@@ -1,10 +1,15 @@
 programa patito:
 renglon entero -> arr[10];
-variable entero -> i, a;
+tabla entero -> mat[2][2];
+variable entero -> i, a, b;
 
 inicio () {
-  i = 4;
-  arr[i] = 2;
-  a = arr[i];
+  i = 1;
+  /*arr[i] = 2;
+  a = arr[i];*/
+  mat[1][i] = 2;
+  a = 2 * mat[1][i];
+  b = 3 * a;
   imprimir(a);
+  imprimir(b);
 };

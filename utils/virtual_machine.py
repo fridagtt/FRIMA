@@ -112,6 +112,11 @@ class VirtualMachine:
     elif return_type == 2:
       self.global_memory.vars_float[global_var_address] = value
 
+  def access_through_pointers(self, operand):
+    dim_dir = self.get_memory_value(operand) # Grab pointer's address
+    value = self.get_memory_value(dim_dir)
+    return value
+
   def get_memory(self, memory_address) -> Memory:
     """According to the memory address received, it returns either the vm's local or global memory
 
@@ -156,8 +161,16 @@ class VirtualMachine:
       operator, left_operand, right_operand, quad_res = self.get_quadruple_values(self.list_quadruples[instruction_pointer])
       if operator == 10: # Add
         try:
-          left_value = self.get_memory_value(left_operand)
-          right_value = self.get_memory_value(right_operand)
+          if left_operand >= 38000 or right_operand >= 38000:
+            if left_operand >= 38000 :
+              left_value = self.access_through_pointers(left_operand)
+              right_value = self.get_memory_value(right_operand)
+            else : 
+              right_value = self.access_through_pointers(right_operand)
+              left_value = self.get_memory_value(left_operand)
+          else:
+            left_value = self.get_memory_value(left_operand)
+            right_value = self.get_memory_value(right_operand)
           result = left_value + right_value
           self.set_memory_value(quad_res, result)
           instruction_pointer += 1
@@ -165,8 +178,16 @@ class VirtualMachine:
           raise Exception("Error: Variable sin valor")
       elif operator == 15: # Substract
         try:
-          left_value = self.get_memory_value(left_operand)
-          right_value = self.get_memory_value(right_operand)
+          if left_operand >= 38000 or right_operand >= 38000:
+            if left_operand >= 38000 :
+              left_value = self.access_through_pointers(left_operand)
+              right_value = self.get_memory_value(right_operand)
+            else : 
+              right_value = self.access_through_pointers(right_operand)
+              left_value = self.get_memory_value(left_operand)
+          else:
+            left_value = self.get_memory_value(left_operand)
+            right_value = self.get_memory_value(right_operand)
           result = left_value - right_value
           self.set_memory_value(quad_res, result)
           instruction_pointer += 1
@@ -174,8 +195,16 @@ class VirtualMachine:
           raise Exception("ERROR: Variable sin valor")
       elif operator == 20: # Multiply
         try:
-          left_value = self.get_memory_value(left_operand)
-          right_value = self.get_memory_value(right_operand)
+          if left_operand >= 38000 or right_operand >= 38000:
+            if left_operand >= 38000 :
+              left_value = self.access_through_pointers(left_operand)
+              right_value = self.get_memory_value(right_operand)
+            else : 
+              right_value = self.access_through_pointers(right_operand)
+              left_value = self.get_memory_value(left_operand)
+          else:
+            left_value = self.get_memory_value(left_operand)
+            right_value = self.get_memory_value(right_operand)
           result = left_value * right_value
           self.set_memory_value(quad_res, result)
           instruction_pointer += 1
@@ -183,8 +212,16 @@ class VirtualMachine:
           raise Exception("ERROR: Variable sin valor")
       elif operator == 25: # Divide
         try:
-          left_value = self.get_memory_value(left_operand)
-          right_value = self.get_memory_value(right_operand)
+          if left_operand >= 38000 or right_operand >= 38000:
+            if left_operand >= 38000 :
+              left_value = self.access_through_pointers(left_operand)
+              right_value = self.get_memory_value(right_operand)
+            else : 
+              right_value = self.access_through_pointers(right_operand)
+              left_value = self.get_memory_value(left_operand)
+          else:
+            left_value = self.get_memory_value(left_operand)
+            right_value = self.get_memory_value(right_operand)
           if right_value == 0:
             raise Exception("ERROR: No se pueden hacer divisiones entre 0")
           result = left_value / right_value
