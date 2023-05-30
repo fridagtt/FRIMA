@@ -1,0 +1,25 @@
+programa patito:
+tabla decimal -> mat[3][3];
+renglon entero -> arr[10];
+variable entero -> i,j,x,r,m;
+variable decimal -> a,b,c;
+
+funcion entero encontrarArreglo(entero m){
+x = 1;
+
+desde (i = 0) hasta (10) {
+  arr[i] = x;
+  x = x + 1;
+};
+imprimir(m);
+j = arr[m];
+
+regresar (j);
+};
+
+
+inicio () {
+m = 5;
+imprimir (encontrarArreglo(m));
+
+};

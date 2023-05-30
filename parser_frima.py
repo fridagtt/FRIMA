@@ -886,10 +886,10 @@ def p_punto_create_ver_quad(p):
   
   tipo_operando_exp = stack_de_tipos.pop()
   if tipo_operando_exp != 1:
-    raise Exception(f"ERROR: El índice de acceso para {current_var} deber ser entero.")
+    raise Exception(f"ERROR: El índice de acceso para {p[-6]} deber ser entero.")
+  
 
-  var_dimension = dir_func.get_variable_dimension(current_func, current_var)
-
+  var_dimension = dir_func.get_variable_dimension(current_func, p[-6])
   constant_address_inf = dir_func.get_constant_address(0)
   constant_address_sup = dir_func.get_constant_address(stack_de_dimensiones[-1][1][0])
   
@@ -1161,7 +1161,7 @@ parser = yacc.yacc()
 def readFile():
   #Testear el parser y léxico juntos
   try:
-    file = open("./tests/aritmetica.txt", "r")
+    file = open("./tests/findNuminArr.txt", "r")
     archivo = file.read()
     file.close()
     parser.parse(archivo)

@@ -203,9 +203,15 @@ class SymbolTable:
       bool(): whether the variable is non-atomic
 
     """
-    list_of_variables = self.symbol_table["dir_functions"][func_name]["variables"]['vars_info']
-    variable_object = next((variable for variable in list_of_variables if variable['name'] == variable_name),None)
-    return variable_object['dimension']
+    set_of_variables = self.get_function_variables(func_name)
+    if variable_name in set_of_variables:
+        list_of_variables = self.symbol_table["dir_functions"][func_name]["variables"]['vars_info']
+        variable_object = next((variable for variable in list_of_variables if variable['name'] == variable_name),None)
+        return variable_object['dimension']
+    elif func_name != "inicio":
+        list_of_variables = self.symbol_table["dir_functions"]['inicio']["variables"]['vars_info']
+        variable_object = next((variable for variable in list_of_variables if variable['name'] == variable_name),None)
+        return variable_object['dimension']
 
   def get_variable_var_dimInfo(self, func_name, variable_name):
     """Return dimentions and base address of the requested variable
@@ -218,9 +224,15 @@ class SymbolTable:
       Size of the variable, Address of the variable
 
     """
-    list_of_variables = self.symbol_table["dir_functions"][func_name]["variables"]['vars_info']
-    variable_object = next((variable for variable in list_of_variables if variable['name'] == variable_name),None)
-    return [variable_object['size'], variable_object['memory_dir']]
+    set_of_variables = self.get_function_variables(func_name)
+    if variable_name in set_of_variables:
+        list_of_variables = self.symbol_table["dir_functions"][func_name]["variables"]['vars_info']
+        variable_object = next((variable for variable in list_of_variables if variable['name'] == variable_name),None)
+        return [variable_object['size'], variable_object['memory_dir']]
+    elif func_name != "inicio":
+        list_of_variables = self.symbol_table["dir_functions"]['inicio']["variables"]['vars_info']
+        variable_object = next((variable for variable in list_of_variables if variable['name'] == variable_name),None)
+        return [variable_object['size'], variable_object['memory_dir']]
 
   def is_variable_declared(self, func_name, variable_name) -> bool:
     """Validates if the variables is either declared within the local or global scope
