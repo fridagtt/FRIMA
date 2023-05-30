@@ -368,7 +368,6 @@ def p_punto_dimensioned(p):
 
   var_info = dir_func.get_variable_var_dimInfo(current_func, p[-3])
   stack_de_operandos.pop()
-  stack_de_tipos.pop()
   stack_de_dimensiones.append((var_info[1], var_info[0])) # (baseAddress, [size1, size2]) or  (baseAddress, [size1])
 
 # Only if it's an array (the size of the top element of the stack of operands is equal to 1) then
@@ -383,7 +382,8 @@ def p_punto_termina_arr(p):
   if len(stack_de_dimensiones[-1][1]) == 1:
     top_dim = stack_de_dimensiones.pop()
     top_operando = stack_de_operandos.pop()
-    
+    stack_de_tipos.pop()
+
     dirBase = top_dim[0] # Grab baseAddress
     # Grab type from the baseAddress (type of the dimensioned variable)
     dirBase_type = dir_func.get_variable_type(current_func, current_var)
@@ -898,6 +898,7 @@ def p_punto_create_ver_quad(p):
  
   if var_dimension == 2:
     result_exp = stack_de_operandos.pop()
+    stack_de_tipos.pop()
   
     temp_var = assign_memory_temporal(1, current_func)
     constant_address_columns = dir_func.get_constant_address(stack_de_dimensiones[-1][1][1])
@@ -935,6 +936,7 @@ def p_punto_create_lastDim_cuadruplo(p):
 
   quadruple = Quadruple(10, sm, res_exp, temp_var)
   lista_de_cuadruplos.append(quadruple.transform_quadruple())
+  stack_de_tipos.append(2)
   stack_de_operandos.append(temp_var)
 
 # Constant values
@@ -1159,7 +1161,7 @@ parser = yacc.yacc()
 def readFile():
   #Testear el parser y léxico juntos
   try:
-    file = open("./tests/examples.txt", "r")
+    file = open("./tests/aritmetica.txt", "r")
     archivo = file.read()
     file.close()
     parser.parse(archivo)

@@ -1,0 +1,19 @@
+programa llenarMatriz:
+tabla entero -> mat[2][2];
+variable entero -> i,j;
+
+inicio(){
+  // llenar matriz
+  desde (i = 0) hasta (2) {
+    desde (j = 0) hasta (2) {
+      mat[i][j] = i+j;
+    };
+  };
+
+  // imprimir valores de matriz
+  desde (i = 0) hasta (2) {
+    desde (j = 0) hasta (2) {
+      imprimir(mat[i][j]);
+    };
+  };
+};

@@ -1,0 +1,11 @@
+programa aritmetica:
+variable entero -> a;
+variable decimal -> b,c,e;
+tabla decimal -> mat[3][4];
+renglon decimal -> arr[4];
+
+inicio(){
+  mat[0][0] = 2.5;
+  c = 2.0 * mat[0][0];
+  imprimir(c);
+};
