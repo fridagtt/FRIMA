@@ -1,0 +1,23 @@
+programa patito:
+renglon entero -> arr[10];
+variable entero -> j,i,x;
+
+funcion entero encontrarNum(entero m){
+  variable entero -> x;
+  x = 2;
+
+  desde(i = 0) hasta (10) {
+    arr[i] = x;
+    x = x + 1;
+  };
+
+  desde(j = 0) hasta (10) {
+    si (arr[j] == m) {
+      regresar(j);
+    };
+  };
+};
+
+inicio () {
+  imprimir(encontrarArreglo(5));
+};

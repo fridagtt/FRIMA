@@ -457,7 +457,10 @@ class VirtualMachine:
         params_list.append(value)
         instruction_pointer +=1
       elif operator == 110: # RET
-        value = self.get_memory_value(quad_res)
+        if quad_res >= 38000 :
+          value = self.access_through_pointers(quad_res) # It is returning a pointer
+        else:
+          value = self.get_memory_value(quad_res)
         self.set_func_name_value(value, self.local_memory.func_info['return_type'], self.local_memory.function_name)
         instruction_pointer += 1
         if(len(self.execution_stack)!=0):
