@@ -398,7 +398,7 @@ class VirtualMachine:
             value_memory = self.get_memory_value(value_dir)
           else:
             value_memory = self.get_memory_value(quad_res)
-          print("Imprimir: ", value_memory)
+          print("Imprimir:", value_memory)
           instruction_pointer += 1
         except:
           raise Exception("ERROR: Variable sin valor")

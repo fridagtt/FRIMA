@@ -1,16 +1,16 @@
 programa patito:
-tabla decimal -> mat[3][3];
-renglon decimal -> arr[3];
-variable entero -> i,j,x;
-variable decimal -> a,b;
+tabla decimal -> mat[4][4];
+renglon decimal -> arr[2];
+renglon entero -> arr_dos[3];
+variable decimal -> a;
+variable entero -> b;
 
 inicio () {
+  mat[0][0] = 1.5;
+  arr[0] = 1.2;
+  arr_dos[1] = 5;
 
-mat[0][1] = 4.3;
-mat[0][0] = 3.1; 
-a = mat[0][1];
-b = mat[0][0];
-
-imprimir (a*1);
-
+  b = arr_dos[1];
+  a = b * mat[0][0];
+  imprimir(a);
 };

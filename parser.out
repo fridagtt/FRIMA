@@ -63,11 +63,11 @@ Rule 57    func_regresar -> REGRESAR LPAREN exp RPAREN SEMICOLON punto_check_typ
 Rule 58    punto_check_types -> <empty>
 Rule 59    asignar -> variable ASSIGN hyper_exp push_op_igual check_op_igual SEMICOLON
 Rule 60    variable -> ID push_id variable_aux
-Rule 61    variable_aux -> LBRACKET punto_arreglos meter_fondo_falso hyper_exp punto_create_cuadruplo punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim
+Rule 61    variable_aux -> LBRACKET punto_dimensioned meter_fondo_falso hyper_exp punto_create_ver_quad punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim
 Rule 62    variable_aux -> empty
 Rule 63    variable_aux_dim -> LBRACKET meter_fondo_falso hyper_exp punto_create_lastDim_cuadruplo RBRACKET quitar_fondo_falso generate_address_quadruple
 Rule 64    variable_aux_dim -> empty
-Rule 65    punto_arreglos -> <empty>
+Rule 65    punto_dimensioned -> <empty>
 Rule 66    punto_termina_arr -> <empty>
 Rule 67    push_op_igual -> <empty>
 Rule 68    check_op_igual -> <empty>
@@ -122,7 +122,7 @@ Rule 116   factor -> factor_constante
 Rule 117   factor -> llamada_func_return
 Rule 118   factor -> variable
 Rule 119   generate_address_quadruple -> <empty>
-Rule 120   punto_create_cuadruplo -> <empty>
+Rule 120   punto_create_ver_quad -> <empty>
 Rule 121   punto_create_lastDim_cuadruplo -> <empty>
 Rule 122   factor_constante -> CTEI push_int
 Rule 123   factor_constante -> CTEF push_float
@@ -248,15 +248,15 @@ programa             : 0
 punto_add_func       : 35 36
 punto_add_parameter  : 40 42
 punto_array_size     : 25 26
-punto_arreglos       : 61
 punto_check_param    : 129 131
 punto_check_total_params : 134 135
 punto_check_types    : 57
-punto_create_cuadruplo : 61
 punto_create_era     : 134 135
 punto_create_gosub   : 134 135
 punto_create_lastDim_cuadruplo : 63
 punto_create_leer    : 69
+punto_create_ver_quad : 61
+punto_dimensioned    : 61
 punto_end_function   : 35 36
 punto_existe_id      : 76
 punto_fin_si         : 81 82
@@ -1287,7 +1287,7 @@ state 84
 state 85
 
     (60) variable -> ID push_id . variable_aux
-    (61) variable_aux -> . LBRACKET punto_arreglos meter_fondo_falso hyper_exp punto_create_cuadruplo punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim
+    (61) variable_aux -> . LBRACKET punto_dimensioned meter_fondo_falso hyper_exp punto_create_ver_quad punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim
     (62) variable_aux -> . empty
     (147) empty -> .
 
@@ -1818,15 +1818,15 @@ state 112
 
 state 113
 
-    (61) variable_aux -> LBRACKET . punto_arreglos meter_fondo_falso hyper_exp punto_create_cuadruplo punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim
-    (65) punto_arreglos -> .
+    (61) variable_aux -> LBRACKET . punto_dimensioned meter_fondo_falso hyper_exp punto_create_ver_quad punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim
+    (65) punto_dimensioned -> .
 
-    LPAREN          reduce using rule 65 (punto_arreglos -> .)
-    CTEI            reduce using rule 65 (punto_arreglos -> .)
-    CTEF            reduce using rule 65 (punto_arreglos -> .)
-    ID              reduce using rule 65 (punto_arreglos -> .)
+    LPAREN          reduce using rule 65 (punto_dimensioned -> .)
+    CTEI            reduce using rule 65 (punto_dimensioned -> .)
+    CTEF            reduce using rule 65 (punto_dimensioned -> .)
+    ID              reduce using rule 65 (punto_dimensioned -> .)
 
-    punto_arreglos                 shift and go to state 151
+    punto_dimensioned              shift and go to state 151
 
 state 114
 
@@ -2397,7 +2397,7 @@ state 150
 
 state 151
 
-    (61) variable_aux -> LBRACKET punto_arreglos . meter_fondo_falso hyper_exp punto_create_cuadruplo punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim
+    (61) variable_aux -> LBRACKET punto_dimensioned . meter_fondo_falso hyper_exp punto_create_ver_quad punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim
     (124) meter_fondo_falso -> .
 
     LPAREN          reduce using rule 124 (meter_fondo_falso -> .)
@@ -2878,7 +2878,7 @@ state 182
 
 state 183
 
-    (61) variable_aux -> LBRACKET punto_arreglos meter_fondo_falso . hyper_exp punto_create_cuadruplo punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim
+    (61) variable_aux -> LBRACKET punto_dimensioned meter_fondo_falso . hyper_exp punto_create_ver_quad punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim
     (86) hyper_exp -> . super_exp hyper_exp_aux
     (93) super_exp -> . exp super_exp_aux
     (103) exp -> . term check_op_masmenos exp_aux
@@ -3352,12 +3352,12 @@ state 214
 
 state 215
 
-    (61) variable_aux -> LBRACKET punto_arreglos meter_fondo_falso hyper_exp . punto_create_cuadruplo punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim
-    (120) punto_create_cuadruplo -> .
+    (61) variable_aux -> LBRACKET punto_dimensioned meter_fondo_falso hyper_exp . punto_create_ver_quad punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim
+    (120) punto_create_ver_quad -> .
 
-    RBRACKET        reduce using rule 120 (punto_create_cuadruplo -> .)
+    RBRACKET        reduce using rule 120 (punto_create_ver_quad -> .)
 
-    punto_create_cuadruplo         shift and go to state 233
+    punto_create_ver_quad          shift and go to state 233
 
 state 216
 
@@ -3610,7 +3610,7 @@ state 232
 
 state 233
 
-    (61) variable_aux -> LBRACKET punto_arreglos meter_fondo_falso hyper_exp punto_create_cuadruplo . punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim
+    (61) variable_aux -> LBRACKET punto_dimensioned meter_fondo_falso hyper_exp punto_create_ver_quad . punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim
     (66) punto_termina_arr -> .
 
     RBRACKET        reduce using rule 66 (punto_termina_arr -> .)
@@ -3810,7 +3810,7 @@ state 248
 
 state 249
 
-    (61) variable_aux -> LBRACKET punto_arreglos meter_fondo_falso hyper_exp punto_create_cuadruplo punto_termina_arr . RBRACKET quitar_fondo_falso variable_aux_dim
+    (61) variable_aux -> LBRACKET punto_dimensioned meter_fondo_falso hyper_exp punto_create_ver_quad punto_termina_arr . RBRACKET quitar_fondo_falso variable_aux_dim
 
     RBRACKET        shift and go to state 262
 
@@ -3941,7 +3941,7 @@ state 261
 
 state 262
 
-    (61) variable_aux -> LBRACKET punto_arreglos meter_fondo_falso hyper_exp punto_create_cuadruplo punto_termina_arr RBRACKET . quitar_fondo_falso variable_aux_dim
+    (61) variable_aux -> LBRACKET punto_dimensioned meter_fondo_falso hyper_exp punto_create_ver_quad punto_termina_arr RBRACKET . quitar_fondo_falso variable_aux_dim
     (125) quitar_fondo_falso -> .
 
     LBRACKET        reduce using rule 125 (quitar_fondo_falso -> .)
@@ -4103,7 +4103,7 @@ state 275
 
 state 276
 
-    (61) variable_aux -> LBRACKET punto_arreglos meter_fondo_falso hyper_exp punto_create_cuadruplo punto_termina_arr RBRACKET quitar_fondo_falso . variable_aux_dim
+    (61) variable_aux -> LBRACKET punto_dimensioned meter_fondo_falso hyper_exp punto_create_ver_quad punto_termina_arr RBRACKET quitar_fondo_falso . variable_aux_dim
     (63) variable_aux_dim -> . LBRACKET meter_fondo_falso hyper_exp punto_create_lastDim_cuadruplo RBRACKET quitar_fondo_falso generate_address_quadruple
     (64) variable_aux_dim -> . empty
     (147) empty -> .
@@ -4284,29 +4284,29 @@ state 287
 
 state 288
 
-    (61) variable_aux -> LBRACKET punto_arreglos meter_fondo_falso hyper_exp punto_create_cuadruplo punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .
+    (61) variable_aux -> LBRACKET punto_dimensioned meter_fondo_falso hyper_exp punto_create_ver_quad punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .
 
-    ASSIGN          reduce using rule 61 (variable_aux -> LBRACKET punto_arreglos meter_fondo_falso hyper_exp punto_create_cuadruplo punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
-    TIMES           reduce using rule 61 (variable_aux -> LBRACKET punto_arreglos meter_fondo_falso hyper_exp punto_create_cuadruplo punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
-    DIVIDE          reduce using rule 61 (variable_aux -> LBRACKET punto_arreglos meter_fondo_falso hyper_exp punto_create_cuadruplo punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
-    PLUS            reduce using rule 61 (variable_aux -> LBRACKET punto_arreglos meter_fondo_falso hyper_exp punto_create_cuadruplo punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
-    MINUS           reduce using rule 61 (variable_aux -> LBRACKET punto_arreglos meter_fondo_falso hyper_exp punto_create_cuadruplo punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
-    GREATER         reduce using rule 61 (variable_aux -> LBRACKET punto_arreglos meter_fondo_falso hyper_exp punto_create_cuadruplo punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
-    LESS            reduce using rule 61 (variable_aux -> LBRACKET punto_arreglos meter_fondo_falso hyper_exp punto_create_cuadruplo punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
-    GREATEREQ       reduce using rule 61 (variable_aux -> LBRACKET punto_arreglos meter_fondo_falso hyper_exp punto_create_cuadruplo punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
-    LESSEQ          reduce using rule 61 (variable_aux -> LBRACKET punto_arreglos meter_fondo_falso hyper_exp punto_create_cuadruplo punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
-    NOTEQUAL        reduce using rule 61 (variable_aux -> LBRACKET punto_arreglos meter_fondo_falso hyper_exp punto_create_cuadruplo punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
-    EQUAL           reduce using rule 61 (variable_aux -> LBRACKET punto_arreglos meter_fondo_falso hyper_exp punto_create_cuadruplo punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
-    Y               reduce using rule 61 (variable_aux -> LBRACKET punto_arreglos meter_fondo_falso hyper_exp punto_create_cuadruplo punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
-    O               reduce using rule 61 (variable_aux -> LBRACKET punto_arreglos meter_fondo_falso hyper_exp punto_create_cuadruplo punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
-    LPAREN          reduce using rule 61 (variable_aux -> LBRACKET punto_arreglos meter_fondo_falso hyper_exp punto_create_cuadruplo punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
-    CTEI            reduce using rule 61 (variable_aux -> LBRACKET punto_arreglos meter_fondo_falso hyper_exp punto_create_cuadruplo punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
-    CTEF            reduce using rule 61 (variable_aux -> LBRACKET punto_arreglos meter_fondo_falso hyper_exp punto_create_cuadruplo punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
-    ID              reduce using rule 61 (variable_aux -> LBRACKET punto_arreglos meter_fondo_falso hyper_exp punto_create_cuadruplo punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
-    SEMICOLON       reduce using rule 61 (variable_aux -> LBRACKET punto_arreglos meter_fondo_falso hyper_exp punto_create_cuadruplo punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
-    RPAREN          reduce using rule 61 (variable_aux -> LBRACKET punto_arreglos meter_fondo_falso hyper_exp punto_create_cuadruplo punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
-    COMMA           reduce using rule 61 (variable_aux -> LBRACKET punto_arreglos meter_fondo_falso hyper_exp punto_create_cuadruplo punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
-    RBRACKET        reduce using rule 61 (variable_aux -> LBRACKET punto_arreglos meter_fondo_falso hyper_exp punto_create_cuadruplo punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
+    ASSIGN          reduce using rule 61 (variable_aux -> LBRACKET punto_dimensioned meter_fondo_falso hyper_exp punto_create_ver_quad punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
+    TIMES           reduce using rule 61 (variable_aux -> LBRACKET punto_dimensioned meter_fondo_falso hyper_exp punto_create_ver_quad punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
+    DIVIDE          reduce using rule 61 (variable_aux -> LBRACKET punto_dimensioned meter_fondo_falso hyper_exp punto_create_ver_quad punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
+    PLUS            reduce using rule 61 (variable_aux -> LBRACKET punto_dimensioned meter_fondo_falso hyper_exp punto_create_ver_quad punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
+    MINUS           reduce using rule 61 (variable_aux -> LBRACKET punto_dimensioned meter_fondo_falso hyper_exp punto_create_ver_quad punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
+    GREATER         reduce using rule 61 (variable_aux -> LBRACKET punto_dimensioned meter_fondo_falso hyper_exp punto_create_ver_quad punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
+    LESS            reduce using rule 61 (variable_aux -> LBRACKET punto_dimensioned meter_fondo_falso hyper_exp punto_create_ver_quad punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
+    GREATEREQ       reduce using rule 61 (variable_aux -> LBRACKET punto_dimensioned meter_fondo_falso hyper_exp punto_create_ver_quad punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
+    LESSEQ          reduce using rule 61 (variable_aux -> LBRACKET punto_dimensioned meter_fondo_falso hyper_exp punto_create_ver_quad punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
+    NOTEQUAL        reduce using rule 61 (variable_aux -> LBRACKET punto_dimensioned meter_fondo_falso hyper_exp punto_create_ver_quad punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
+    EQUAL           reduce using rule 61 (variable_aux -> LBRACKET punto_dimensioned meter_fondo_falso hyper_exp punto_create_ver_quad punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
+    Y               reduce using rule 61 (variable_aux -> LBRACKET punto_dimensioned meter_fondo_falso hyper_exp punto_create_ver_quad punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
+    O               reduce using rule 61 (variable_aux -> LBRACKET punto_dimensioned meter_fondo_falso hyper_exp punto_create_ver_quad punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
+    LPAREN          reduce using rule 61 (variable_aux -> LBRACKET punto_dimensioned meter_fondo_falso hyper_exp punto_create_ver_quad punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
+    CTEI            reduce using rule 61 (variable_aux -> LBRACKET punto_dimensioned meter_fondo_falso hyper_exp punto_create_ver_quad punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
+    CTEF            reduce using rule 61 (variable_aux -> LBRACKET punto_dimensioned meter_fondo_falso hyper_exp punto_create_ver_quad punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
+    ID              reduce using rule 61 (variable_aux -> LBRACKET punto_dimensioned meter_fondo_falso hyper_exp punto_create_ver_quad punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
+    SEMICOLON       reduce using rule 61 (variable_aux -> LBRACKET punto_dimensioned meter_fondo_falso hyper_exp punto_create_ver_quad punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
+    RPAREN          reduce using rule 61 (variable_aux -> LBRACKET punto_dimensioned meter_fondo_falso hyper_exp punto_create_ver_quad punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
+    COMMA           reduce using rule 61 (variable_aux -> LBRACKET punto_dimensioned meter_fondo_falso hyper_exp punto_create_ver_quad punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
+    RBRACKET        reduce using rule 61 (variable_aux -> LBRACKET punto_dimensioned meter_fondo_falso hyper_exp punto_create_ver_quad punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim .)
 
 
 state 289

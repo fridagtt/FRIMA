@@ -61,7 +61,7 @@ def p_inicio(p):
   '''
   p[0] = None
   # Segment for testing dir_func and quadruples
-  print("TABLA DE VARIABLES", dir_func.symbol_table)
+  # print("TABLA DE VARIABLES", dir_func.symbol_table)
   for index, quadruple in enumerate(lista_de_cuadruplos): 
     print(index, " -> ", quadruple)
 
@@ -347,42 +347,47 @@ def p_asignar(p):
   '''
   asignar : variable ASSIGN hyper_exp push_op_igual check_op_igual SEMICOLON
   '''
-  p[0] = None
 
+# Invokes a variable that can be either a simple variable, an array or a matrix.
 def p_variable(p):
   '''
   variable : ID push_id variable_aux
-  variable_aux : LBRACKET punto_arreglos meter_fondo_falso hyper_exp punto_create_cuadruplo punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim
+  variable_aux : LBRACKET punto_dimensioned meter_fondo_falso hyper_exp punto_create_ver_quad punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim
                 | empty
   variable_aux_dim : LBRACKET meter_fondo_falso hyper_exp punto_create_lastDim_cuadruplo RBRACKET quitar_fondo_falso generate_address_quadruple
                 | empty
   '''
   p[0] = p[1]
 
-def p_punto_arreglos(p):
-  '''
-  punto_arreglos :
-  '''
+# Gets the information about the dimensioned variable and push it into the stack of dimensions.
+# Pops out the ID from the stack of operands since it won't be needed.
+def p_punto_dimensioned(p):
+  '''punto_dimensioned :'''
+
   global stack_de_operandos, stack_de_dimensiones
+
   var_info = dir_func.get_variable_var_dimInfo(current_func, p[-3])
   stack_de_operandos.pop()
-  stack_de_dimensiones.append((var_info[1], var_info[0])) # (baseAddress, [m,n] or [m]) -> [(2000, [5])]
+  stack_de_tipos.pop()
+  stack_de_dimensiones.append((var_info[1], var_info[0])) # (baseAddress, [size1, size2]) or  (baseAddress, [size1])
 
+# Only if it's an array (the size of the top element of the stack of operands is equal to 1) then
+# remove the array info from the stack of dimensions and grab from it the baseAddress.
+# Generates the (DIM, exp, baseAddress, (tn)) quadruple. We use DIM as a new operator
+# to distinguish we need to add a baseAddress(pointer) to a regular value (exp).
 def p_punto_termina_arr(p):
-  '''
-  punto_termina_arr :
-  '''
+  '''punto_termina_arr :'''
+
   global stack_de_operandos, stack_de_dimensiones, stack_de_tipos, lista_de_cuadruplos
  
   if len(stack_de_dimensiones[-1][1]) == 1:
-
     top_dim = stack_de_dimensiones.pop()
     top_operando = stack_de_operandos.pop()
-    stack_de_tipos.pop()
     
-    dirBase = top_dim[0]
+    dirBase = top_dim[0] # Grab baseAddress
+    # Grab type from the baseAddress (type of the dimensioned variable)
     dirBase_type = dir_func.get_variable_type(current_func, current_var)
-    dim_pointer = get_dim_pointer()
+    dim_pointer = get_dim_pointer() # Grab next pointer available
 
     quadruple = Quadruple(125, top_operando, dirBase, dim_pointer)
     lista_de_cuadruplos.append(quadruple.transform_quadruple())
@@ -391,17 +396,15 @@ def p_punto_termina_arr(p):
 
 # Push the "=" operator to the stack of operators.
 def p_push_op_igual(p):
-  '''
-  push_op_igual :
-  '''
+  '''push_op_igual :'''
+
   global stack_de_operadores
   stack_de_operadores.append(p[-2])
 
 # Creates the quadruple for the assignation process.
 def p_check_op_igual(p):
-  '''
-  check_op_igual :
-  '''
+  '''check_op_igual :'''
+
   global stack_de_operadores, stack_de_operandos, stack_de_tipos, lista_de_cuadruplos, dir_func
   top_operador = stack_de_operadores.pop()
 
@@ -410,8 +413,6 @@ def p_check_op_igual(p):
 
   tipo_operando_der = stack_de_tipos.pop()
   tipo_operando_izq = stack_de_tipos.pop()
-
-  print("check_op_igual", operando_der, operando_izq, tipo_operando_der, tipo_operando_izq)
 
   converted_operador = convert_type(top_operador)
   # Validate if the variable to assign exists either locally or globally
@@ -536,10 +537,10 @@ def p_punto_valida_int(p):
     lista_de_cuadruplos.append(quadruple.transform_quadruple())
 
 def p_punto_valida_exp(p):
-  '''
-  punto_valida_exp : 
-  '''
+  '''punto_valida_exp : '''
+
   global stack_de_operandos, stack_de_tipos, lista_de_cuadruplos, vControl
+
   tipo_exp = stack_de_tipos.pop()
   if tipo_exp != 1:
     raise Exception(f"ERROR: Type Mismatch. El valor de la expresion debe ser entera") 
@@ -559,9 +560,8 @@ def p_punto_valida_exp(p):
     stack_de_saltos.append(len(lista_de_cuadruplos)-1)
   
 def p_punto_termina_for(p):
-  '''
-  punto_termina_for : 
-  '''
+  '''punto_termina_for : '''
+
   global dir_func, stack_de_operandos, stack_de_tipos, lista_de_cuadruplos
 
   constant_address = dir_func.get_constant_address(1)
@@ -593,10 +593,10 @@ def p_condicion(p):
 # It if is a boolean create a GOTOF quadruple with its 4th position empty, and add
 # its position within the array to the stack of jumps.
 def p_punto_si(p):
-  '''
-  punto_si : 
-  '''
+  '''punto_si : '''
+
   global stack_de_tipos, stack_de_saltos, lista_de_cuadruplos
+
   top_tipos = stack_de_tipos.pop()
   if(top_tipos != 4):
     raise Exception("ERROR: Type mismatch. Se espera una condición.")
@@ -608,26 +608,26 @@ def p_punto_si(p):
 
 # Complete the missing GOTOF(if) or GOTO(if-else) quadruple.
 def p_punto_fin_si(p):
-  '''
-  punto_fin_si :
-  '''
+  '''punto_fin_si :'''
+
   global stack_de_saltos, lista_de_cuadruplos
+
   end = stack_de_saltos.pop()
   lista_de_cuadruplos = fill(end, len(lista_de_cuadruplos), lista_de_cuadruplos)
 
 # Complete the missing GOTOF qudadruple, generate a GOTO quadruple, and its position to the stack of jumps.
 def p_punto_sino(p):
-  '''
-  punto_sino :
-  '''
+  '''punto_sino :'''
+
   global stack_de_saltos, lista_de_cuadruplos
+
   false = stack_de_saltos.pop()
   quadruple = Quadruple(80, None, None, None)
   lista_de_cuadruplos.append(quadruple.transform_quadruple())
   stack_de_saltos.append(len(lista_de_cuadruplos)-1)
   lista_de_cuadruplos = fill(false, len(lista_de_cuadruplos), lista_de_cuadruplos)
 
-# Logic operators: and, or
+# Highest level of operations. It starts withe the logic operators: and, or
 def p_hyper_exp(p):
   '''
   hyper_exp : super_exp hyper_exp_aux
@@ -642,10 +642,10 @@ def p_hyper_exp_aux(p):
 # When there's a logical operator to be solved within the stack
 # of operators, it creates a Quadruple for it.
 def p_check_op_logicos(p):
-  '''
-  check_op_logicos :
-  '''
+  '''check_op_logicos :'''
+
   global stack_de_operadores, stack_de_operandos, stack_de_tipos, lista_de_cuadruplos, dir_func
+
   if len(stack_de_operadores) != 0:
     top_operador = stack_de_operadores.pop()
     if top_operador == 'y' or top_operador == 'o':
@@ -698,10 +698,10 @@ def p_super_exp_aux(p):
 # When there's a relational operator to be solved within the stack
 # of operators, it creates a Quadruple for it.
 def p_check_op_relacionales(p):
-  '''
-  check_op_relacionales :
-  '''
+  '''check_op_relacionales :'''
+
   global stack_de_operadores, stack_de_operandos, stack_de_tipos, lista_de_cuadruplos
+
   if len(stack_de_operadores) != 0:
     top_operador = stack_de_operadores.pop()
     if top_operador == '>' or top_operador == '<' or top_operador == '<=' or top_operador == '>=' or top_operador == '!=' or top_operador == '==':
@@ -764,10 +764,10 @@ def p_push_op_exp_masmenos(p):
 # When there's a minus or plus operator to be solved within the stack
 # of operators, it creates a Quadruple for it.
 def p_check_op_masmenos(p):
-  '''
-  check_op_masmenos :
-  '''
+  '''check_op_masmenos :'''
+
   global stack_de_operadores, stack_de_operandos, stack_de_tipos, lista_de_cuadruplos
+
   if len(stack_de_operadores) != 0:
     top_operador = stack_de_operadores.pop()
     if top_operador == '+' or top_operador == '-':
@@ -808,10 +808,10 @@ def p_term_aux(p):
 # When there's a times or division operator to be solved within the stack
 # of operators, it creates a Quadruple for it.
 def p_check_op_pordiv(p):
-  '''
-  check_op_pordiv :
-  '''
+  '''check_op_pordiv :'''
+
   global stack_de_operadores, stack_de_operandos, stack_de_tipos, lista_de_cuadruplos
+
   if len(stack_de_operadores) != 0:
     top_operador = stack_de_operadores.pop()
     if top_operador == '*' or top_operador == '/':
@@ -855,13 +855,16 @@ def p_factor(p) :
   '''
   p[0] = p[1]
 
+# This part only happens if we are on a matrix.
+# Generates the (DIM, exp, baseAddress, (tn)) quadruple. We use DIM as a new operator
+# to distinguish we need to add a baseAddress(pointer) to a regular value (exp).
+# Appends the type of the baseAddress to be able to assign either decimals or integers.
 def p_generate_address_quadruple(p):
-  '''
-  generate_address_quadruple :
-  '''
-  global stack_de_tipos, stack_de_operandos, stack_de_dimensiones, lista_de_cuadruplos
-  top_operando = stack_de_operandos.pop()
+  '''generate_address_quadruple :'''
 
+  global stack_de_tipos, stack_de_operandos, stack_de_dimensiones, lista_de_cuadruplos
+
+  top_operando = stack_de_operandos.pop()
   top_dim = stack_de_dimensiones.pop()
   dirBase = top_dim[0]
 
@@ -873,17 +876,19 @@ def p_generate_address_quadruple(p):
   stack_de_operandos.append(dim_pointer)
   stack_de_tipos.append(dirBase_type)
 
-def p_punto_create_cuadruplo(p):
-  '''
-  punto_create_cuadruplo : 
-  '''
+# Validates if the evaluated expression for indexing a dimensioned variable is of type int.
+# It generates the quadruple to validate if the value of the expression is between the bounds.
+# If it's a matrix, it generates the (*, exp, column, tn) -> (S1*m1) quadruple.
+def p_punto_create_ver_quad(p):
+  '''punto_create_ver_quad :'''
+
   global stack_de_tipos, stack_de_operandos, stack_de_dimensiones, lista_de_cuadruplos
-  var_dimension = dir_func.get_variable_dimension(current_func, p[-6])
+  
+  tipo_operando_exp = stack_de_tipos.pop()
+  if tipo_operando_exp != 1:
+    raise Exception(f"ERROR: El índice de acceso para {current_var} deber ser entero.")
 
-  tipo_operando_der = stack_de_tipos.pop()
-
-  if tipo_operando_der != 1:
-    raise Exception(f"ERROR: El índice de acceso deber ser entero.")
+  var_dimension = dir_func.get_variable_dimension(current_func, current_var)
 
   constant_address_inf = dir_func.get_constant_address(0)
   constant_address_sup = dir_func.get_constant_address(stack_de_dimensiones[-1][1][0])
@@ -893,22 +898,24 @@ def p_punto_create_cuadruplo(p):
  
   if var_dimension == 2:
     result_exp = stack_de_operandos.pop()
-    stack_de_tipos.pop()
   
     temp_var = assign_memory_temporal(1, current_func)
     constant_address_columns = dir_func.get_constant_address(stack_de_dimensiones[-1][1][1])
     quadruple = Quadruple(20, result_exp, constant_address_columns, temp_var)
    
-  
     stack_de_operandos.append(temp_var) 
     stack_de_tipos.append(1)
     lista_de_cuadruplos.append(quadruple.transform_quadruple())
 
+# This part only happens if we are on a matrix.
+# It Validates if the evaluated expression for indexing a dimensioned variable is of type int.
+# It generates the quadruple to validate if the value of the expression is between the bounds.
+# It then generates the (+, S1*M1, S2, tn) quadruple.
 def p_punto_create_lastDim_cuadruplo(p):
-  '''
-  punto_create_lastDim_cuadruplo :
-  '''
+  '''punto_create_lastDim_cuadruplo :'''
+
   global stack_de_tipos, stack_de_operandos, stack_de_dimensiones, lista_de_cuadruplos
+
   if stack_de_tipos[-1] != 1:
     raise Exception(f"ERROR: El índice de acceso para {current_var} deber ser entero.")
 
@@ -921,16 +928,13 @@ def p_punto_create_lastDim_cuadruplo(p):
   
   res_exp = stack_de_operandos.pop()
   sm = stack_de_operandos.pop()
+  stack_de_tipos.pop() #res_exp_type
   stack_de_tipos.pop() #sm_type
-  stack_de_tipos.pop() #sm_type
-
   
   temp_var = assign_memory_temporal(1, current_func)
-  print("Tipo",temp_var)
 
   quadruple = Quadruple(10, sm, res_exp, temp_var)
   lista_de_cuadruplos.append(quadruple.transform_quadruple())
-  stack_de_tipos.append(2)
   stack_de_operandos.append(temp_var)
 
 # Constant values
@@ -941,18 +945,18 @@ def p_factor_constante(p) :
   '''
   p[0] = p[1]
 
-# Push of a parenthesis to simulate the false bottom
+# Push a parenthesis into the stack of operators to simulate the false bottom
 def p_meter_fondo_falso(p) : 
-  '''
-  meter_fondo_falso :
-  '''
+  '''meter_fondo_falso :'''
+
+  global stack_de_operadores
   stack_de_operadores.append('(')
 
-# Removal of the false bottom
+# Removes the parenthesis from the stack of operators to simulate the end of the false bottom
 def p_quitar_fondo_falso(p) : 
-  '''
-  quitar_fondo_falso :
-  '''
+  '''quitar_fondo_falso :'''
+
+  global stack_de_operadores
   stack_de_operadores.pop()
 
 # Creates the address memory of the int constant (if it doesn't have one yet) 
@@ -983,11 +987,12 @@ def p_push_float(p) :
     stack_de_operandos.append(constant_address)
     stack_de_tipos.append(2)
 
-# Push of IDs
+# Push ID's address into stack of operands and its stype into the stack of types
+# Save the ID's name in a global variable named "current_var" for future references.
 def p_push_id(p) : 
   '''push_id :'''
 
-  # Validate if the id exists either locally or globally
+  # Validate if the ID exists either locally or globally
   if not dir_func.is_variable_declared(current_func, p[-1]):
     raise Exception(f"ERROR: La variable {p[-1]} no está declarada.")
 
