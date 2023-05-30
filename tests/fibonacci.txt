@@ -14,6 +14,6 @@ funcion entero fibonacci(entero n) {
 };
 
 inicio(){
-	a = fibonacci(0);
+	a = fibonacci(9);
 	imprimir(a);
 };

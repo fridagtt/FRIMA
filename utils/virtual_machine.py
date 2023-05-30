@@ -247,18 +247,18 @@ class VirtualMachine:
             left_value = self.access_through_pointers(left_operand)
             right_value = self.access_through_pointers(right_operand)
           elif left_operand >= 38000 or right_operand >= 38000:
-              if left_operand >= 38000 :
-                left_value = self.access_through_pointers(left_operand)
-                right_value = self.get_memory_value(right_operand)
-              else : 
-                right_value = self.access_through_pointers(right_value)
-                left_value = self.get_memory_value(left_value)
+            if left_operand >= 38000 :
+              left_value = self.access_through_pointers(left_operand)
+              right_value = self.get_memory_value(right_operand)
+            else : 
+              right_value = self.access_through_pointers(right_value)
+              left_value = self.get_memory_value(left_value)
           else : 
             left_value = self.get_memory_value(left_operand)
             right_value = self.get_memory_value(right_operand)
-            result = left_value > right_value
-            self.set_memory_value(quad_res, result)
-            instruction_pointer += 1
+          result = left_value > right_value
+          self.set_memory_value(quad_res, result)
+          instruction_pointer += 1
         except:
           raise Exception("ERROR: Variable sin valor")
       elif operator == 35: # <
@@ -267,18 +267,18 @@ class VirtualMachine:
             left_value = self.access_through_pointers(left_operand)
             right_value = self.access_through_pointers(right_operand)
           elif left_operand >= 38000 or right_operand >= 38000:
-              if left_operand >= 38000 :
-                left_value = self.access_through_pointers(left_operand)
-                right_value = self.get_memory_value(right_operand)
-              else : 
-                right_value = self.access_through_pointers(right_value)
-                left_value = self.get_memory_value(left_value)
+            if left_operand >= 38000 :
+              left_value = self.access_through_pointers(left_operand)
+              right_value = self.get_memory_value(right_operand)
+            else : 
+              right_value = self.access_through_pointers(right_value)
+              left_value = self.get_memory_value(left_value)
           else : 
             left_value = self.get_memory_value(left_operand)
             right_value = self.get_memory_value(right_operand)
-            result = left_value < right_value
-            self.set_memory_value(quad_res, result)
-            instruction_pointer += 1
+          result = left_value < right_value
+          self.set_memory_value(quad_res, result)
+          instruction_pointer += 1
         except:
           raise Exception("ERROR: Variable sin valor")
       elif operator == 40: # >=
@@ -287,18 +287,18 @@ class VirtualMachine:
             left_value = self.access_through_pointers(left_operand)
             right_value = self.access_through_pointers(right_operand)
           elif left_operand >= 38000 or right_operand >= 38000:
-                if left_operand >= 38000 :
-                  left_value = self.access_through_pointers(left_operand)
-                  right_value = self.get_memory_value(right_operand)
-                else : 
-                  right_value = self.access_through_pointers(right_value)
-                  left_value = self.get_memory_value(left_value)
+            if left_operand >= 38000 :
+              left_value = self.access_through_pointers(left_operand)
+              right_value = self.get_memory_value(right_operand)
+            else : 
+              right_value = self.access_through_pointers(right_value)
+              left_value = self.get_memory_value(left_value)
           else: 
             left_value = self.get_memory_value(left_operand)
             right_value = self.get_memory_value(right_operand)
-            result = left_value >= right_value
-            self.set_memory_value(quad_res, result)
-            instruction_pointer += 1
+          result = left_value >= right_value
+          self.set_memory_value(quad_res, result)
+          instruction_pointer += 1
         except:
           raise Exception("ERROR: Variable sin valor")
       elif operator == 45: # <=
@@ -307,18 +307,18 @@ class VirtualMachine:
             left_value = self.access_through_pointers(left_operand)
             right_value = self.access_through_pointers(right_operand)
           elif left_operand >= 38000 or right_operand >= 38000:
-              if left_operand >= 38000 :
-                left_value = self.access_through_pointers(left_operand)
-                right_value = self.get_memory_value(right_operand)
-              else : 
-                right_value = self.access_through_pointers(right_value)
-                left_value = self.get_memory_value(left_value)
+            if left_operand >= 38000 :
+              left_value = self.access_through_pointers(left_operand)
+              right_value = self.get_memory_value(right_operand)
+            else : 
+              right_value = self.access_through_pointers(right_value)
+              left_value = self.get_memory_value(left_value)
           else: 
             left_value = self.get_memory_value(left_operand)
             right_value = self.get_memory_value(right_operand)
-            result = left_value <= right_value
-            self.set_memory_value(quad_res, result)
-            instruction_pointer += 1
+          result = left_value <= right_value
+          self.set_memory_value(quad_res, result)
+          instruction_pointer += 1
         except:
           raise Exception("ERROR: Variable sin valor")
       elif operator == 50: # !=
@@ -327,18 +327,18 @@ class VirtualMachine:
             left_value = self.access_through_pointers(left_operand)
             right_value = self.access_through_pointers(right_operand)
           elif left_operand >= 38000 or right_operand >= 38000:
-              if left_operand >= 38000 :
-                left_value = self.access_through_pointers(left_operand)
-                right_value = self.get_memory_value(right_operand)
-              else : 
-                right_value = self.access_through_pointers(right_value)
-                left_value = self.get_memory_value(left_value)
+            if left_operand >= 38000 :
+              left_value = self.access_through_pointers(left_operand)
+              right_value = self.get_memory_value(right_operand)
+            else : 
+              right_value = self.access_through_pointers(right_value)
+              left_value = self.get_memory_value(left_value)
           else: 
             left_value = self.get_memory_value(left_operand)
             right_value = self.get_memory_value(right_operand)
-            result = left_value != right_value
-            self.set_memory_value(quad_res, result)
-            instruction_pointer += 1
+          result = left_value != right_value
+          self.set_memory_value(quad_res, result)
+          instruction_pointer += 1
         except:
           raise Exception("ERROR: Variable sin valor")
       elif operator == 55: # ==
@@ -347,18 +347,18 @@ class VirtualMachine:
             left_value = self.access_through_pointers(left_operand)
             right_value = self.access_through_pointers(right_operand)
           elif left_operand >= 38000 or right_operand >= 38000:
-              if left_operand >= 38000 :
-                  left_value = self.access_through_pointers(left_operand)
-                  right_value = self.get_memory_value(right_operand)
-              else : 
-                right_value = self.access_through_pointers(right_value)
-                left_value = self.get_memory_value(left_value)
-          else: 
-              left_value = self.get_memory_value(left_operand)
+            if left_operand >= 38000 :
+              left_value = self.access_through_pointers(left_operand)
               right_value = self.get_memory_value(right_operand)
-              result = left_value == right_value
-              self.set_memory_value(quad_res, result)
-              instruction_pointer += 1
+            else : 
+              right_value = self.access_through_pointers(right_value)
+              left_value = self.get_memory_value(left_value)
+          else: 
+            left_value = self.get_memory_value(left_operand)
+            right_value = self.get_memory_value(right_operand)
+          result = left_value == right_value
+          self.set_memory_value(quad_res, result)
+          instruction_pointer += 1
         except:
           raise Exception("ERROR: Variable sin valor")
       elif operator == 60: # y
@@ -368,17 +368,17 @@ class VirtualMachine:
             right_value = self.access_through_pointers(right_operand)
           elif left_operand >= 38000 or right_operand >= 38000:
             if left_operand >= 38000 :
-                left_value = self.access_through_pointers(left_operand)
-                right_value = self.get_memory_value(right_operand)
-            else : 
-                right_value = self.access_through_pointers(right_value)
-                left_value = self.get_memory_value(left_value)
-          else: 
-              left_value = self.get_memory_value(left_operand)
+              left_value = self.access_through_pointers(left_operand)
               right_value = self.get_memory_value(right_operand)
-              result = left_value and right_value
-              self.set_memory_value(quad_res, result)
-              instruction_pointer += 1
+            else : 
+              right_value = self.access_through_pointers(right_value)
+              left_value = self.get_memory_value(left_value)
+          else: 
+            left_value = self.get_memory_value(left_operand)
+            right_value = self.get_memory_value(right_operand)
+          result = left_value and right_value
+          self.set_memory_value(quad_res, result)
+          instruction_pointer += 1
         except:
           raise Exception("ERROR: Variable sin valor")
       elif operator == 65: # o
@@ -388,17 +388,17 @@ class VirtualMachine:
             right_value = self.access_through_pointers(right_operand)
           elif left_operand >= 38000 or right_operand >= 38000:
             if left_operand >= 38000 :
-                left_value = self.access_through_pointers(left_operand)
-                right_value = self.get_memory_value(right_operand)
-            else : 
-                right_value = self.access_through_pointers(right_value)
-                left_value = self.get_memory_value(left_value)
-          else: 
-              left_value = self.get_memory_value(left_operand)
+              left_value = self.access_through_pointers(left_operand)
               right_value = self.get_memory_value(right_operand)
-              result = left_value or right_value
-              self.set_memory_value(quad_res, result)
-              instruction_pointer += 1
+            else : 
+              right_value = self.access_through_pointers(right_value)
+              left_value = self.get_memory_value(left_value)
+          else: 
+            left_value = self.get_memory_value(left_operand)
+            right_value = self.get_memory_value(right_operand)
+          result = left_value or right_value
+          self.set_memory_value(quad_res, result)
+          instruction_pointer += 1
         except:
           raise Exception("ERROR: Variable sin valor")
       elif operator == 70: # Assign

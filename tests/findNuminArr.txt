@@ -1,23 +1,19 @@
 programa patito:
-renglon entero -> arr[10];
-variable entero -> i,j,x,r,m;
+renglon entero -> arr[2];
+variable entero -> j, x;
 
-funcion entero encontrarArreglo(entero m){
+funcion sinregresar encontrarArreglo(){
+  arr[0] = 2;
+  arr[1] = 1;
 
-desde(i = 0) hasta (10) {
-    si (arr[i] == 5) {
-        imprimir ("Lo encontre");
-        regresar(1);
+  desde(j = 0) hasta (2) {
+    si (arr[j] == 2) {
+      imprimir(arr[j]);
     };
-    regresar(1);
-};
-
-regresar (1);
+  };
 };
 
 
 inicio () {
-m = 5;
-imprimir (encontrarArreglo(m));
-
+  encontrarArreglo();
 };
