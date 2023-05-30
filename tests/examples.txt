@@ -1,18 +1,16 @@
 programa patito:
-tabla entero -> mat[2][2];
+tabla decimal -> mat[3][3];
+renglon decimal -> arr[3];
 variable entero -> i,j,x;
-variable entero -> a,b;
+variable decimal -> a,b;
 
 inicio () {
-  mat[0][1] = 4;
-  mat[0][0] = 3; 
-  a = mat[0][1];
-  b = mat[0][0];
 
-  si (a == b o a == a) {
-    imprimir (" y ");
-  } sino {
-    imprimir ("Ups");
-  };
+mat[0][1] = 4.3;
+mat[0][0] = 3.1; 
+a = mat[0][1];
+b = mat[0][0];
+
+imprimir (a*1);
 
 };

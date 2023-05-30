@@ -899,6 +899,7 @@ def p_punto_create_cuadruplo(p):
     constant_address_columns = dir_func.get_constant_address(stack_de_dimensiones[-1][1][1])
     quadruple = Quadruple(20, result_exp, constant_address_columns, temp_var)
    
+  
     stack_de_operandos.append(temp_var) 
     stack_de_tipos.append(1)
     lista_de_cuadruplos.append(quadruple.transform_quadruple())
@@ -923,11 +924,13 @@ def p_punto_create_lastDim_cuadruplo(p):
   stack_de_tipos.pop() #sm_type
   stack_de_tipos.pop() #sm_type
 
+  
   temp_var = assign_memory_temporal(1, current_func)
+  print("Tipo",temp_var)
 
   quadruple = Quadruple(10, sm, res_exp, temp_var)
   lista_de_cuadruplos.append(quadruple.transform_quadruple())
-  stack_de_tipos.append(1)
+  stack_de_tipos.append(2)
   stack_de_operandos.append(temp_var)
 
 # Constant values
