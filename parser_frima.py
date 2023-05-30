@@ -1160,7 +1160,7 @@ parser = yacc.yacc()
 def readFile():
   #Testear el parser y léxico juntos
   try:
-    file = open("./tests/findNuminArr.txt", "r")
+    file = open("./tests/factCycle.txt", "r")
     archivo = file.read()
     file.close()
     parser.parse(archivo)

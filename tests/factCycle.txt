@@ -1,0 +1,22 @@
+programa caramelo:
+// En el ciclo desde, hasta 
+variable entero -> num,n;
+variable entero -> factorial;
+variable entero -> i;
+
+funcion entero factorialCycle(entero num) {
+  num = num + 1; 
+
+  desde (i = 1) hasta (num) {
+    factorial = factorial * i;
+  };
+
+  regresar (factorial);
+};
+
+inicio(){
+  num = 10;
+  factorial = 1;
+  imprimir(factorialCycle(num));
+	
+};
