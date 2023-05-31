@@ -61,7 +61,7 @@ def p_inicio(p):
   '''
   p[0] = None
   # Segment for testing dir_func and quadruples
-  # print("TABLA DE VARIABLES", dir_func.symbol_table)
+  print("TABLA DE VARIABLES", dir_func.symbol_table)
   for index, quadruple in enumerate(lista_de_cuadruplos): 
     print(index, " -> ", quadruple)
 
@@ -207,6 +207,9 @@ def p_punto_matrix_size(p):
 # It sends additional values such as its dimension and its size as a tuple. 
 def p_punto_save_matrix(p):
   '''punto_save_matrix : '''
+
+  global dimensiones
+
   var_dir_address = assign_memory_global_local(current_var_type, current_func, current_size)
   dir_func.add_variable(current_var_type, p[-9], current_func, var_dir_address, dimensiones, 2)
 
@@ -223,6 +226,7 @@ def p_punto_save_matrix(p):
     constant_address = assign_memory_constant(1)
     dir_func.add_constant_variable(1, 0, constant_address)
   
+  dimensiones = [] # Empty list of dimensions for new matrix
 
 # Declares a function
 def p_dec_func(p):
@@ -1161,7 +1165,7 @@ parser = yacc.yacc()
 def readFile():
   #Testear el parser y léxico juntos
   try:
-    file = open("./tests/bubbleSort.txt", "r")
+    file = open("./tests/multiplyMat.txt", "r")
     archivo = file.read()
     file.close()
     parser.parse(archivo)
