@@ -18,5 +18,4 @@ inicio(){
   num = 10;
   factorial = 1;
   imprimir(factorialCycle(num));
-	
 };
