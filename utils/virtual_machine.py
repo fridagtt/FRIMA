@@ -402,22 +402,20 @@ class VirtualMachine:
         except:
           raise Exception("ERROR: Variable sin valor")
       elif operator == 70: # Assign
-       
         try:
-          if quad_res >= 38000 : # Assign to a pointer
-            dim_dir = self.get_memory_value(quad_res) # Grab pointer's address
-            value = self.get_memory_value(left_operand)
-            self.set_memory_value(dim_dir, value)
-            print("Entra aqui")
-            print("quad res", quad_res)
-            print("value", value)
-            print("dim_dir", dim_dir)
-          elif left_operand >= 38000: # Assign pointer to a normal variable
-            dim_dir = self.get_memory_value(left_operand) # Grab pointer's address
+          if left_operand >= 38000 and quad_res >= 38000:
+            dim_dir = self.get_memory_value(left_operand)
             value = self.get_memory_value(dim_dir)
-            self.set_memory_value(quad_res, value)
-            print("quad res", quad_res)
-            print("value", value)
+            self.set_memory_value(quad_res,dim_dir)
+          elif left_operand >= 38000 or quad_res >= 38000:
+            if quad_res >= 38000 : # Assign to a pointer
+              dim_dir = self.get_memory_value(quad_res) # Grab pointer's address
+              value = self.get_memory_value(left_operand)
+              self.set_memory_value(dim_dir, value)
+            else: # Assign pointer to a normal variable
+              dim_dir = self.get_memory_value(left_operand) # Grab pointer's address
+              value = self.get_memory_value(dim_dir)
+              self.set_memory_value(quad_res, value)
           else:
             value = self.get_memory_value(left_operand)
             self.set_memory_value(quad_res, value)
