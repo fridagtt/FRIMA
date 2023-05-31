@@ -1,0 +1,35 @@
+programa caramelo:
+variable entero -> i,j,temp,n;
+renglon entero -> arr[10];
+
+funcion sinregresar bubbleSort() {
+temp = 0;
+n = 10;
+
+//Rellenar el arreglo
+desde (i = 0) hasta (10) {
+    arr[i] = n-i;
+};
+
+//Imprimir arreglo normal
+desde (i = 0) hasta (10) {
+    imprimir(arr[i]);
+};
+
+//BubbleSort
+desde (i = 0) hasta (10){
+    desde (j = 1 + i) hasta (10){
+        si (arr[j] < arr[i]) {
+            temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+            imprimir("Temp:");
+            imprimir(temp);
+        };
+    };
+};
+
+};
+inicio() {
+bubbleSort();
+};

@@ -1161,7 +1161,7 @@ parser = yacc.yacc()
 def readFile():
   #Testear el parser y léxico juntos
   try:
-    file = open("./tests/multiplyMat.txt", "r")
+    file = open("./tests/bubbleSort.txt", "r")
     archivo = file.read()
     file.close()
     parser.parse(archivo)
