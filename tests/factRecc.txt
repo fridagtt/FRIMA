@@ -1,0 +1,23 @@
+programa caramelo:
+variable entero -> num,n;
+variable entero -> factorial;
+variable entero -> i;
+
+funcion entero factorialRec(entero num) {
+  
+
+    si (num == 0 o num == 1) {
+        regresar(1);
+    } sino {
+        regresar(num*factorialRec(num-1));
+    };
+
+ 
+};
+
+inicio(){
+  num = 10;
+  factorial = 1;
+  imprimir(factorialRec(num));
+	
+};

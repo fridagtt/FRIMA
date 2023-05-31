@@ -1,5 +1,5 @@
 programa caramelo:
-// En el ciclo desde, hasta 
+// En el ciclo desde, hasta  se le tiene que sumar 1
 variable entero -> num,n;
 variable entero -> factorial;
 variable entero -> i;

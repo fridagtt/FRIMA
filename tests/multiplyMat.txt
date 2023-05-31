@@ -1,0 +1,48 @@
+programa caramelo:
+tabla entero -> mat1[3][3];
+tabla entero -> mat2[3][3];
+tabla entero -> matRes[3][3];
+variable entero -> i,j,k;
+
+
+funcion entero multiplyMat(){
+
+     // llenar matriz 1
+  desde (i = 0) hasta (3) {
+    desde (j = 0) hasta (3) {
+      mat1[i][j] = 2;
+    };
+  };
+
+    // llenar matriz 2
+  desde (i = 0) hasta (3) {
+    desde (j = 0) hasta (3) {
+      mat2[i][j] = 2;
+    };
+  };
+
+  // multiplicacion matrices
+  desde (i = 0) hasta (3) {
+    desde (j = 0) hasta (3){
+        matRes[i][j] = 0;
+            desde (k = 0) hasta (3){
+             matRes[i][j] = matRes[i][j]+mat1[i][k]*mat2[k][j];
+        };
+  };
+};
+
+//imprimir matriz respuesta
+desde (i=0) hasta (3){
+    desde (j = 0) hasta (3) {
+    imprimir("Matriz respuesta:");
+    imprimir(matRes[i][j]);
+    };  
+};
+
+regresar (0);
+};
+
+
+inicio(){
+    imprimir(multiplyMat());
+};
