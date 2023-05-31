@@ -63,7 +63,9 @@ class Memory:
         return self.vars_string[memory_address]
   
   def set_value(self, memory_address, value):
-    if (memory_address >= 8000 and memory_address < 10000) or (memory_address >= 22000 and memory_address < 24000)	or (memory_address >= 2000 and memory_address < 4000) or (memory_address >= 14000 and memory_address < 16000) or (memory_address >= 32000 and memory_address < 34000):
+    if (memory_address >= 38000):
+      self.vars_int[memory_address] = value
+    elif (memory_address >= 8000 and memory_address < 10000) or (memory_address >= 22000 and memory_address < 24000)	or (memory_address >= 2000 and memory_address < 4000) or (memory_address >= 14000 and memory_address < 16000) or (memory_address >= 32000 and memory_address < 34000):
       self.vars_int[memory_address] = value
     elif (memory_address >= 4000 and memory_address < 6000) or (memory_address >= 16000 and memory_address < 18000) or (memory_address >= 8000 and memory_address < 10000) or (memory_address >= 24000 and memory_address < 26000) or (memory_address >= 34000 and memory_address < 36000):
       self.vars_float[memory_address] = value
@@ -71,8 +73,6 @@ class Memory:
       self.vars_bool[memory_address] = value
     elif (memory_address >= 30000 and memory_address < 32000):
       self.vars_string[memory_address] = value
-    elif (memory_address >= 38000):
-      self.vars_int[memory_address] = value
   
   def add_params_to_function(self, params_list):
     for index, value in enumerate(params_list):
@@ -403,22 +403,12 @@ class VirtualMachine:
           raise Exception("ERROR: Variable sin valor")
       elif operator == 70: # Assign
         try:
-          if left_operand >= 38000 and quad_res >= 38000:
-            dim_dir = self.get_memory_value(left_operand)
-            value = self.get_memory_value(dim_dir)
-            self.set_memory_value(quad_res,dim_dir)
-          elif left_operand >= 38000 or quad_res >= 38000:
-            if quad_res >= 38000 : # Assign to a pointer
-              dim_dir = self.get_memory_value(quad_res) # Grab pointer's address
-              value = self.get_memory_value(left_operand)
-              self.set_memory_value(dim_dir, value)
-            else: # Assign pointer to a normal variable
-              dim_dir = self.get_memory_value(left_operand) # Grab pointer's address
-              value = self.get_memory_value(dim_dir)
-              self.set_memory_value(quad_res, value)
-          else:
-            value = self.get_memory_value(left_operand)
-            self.set_memory_value(quad_res, value)
+          if left_operand >= 38000:
+            left_operand = self.get_memory_value(left_operand)
+          if quad_res >= 38000:
+            quad_res = self.get_memory_value(quad_res) # Grab pointer's address
+          value = self.get_memory_value(left_operand)
+          self.set_memory_value(quad_res, value)
           instruction_pointer += 1
         except:
           raise Exception("ERROR: Variable sin valor")
@@ -434,11 +424,10 @@ class VirtualMachine:
         instruction_pointer = quad_res
       elif operator == 90: # IMPRIMIR
         try:
-          if quad_res > 38000:
-            value_dir = self.get_memory_value(quad_res)
-            value_memory = self.get_memory_value(value_dir)
-          else:
+          if quad_res >= 38000:
+            quad_res = self.get_memory_value(quad_res)
             value_memory = self.get_memory_value(quad_res)
+          value_memory = self.get_memory_value(quad_res)
           print("Imprimir:", value_memory)
           instruction_pointer += 1
         except:

@@ -369,6 +369,7 @@ def p_punto_dimensioned(p):
   var_info = dir_func.get_variable_var_dimInfo(current_func, p[-3])
   stack_de_operandos.pop()
   stack_de_dimensiones.append((var_info[1], var_info[0])) # (baseAddress, [size1, size2]) or  (baseAddress, [size1])
+  # agregar a la tabla de contsntes la dir base const address = dirbase
 
 # Only if it's an array (the size of the top element of the stack of operands is equal to 1) then
 # remove the array info from the stack of dimensions and grab from it the baseAddress.
@@ -888,7 +889,6 @@ def p_punto_create_ver_quad(p):
   if tipo_operando_exp != 1:
     raise Exception(f"ERROR: El índice de acceso para {p[-6]} deber ser entero.")
   
-
   var_dimension = dir_func.get_variable_dimension(current_func, p[-6])
   constant_address_inf = dir_func.get_constant_address(0)
   constant_address_sup = dir_func.get_constant_address(stack_de_dimensiones[-1][1][0])
