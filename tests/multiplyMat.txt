@@ -6,27 +6,21 @@ variable entero -> i,j,k;
 
 funcion sinregresar multiplyMat(){
 
-  mat1[0][0] = 0;
-  mat1[0][1] = 1;
-  mat1[0][2] = 2;
-  mat1[1][0] = 3;
-  mat1[1][1] = 4;
-  mat1[1][2] = 5;
+  // Llenar mat1
+  desde (i=0) hasta (2){
+    desde (j = 0) hasta (3) {
+      mat1[i][j] = i + j;
+    };  
+  };
 
-  mat2[0][0] = 0;
-  mat2[0][1] = 1;
-  mat2[0][2] = 2;
-  mat2[0][3] = 3;
-  mat2[1][0] = 3;
-  mat2[1][1] = 4;
-  mat2[1][2] = 5;
-  mat2[1][3] = 9;
-  mat2[2][0] = 6;
-  mat2[2][1] = 7;
-  mat2[2][2] = 8;
-  mat2[2][3] = 2;
+  // Llenar mat2
+  desde (i=0) hasta (3){
+    desde (j = 0) hasta (4) {
+      mat2[i][j] = i + j;
+    };  
+  };
 
-    // multiplicacion matrices
+  // Multiplicacion de matrices
   desde (i = 0) hasta (2) { // rows de la primera
     desde (j = 0) hasta (4){ // columns de la segunda
       matRes[i][j] = 0;
@@ -36,7 +30,7 @@ funcion sinregresar multiplyMat(){
     };
   };
 
-  //imprimir matriz respuesta
+  // Imprimir resultado de multiplicacion de matriz
   desde (i=0) hasta (2){
     desde (j = 0) hasta (4) {
       imprimir("Matriz respuesta:");
