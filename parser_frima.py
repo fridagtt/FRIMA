@@ -173,7 +173,6 @@ def p_punto_save_array(p):
   # Add size of array to constant table to only work with addresses
   var_dir_address = assign_memory_global_local(current_var_type, current_func, p[-3])
   dir_func.add_variable(current_var_type, p[-5], current_func, var_dir_address, [p[-3]], 1)
-
   constant_address = dir_func.get_constant_address(p[-3])
   if(not constant_address):
     constant_address = assign_memory_constant(1)
@@ -1127,16 +1126,15 @@ def p_imprimir(p):
   imprimirCycle : COMMA imprimir_aux
               | empty
   '''
-  p[0] = None
 
 # It created a Quadruple for the print instruction. If there's something left within the
 # stack of operands that means it is either a variable, expression or an int/float. If not it means it's
 # a constant string. For each it will create the corresponding Quadruple.
 def p_push_imprimir(p):
-  '''
-  push_imprimir :
-  '''
+  '''push_imprimir :'''
+
   global stack_de_operandos, stack_de_tipos
+
   converted_operador = convert_type('imprimir')
   if len(stack_de_operandos) != 0:
     top_operando = stack_de_operandos.pop()
@@ -1165,7 +1163,7 @@ parser = yacc.yacc()
 def readFile():
   #Testear el parser y léxico juntos
   try:
-    file = open("./tests/searchArr.txt", "r")
+    file = open("./tests/subIndexDim.txt", "r")
     archivo = file.read()
     file.close()
     parser.parse(archivo)

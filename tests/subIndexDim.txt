@@ -1,0 +1,18 @@
+programa patito:
+renglon entero -> arr[3];
+tabla entero -> mat[4][2];
+variable entero -> i,j;
+
+inicio () {
+  desde (i = 0) hasta (4) {
+    desde (j = 0) hasta (2) {
+      mat[i][j] = i+j;
+    };
+  };
+
+  arr[0] = 1;
+  arr[1] = 2;
+  arr[2] = 3;
+
+  imprimir(mat[arr[arr[1]]][0]);
+};

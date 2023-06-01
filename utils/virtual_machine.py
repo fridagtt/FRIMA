@@ -465,6 +465,8 @@ class VirtualMachine:
           self.local_memory = self.execution_stack.pop()
           instruction_pointer = self.stack_pointers.pop()
       elif operator == 120: # VERIFY
+        if left_operand >= 38000:
+          left_operand = self.get_memory_value(left_operand)
         value = self.get_memory_value(left_operand)
         value_inf = self.get_memory_value(right_operand)
         value_sup = self.get_memory_value(quad_res)
@@ -473,6 +475,8 @@ class VirtualMachine:
         else: 
           raise Exception("ERROR: Fuera de rango")
       elif operator == 125: # DIM
+        if left_operand >= 38000:
+          left_operand = self.get_memory_value(left_operand)
         value = self.get_memory_value(left_operand)
         dir_base = right_operand
         dir_final = value + dir_base
