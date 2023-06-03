@@ -1065,7 +1065,7 @@ def p_llamada_func_void(p):
 # Return a value used in expressions
 def p_llamada_func_return(p):
   '''
-  llamada_func_return : ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
+  llamada_func_return : ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
   '''
 
 # Validates called function exists and updates name of called_func to keep track
@@ -1078,6 +1078,13 @@ def p_punto_func_exists(p):
     raise Exception(f"ERROR: La función {p[-2]} no está definida.")
 
   called_func = p[-2]
+
+def p_punto_validate_isNotvoid(p):
+  '''punto_validate_isNotvoid :'''
+
+  func_return_type = dir_func.symbol_table['dir_functions'][called_func]['return_type']
+  if (func_return_type == 0):
+    raise Exception(f"ERROR: La función {called_func} es de tipo sinregresar.")
 
 # Validate if function is void
 def p_punto_validate_isvoid(p):
@@ -1175,7 +1182,7 @@ def p_error(p):
 
 parser = yacc.yacc()
   
-def parser(filePath="tests/fibonacciRec.txt", user_input=None):
+def parser(filePath, user_input=None):
   #Testear el parser y léxico juntos
   try:
     file = open(filePath, "r")

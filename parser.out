@@ -137,29 +137,30 @@ Rule 131   func_params -> exp punto_check_param func_params_aux
 Rule 132   func_params -> empty
 Rule 133   punto_check_param -> <empty>
 Rule 134   llamada_func_void -> ID LPAREN punto_func_exists punto_validate_isvoid punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub SEMICOLON
-Rule 135   llamada_func_return -> ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
+Rule 135   llamada_func_return -> ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
 Rule 136   punto_func_exists -> <empty>
-Rule 137   punto_validate_isvoid -> <empty>
-Rule 138   punto_create_era -> <empty>
-Rule 139   punto_check_total_params -> <empty>
-Rule 140   punto_create_gosub -> <empty>
-Rule 141   imprimir -> IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON
-Rule 142   imprimir_aux -> exp push_imprimir imprimirCycle
-Rule 143   imprimir_aux -> CTESTRING push_imprimir imprimirCycle
-Rule 144   imprimirCycle -> COMMA imprimir_aux
-Rule 145   imprimirCycle -> empty
-Rule 146   push_imprimir -> <empty>
-Rule 147   empty -> <empty>
+Rule 137   punto_validate_isNotvoid -> <empty>
+Rule 138   punto_validate_isvoid -> <empty>
+Rule 139   punto_create_era -> <empty>
+Rule 140   punto_check_total_params -> <empty>
+Rule 141   punto_create_gosub -> <empty>
+Rule 142   imprimir -> IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON
+Rule 143   imprimir_aux -> exp push_imprimir imprimirCycle
+Rule 144   imprimir_aux -> CTESTRING push_imprimir imprimirCycle
+Rule 145   imprimirCycle -> COMMA imprimir_aux
+Rule 146   imprimirCycle -> empty
+Rule 147   push_imprimir -> <empty>
+Rule 148   empty -> <empty>
 
 Terminals, with rules where they appear
 
 ARROW                : 21 25 30
 ASSIGN               : 59 76
 COLON                : 1 2 3 4
-COMMA                : 22 26 31 42 129 144
+COMMA                : 22 26 31 42 129 145
 CTEF                 : 123
 CTEI                 : 25 26 30 30 31 31 122
-CTESTRING            : 143
+CTESTRING            : 144
 DECIMAL              : 20
 DESDE                : 76
 DIVIDE               : 114
@@ -170,14 +171,14 @@ GREATER              : 97
 GREATEREQ            : 99
 HASTA                : 76
 ID                   : 1 2 3 4 21 22 25 26 30 31 35 36 40 42 60 69 76 134 135
-IMPRIMIR             : 141
+IMPRIMIR             : 142
 INICIO               : 6
 LBRACE               : 6 35 36 72 76 81 82 82
 LBRACKET             : 25 26 30 30 31 31 61 63
 LEER                 : 69
 LESS                 : 98
 LESSEQ               : 100
-LPAREN               : 6 35 36 57 69 72 76 76 81 82 115 134 135 141
+LPAREN               : 6 35 36 57 69 72 76 76 81 82 115 134 135 142
 MIENTRAS             : 72
 MINUS                : 107
 NOTEQUAL             : 101
@@ -188,8 +189,8 @@ RBRACE               : 6 35 36 72 76 81 82 82
 RBRACKET             : 25 26 30 30 31 31 61 63
 REGRESAR             : 57
 RENGLON              : 25
-RPAREN               : 6 35 36 57 69 72 76 76 81 82 115 134 135 141
-SEMICOLON            : 6 21 25 30 35 36 57 59 69 72 76 81 82 134 141
+RPAREN               : 6 35 36 57 69 72 76 76 81 82 115 134 135 142
+SEMICOLON            : 6 21 25 30 35 36 57 59 69 72 76 81 82 134 142
 SI                   : 81 82
 SINO                 : 82
 SINREGRESAR          : 36
@@ -216,11 +217,11 @@ dec_func             : 13 14
 dec_func_cycle       : 3 4
 dec_var              : 11
 dec_var_cycle        : 2 3 11 35 36
-empty                : 9 12 15 23 27 32 41 43 49 62 64 88 92 95 105 111 130 132 145
+empty                : 9 12 15 23 27 32 41 43 49 62 64 88 92 95 105 111 130 132 146
 estatutos            : 35 36 47 72 76 81 82 82
 estatutosCycle       : 45
 estatutos_opciones   : 8 47 48
-exp                  : 57 93 94 104 129 131 142
+exp                  : 57 93 94 104 129 131 143
 exp_aux              : 103
 factor               : 109
 factor_constante     : 116
@@ -231,8 +232,8 @@ generate_address_quadruple : 63
 hyper_exp            : 59 61 63 72 76 76 81 82 115
 hyper_exp_aux        : 86
 imprimir             : 55
-imprimirCycle        : 142 143
-imprimir_aux         : 141 144
+imprimirCycle        : 143 144
+imprimir_aux         : 142 145
 inicio               : 1 2 3 4
 inicio_estatutos     : 6 8
 leer                 : 56
@@ -279,10 +280,11 @@ punto_termina_for    : 76
 punto_update_goto    : 6
 punto_valida_exp     : 76
 punto_valida_int     : 76
+punto_validate_isNotvoid : 135
 punto_validate_isvoid : 134
 push_float           : 123
 push_id              : 60
-push_imprimir        : 142 143
+push_imprimir        : 143 144
 push_int             : 122
 push_op_exp_masmenos : 104
 push_op_exp_pordiv   : 110
@@ -366,7 +368,7 @@ state 5
     (16) dec_var -> . simple_var
     (17) dec_var -> . array
     (18) dec_var -> . matrix
-    (147) empty -> .
+    (148) empty -> .
     (35) dec_func -> . FUNCION type ID punto_add_func punto_global_func_var LPAREN parameter RPAREN LBRACE dec_var_cycle estatutos RBRACE SEMICOLON punto_end_function
     (36) dec_func -> . FUNCION SINREGRESAR ID punto_add_func LPAREN parameter RPAREN LBRACE dec_var_cycle estatutos RBRACE SEMICOLON punto_end_function
     (21) simple_var -> . VARIABLE type ARROW ID punto_simple_var simpleVarCycle SEMICOLON
@@ -381,8 +383,8 @@ state 5
     RENGLON         shift and go to state 18
     TABLA           shift and go to state 19
 
-  ! INICIO          [ reduce using rule 147 (empty -> .) ]
-  ! FUNCION         [ reduce using rule 147 (empty -> .) ]
+  ! INICIO          [ reduce using rule 148 (empty -> .) ]
+  ! FUNCION         [ reduce using rule 148 (empty -> .) ]
 
     inicio                         shift and go to state 6
     dec_var_cycle                  shift and go to state 7
@@ -441,21 +443,21 @@ state 10
     (16) dec_var -> . simple_var
     (17) dec_var -> . array
     (18) dec_var -> . matrix
-    (147) empty -> .
+    (148) empty -> .
     (21) simple_var -> . VARIABLE type ARROW ID punto_simple_var simpleVarCycle SEMICOLON
     (25) array -> . RENGLON type ARROW ID LBRACKET CTEI punto_array_size RBRACKET punto_save_array arrayCycle SEMICOLON
     (30) matrix -> . TABLA type ARROW ID LBRACKET CTEI punto_matrix_size RBRACKET LBRACKET CTEI punto_matrix_size RBRACKET punto_save_matrix matrixCycle SEMICOLON
 
-    INICIO          reduce using rule 147 (empty -> .)
-    FUNCION         reduce using rule 147 (empty -> .)
-    REGRESAR        reduce using rule 147 (empty -> .)
-    ID              reduce using rule 147 (empty -> .)
-    DESDE           reduce using rule 147 (empty -> .)
-    MIENTRAS        reduce using rule 147 (empty -> .)
-    SI              reduce using rule 147 (empty -> .)
-    IMPRIMIR        reduce using rule 147 (empty -> .)
-    LEER            reduce using rule 147 (empty -> .)
-    RBRACE          reduce using rule 147 (empty -> .)
+    INICIO          reduce using rule 148 (empty -> .)
+    FUNCION         reduce using rule 148 (empty -> .)
+    REGRESAR        reduce using rule 148 (empty -> .)
+    ID              reduce using rule 148 (empty -> .)
+    DESDE           reduce using rule 148 (empty -> .)
+    MIENTRAS        reduce using rule 148 (empty -> .)
+    SI              reduce using rule 148 (empty -> .)
+    IMPRIMIR        reduce using rule 148 (empty -> .)
+    LEER            reduce using rule 148 (empty -> .)
+    RBRACE          reduce using rule 148 (empty -> .)
     VARIABLE        shift and go to state 17
     RENGLON         shift and go to state 18
     TABLA           shift and go to state 19
@@ -490,10 +492,10 @@ state 12
     (15) p_dec_func_aux -> . empty
     (35) dec_func -> . FUNCION type ID punto_add_func punto_global_func_var LPAREN parameter RPAREN LBRACE dec_var_cycle estatutos RBRACE SEMICOLON punto_end_function
     (36) dec_func -> . FUNCION SINREGRESAR ID punto_add_func LPAREN parameter RPAREN LBRACE dec_var_cycle estatutos RBRACE SEMICOLON punto_end_function
-    (147) empty -> .
+    (148) empty -> .
 
     FUNCION         shift and go to state 16
-    INICIO          reduce using rule 147 (empty -> .)
+    INICIO          reduce using rule 148 (empty -> .)
 
     dec_func                       shift and go to state 25
     p_dec_func_aux                 shift and go to state 26
@@ -655,10 +657,10 @@ state 25
     (15) p_dec_func_aux -> . empty
     (35) dec_func -> . FUNCION type ID punto_add_func punto_global_func_var LPAREN parameter RPAREN LBRACE dec_var_cycle estatutos RBRACE SEMICOLON punto_end_function
     (36) dec_func -> . FUNCION SINREGRESAR ID punto_add_func LPAREN parameter RPAREN LBRACE dec_var_cycle estatutos RBRACE SEMICOLON punto_end_function
-    (147) empty -> .
+    (148) empty -> .
 
     FUNCION         shift and go to state 16
-    INICIO          reduce using rule 147 (empty -> .)
+    INICIO          reduce using rule 148 (empty -> .)
 
     dec_func                       shift and go to state 25
     p_dec_func_aux                 shift and go to state 37
@@ -856,18 +858,18 @@ state 49
     (54) estatutos_opciones -> . condicion
     (55) estatutos_opciones -> . imprimir
     (56) estatutos_opciones -> . leer
-    (147) empty -> .
+    (148) empty -> .
     (59) asignar -> . variable ASSIGN hyper_exp push_op_igual check_op_igual SEMICOLON
     (134) llamada_func_void -> . ID LPAREN punto_func_exists punto_validate_isvoid punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub SEMICOLON
     (76) ciclo_for -> . DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
     (72) ciclo_while -> . MIENTRAS punto_inicio_while LPAREN hyper_exp RPAREN punto_medio_while LBRACE estatutos RBRACE punto_fin_while SEMICOLON
     (81) condicion -> . SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE punto_fin_si SEMICOLON
     (82) condicion -> . SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE SINO punto_sino LBRACE estatutos RBRACE punto_fin_si SEMICOLON
-    (141) imprimir -> . IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON
+    (142) imprimir -> . IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON
     (69) leer -> . LEER LPAREN punto_push_leer ID punto_create_leer RPAREN SEMICOLON
     (60) variable -> . ID push_id variable_aux
 
-    RBRACE          reduce using rule 147 (empty -> .)
+    RBRACE          reduce using rule 148 (empty -> .)
     ID              shift and go to state 66
     DESDE           shift and go to state 67
     MIENTRAS        shift and go to state 68
@@ -901,11 +903,11 @@ state 51
     (41) parameter -> . empty
     (19) type -> . ENTERO
     (20) type -> . DECIMAL
-    (147) empty -> .
+    (148) empty -> .
 
     ENTERO          shift and go to state 30
     DECIMAL         shift and go to state 31
-    RPAREN          reduce using rule 147 (empty -> .)
+    RPAREN          reduce using rule 148 (empty -> .)
 
     parameter                      shift and go to state 73
     type                           shift and go to state 74
@@ -916,10 +918,10 @@ state 52
     (21) simple_var -> VARIABLE type ARROW ID punto_simple_var . simpleVarCycle SEMICOLON
     (22) simpleVarCycle -> . COMMA ID punto_simple_var simpleVarCycle
     (23) simpleVarCycle -> . empty
-    (147) empty -> .
+    (148) empty -> .
 
     COMMA           shift and go to state 77
-    SEMICOLON       reduce using rule 147 (empty -> .)
+    SEMICOLON       reduce using rule 148 (empty -> .)
 
     simpleVarCycle                 shift and go to state 76
     empty                          shift and go to state 78
@@ -957,18 +959,18 @@ state 56
     (54) estatutos_opciones -> . condicion
     (55) estatutos_opciones -> . imprimir
     (56) estatutos_opciones -> . leer
-    (147) empty -> .
+    (148) empty -> .
     (59) asignar -> . variable ASSIGN hyper_exp push_op_igual check_op_igual SEMICOLON
     (134) llamada_func_void -> . ID LPAREN punto_func_exists punto_validate_isvoid punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub SEMICOLON
     (76) ciclo_for -> . DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
     (72) ciclo_while -> . MIENTRAS punto_inicio_while LPAREN hyper_exp RPAREN punto_medio_while LBRACE estatutos RBRACE punto_fin_while SEMICOLON
     (81) condicion -> . SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE punto_fin_si SEMICOLON
     (82) condicion -> . SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE SINO punto_sino LBRACE estatutos RBRACE punto_fin_si SEMICOLON
-    (141) imprimir -> . IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON
+    (142) imprimir -> . IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON
     (69) leer -> . LEER LPAREN punto_push_leer ID punto_create_leer RPAREN SEMICOLON
     (60) variable -> . ID push_id variable_aux
 
-    RBRACE          reduce using rule 147 (empty -> .)
+    RBRACE          reduce using rule 148 (empty -> .)
     ID              shift and go to state 66
     DESDE           shift and go to state 67
     MIENTRAS        shift and go to state 68
@@ -1138,7 +1140,7 @@ state 69
 
 state 70
 
-    (141) imprimir -> IMPRIMIR . LPAREN imprimir_aux RPAREN SEMICOLON
+    (142) imprimir -> IMPRIMIR . LPAREN imprimir_aux RPAREN SEMICOLON
 
     LPAREN          shift and go to state 89
 
@@ -1157,11 +1159,11 @@ state 72
     (41) parameter -> . empty
     (19) type -> . ENTERO
     (20) type -> . DECIMAL
-    (147) empty -> .
+    (148) empty -> .
 
     ENTERO          shift and go to state 30
     DECIMAL         shift and go to state 31
-    RPAREN          reduce using rule 147 (empty -> .)
+    RPAREN          reduce using rule 148 (empty -> .)
 
     type                           shift and go to state 74
     parameter                      shift and go to state 91
@@ -1254,7 +1256,7 @@ state 83
     (118) factor -> . variable
     (122) factor_constante -> . CTEI push_int
     (123) factor_constante -> . CTEF push_float
-    (135) llamada_func_return -> . ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
+    (135) llamada_func_return -> . ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
     (60) variable -> . ID push_id variable_aux
 
     LPAREN          shift and go to state 105
@@ -1289,30 +1291,30 @@ state 85
     (60) variable -> ID push_id . variable_aux
     (61) variable_aux -> . LBRACKET punto_dimensioned meter_fondo_falso hyper_exp punto_create_ver_quad punto_termina_arr RBRACKET quitar_fondo_falso variable_aux_dim
     (62) variable_aux -> . empty
-    (147) empty -> .
+    (148) empty -> .
 
     LBRACKET        shift and go to state 113
-    ASSIGN          reduce using rule 147 (empty -> .)
-    TIMES           reduce using rule 147 (empty -> .)
-    DIVIDE          reduce using rule 147 (empty -> .)
-    PLUS            reduce using rule 147 (empty -> .)
-    MINUS           reduce using rule 147 (empty -> .)
-    GREATER         reduce using rule 147 (empty -> .)
-    LESS            reduce using rule 147 (empty -> .)
-    GREATEREQ       reduce using rule 147 (empty -> .)
-    LESSEQ          reduce using rule 147 (empty -> .)
-    NOTEQUAL        reduce using rule 147 (empty -> .)
-    EQUAL           reduce using rule 147 (empty -> .)
-    Y               reduce using rule 147 (empty -> .)
-    O               reduce using rule 147 (empty -> .)
-    LPAREN          reduce using rule 147 (empty -> .)
-    CTEI            reduce using rule 147 (empty -> .)
-    CTEF            reduce using rule 147 (empty -> .)
-    ID              reduce using rule 147 (empty -> .)
-    SEMICOLON       reduce using rule 147 (empty -> .)
-    RPAREN          reduce using rule 147 (empty -> .)
-    COMMA           reduce using rule 147 (empty -> .)
-    RBRACKET        reduce using rule 147 (empty -> .)
+    ASSIGN          reduce using rule 148 (empty -> .)
+    TIMES           reduce using rule 148 (empty -> .)
+    DIVIDE          reduce using rule 148 (empty -> .)
+    PLUS            reduce using rule 148 (empty -> .)
+    MINUS           reduce using rule 148 (empty -> .)
+    GREATER         reduce using rule 148 (empty -> .)
+    LESS            reduce using rule 148 (empty -> .)
+    GREATEREQ       reduce using rule 148 (empty -> .)
+    LESSEQ          reduce using rule 148 (empty -> .)
+    NOTEQUAL        reduce using rule 148 (empty -> .)
+    EQUAL           reduce using rule 148 (empty -> .)
+    Y               reduce using rule 148 (empty -> .)
+    O               reduce using rule 148 (empty -> .)
+    LPAREN          reduce using rule 148 (empty -> .)
+    CTEI            reduce using rule 148 (empty -> .)
+    CTEF            reduce using rule 148 (empty -> .)
+    ID              reduce using rule 148 (empty -> .)
+    SEMICOLON       reduce using rule 148 (empty -> .)
+    RPAREN          reduce using rule 148 (empty -> .)
+    COMMA           reduce using rule 148 (empty -> .)
+    RBRACKET        reduce using rule 148 (empty -> .)
 
     variable_aux                   shift and go to state 112
     empty                          shift and go to state 114
@@ -1345,7 +1347,7 @@ state 88
     (118) factor -> . variable
     (122) factor_constante -> . CTEI push_int
     (123) factor_constante -> . CTEF push_float
-    (135) llamada_func_return -> . ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
+    (135) llamada_func_return -> . ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
     (60) variable -> . ID push_id variable_aux
 
     LPAREN          shift and go to state 105
@@ -1364,9 +1366,9 @@ state 88
 
 state 89
 
-    (141) imprimir -> IMPRIMIR LPAREN . imprimir_aux RPAREN SEMICOLON
-    (142) imprimir_aux -> . exp push_imprimir imprimirCycle
-    (143) imprimir_aux -> . CTESTRING push_imprimir imprimirCycle
+    (142) imprimir -> IMPRIMIR LPAREN . imprimir_aux RPAREN SEMICOLON
+    (143) imprimir_aux -> . exp push_imprimir imprimirCycle
+    (144) imprimir_aux -> . CTESTRING push_imprimir imprimirCycle
     (103) exp -> . term check_op_masmenos exp_aux
     (109) term -> . factor check_op_pordiv term_aux
     (115) factor -> . LPAREN meter_fondo_falso hyper_exp RPAREN quitar_fondo_falso
@@ -1375,7 +1377,7 @@ state 89
     (118) factor -> . variable
     (122) factor_constante -> . CTEI push_int
     (123) factor_constante -> . CTEF push_float
-    (135) llamada_func_return -> . ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
+    (135) llamada_func_return -> . ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
     (60) variable -> . ID push_id variable_aux
 
     CTESTRING       shift and go to state 120
@@ -1520,17 +1522,17 @@ state 101
     (90) push_op_logicos -> . Y
     (91) push_op_logicos -> . O
     (92) push_op_logicos -> . empty
-    (147) empty -> .
+    (148) empty -> .
 
     Y               shift and go to state 133
     O               shift and go to state 134
-    SEMICOLON       reduce using rule 147 (empty -> .)
-    RPAREN          reduce using rule 147 (empty -> .)
-    RBRACKET        reduce using rule 147 (empty -> .)
-    LPAREN          reduce using rule 147 (empty -> .)
-    CTEI            reduce using rule 147 (empty -> .)
-    CTEF            reduce using rule 147 (empty -> .)
-    ID              reduce using rule 147 (empty -> .)
+    SEMICOLON       reduce using rule 148 (empty -> .)
+    RPAREN          reduce using rule 148 (empty -> .)
+    RBRACKET        reduce using rule 148 (empty -> .)
+    LPAREN          reduce using rule 148 (empty -> .)
+    CTEI            reduce using rule 148 (empty -> .)
+    CTEF            reduce using rule 148 (empty -> .)
+    ID              reduce using rule 148 (empty -> .)
 
     hyper_exp_aux                  shift and go to state 130
     push_op_logicos                shift and go to state 131
@@ -1547,7 +1549,7 @@ state 102
     (100) push_op_relacionales -> . LESSEQ
     (101) push_op_relacionales -> . NOTEQUAL
     (102) push_op_relacionales -> . EQUAL
-    (147) empty -> .
+    (148) empty -> .
 
     GREATER         shift and go to state 138
     LESS            shift and go to state 139
@@ -1555,15 +1557,15 @@ state 102
     LESSEQ          shift and go to state 141
     NOTEQUAL        shift and go to state 142
     EQUAL           shift and go to state 143
-    Y               reduce using rule 147 (empty -> .)
-    O               reduce using rule 147 (empty -> .)
-    LPAREN          reduce using rule 147 (empty -> .)
-    CTEI            reduce using rule 147 (empty -> .)
-    CTEF            reduce using rule 147 (empty -> .)
-    ID              reduce using rule 147 (empty -> .)
-    SEMICOLON       reduce using rule 147 (empty -> .)
-    RPAREN          reduce using rule 147 (empty -> .)
-    RBRACKET        reduce using rule 147 (empty -> .)
+    Y               reduce using rule 148 (empty -> .)
+    O               reduce using rule 148 (empty -> .)
+    LPAREN          reduce using rule 148 (empty -> .)
+    CTEI            reduce using rule 148 (empty -> .)
+    CTEF            reduce using rule 148 (empty -> .)
+    ID              reduce using rule 148 (empty -> .)
+    SEMICOLON       reduce using rule 148 (empty -> .)
+    RPAREN          reduce using rule 148 (empty -> .)
+    RBRACKET        reduce using rule 148 (empty -> .)
 
     super_exp_aux                  shift and go to state 135
     push_op_relacionales           shift and go to state 136
@@ -1745,7 +1747,7 @@ state 109
 
 state 110
 
-    (135) llamada_func_return -> ID . LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
+    (135) llamada_func_return -> ID . LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
     (60) variable -> ID . push_id variable_aux
     (128) push_id -> .
 
@@ -1779,13 +1781,13 @@ state 110
 state 111
 
     (134) llamada_func_void -> ID LPAREN punto_func_exists . punto_validate_isvoid punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub SEMICOLON
-    (137) punto_validate_isvoid -> .
+    (138) punto_validate_isvoid -> .
 
-    LPAREN          reduce using rule 137 (punto_validate_isvoid -> .)
-    CTEI            reduce using rule 137 (punto_validate_isvoid -> .)
-    CTEF            reduce using rule 137 (punto_validate_isvoid -> .)
-    ID              reduce using rule 137 (punto_validate_isvoid -> .)
-    RPAREN          reduce using rule 137 (punto_validate_isvoid -> .)
+    LPAREN          reduce using rule 138 (punto_validate_isvoid -> .)
+    CTEI            reduce using rule 138 (punto_validate_isvoid -> .)
+    CTEF            reduce using rule 138 (punto_validate_isvoid -> .)
+    ID              reduce using rule 138 (punto_validate_isvoid -> .)
+    RPAREN          reduce using rule 138 (punto_validate_isvoid -> .)
 
     punto_validate_isvoid          shift and go to state 150
 
@@ -1877,7 +1879,7 @@ state 116
     (118) factor -> . variable
     (122) factor_constante -> . CTEI push_int
     (123) factor_constante -> . CTEF push_float
-    (135) llamada_func_return -> . ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
+    (135) llamada_func_return -> . ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
     (60) variable -> . ID push_id variable_aux
 
     LPAREN          shift and go to state 105
@@ -1904,28 +1906,28 @@ state 117
 
 state 118
 
-    (141) imprimir -> IMPRIMIR LPAREN imprimir_aux . RPAREN SEMICOLON
+    (142) imprimir -> IMPRIMIR LPAREN imprimir_aux . RPAREN SEMICOLON
 
     RPAREN          shift and go to state 155
 
 
 state 119
 
-    (142) imprimir_aux -> exp . push_imprimir imprimirCycle
-    (146) push_imprimir -> .
+    (143) imprimir_aux -> exp . push_imprimir imprimirCycle
+    (147) push_imprimir -> .
 
-    COMMA           reduce using rule 146 (push_imprimir -> .)
-    RPAREN          reduce using rule 146 (push_imprimir -> .)
+    COMMA           reduce using rule 147 (push_imprimir -> .)
+    RPAREN          reduce using rule 147 (push_imprimir -> .)
 
     push_imprimir                  shift and go to state 156
 
 state 120
 
-    (143) imprimir_aux -> CTESTRING . push_imprimir imprimirCycle
-    (146) push_imprimir -> .
+    (144) imprimir_aux -> CTESTRING . push_imprimir imprimirCycle
+    (147) push_imprimir -> .
 
-    COMMA           reduce using rule 146 (push_imprimir -> .)
-    RPAREN          reduce using rule 146 (push_imprimir -> .)
+    COMMA           reduce using rule 147 (push_imprimir -> .)
+    RPAREN          reduce using rule 147 (push_imprimir -> .)
 
     push_imprimir                  shift and go to state 157
 
@@ -1951,19 +1953,19 @@ state 123
     (16) dec_var -> . simple_var
     (17) dec_var -> . array
     (18) dec_var -> . matrix
-    (147) empty -> .
+    (148) empty -> .
     (21) simple_var -> . VARIABLE type ARROW ID punto_simple_var simpleVarCycle SEMICOLON
     (25) array -> . RENGLON type ARROW ID LBRACKET CTEI punto_array_size RBRACKET punto_save_array arrayCycle SEMICOLON
     (30) matrix -> . TABLA type ARROW ID LBRACKET CTEI punto_matrix_size RBRACKET LBRACKET CTEI punto_matrix_size RBRACKET punto_save_matrix matrixCycle SEMICOLON
 
-    REGRESAR        reduce using rule 147 (empty -> .)
-    ID              reduce using rule 147 (empty -> .)
-    DESDE           reduce using rule 147 (empty -> .)
-    MIENTRAS        reduce using rule 147 (empty -> .)
-    SI              reduce using rule 147 (empty -> .)
-    IMPRIMIR        reduce using rule 147 (empty -> .)
-    LEER            reduce using rule 147 (empty -> .)
-    RBRACE          reduce using rule 147 (empty -> .)
+    REGRESAR        reduce using rule 148 (empty -> .)
+    ID              reduce using rule 148 (empty -> .)
+    DESDE           reduce using rule 148 (empty -> .)
+    MIENTRAS        reduce using rule 148 (empty -> .)
+    SI              reduce using rule 148 (empty -> .)
+    IMPRIMIR        reduce using rule 148 (empty -> .)
+    LEER            reduce using rule 148 (empty -> .)
+    RBRACE          reduce using rule 148 (empty -> .)
     VARIABLE        shift and go to state 17
     RENGLON         shift and go to state 18
     TABLA           shift and go to state 19
@@ -1980,10 +1982,10 @@ state 124
     (40) parameter -> type ID punto_add_parameter . parameterCycle
     (42) parameterCycle -> . COMMA type ID punto_add_parameter parameterCycle
     (43) parameterCycle -> . empty
-    (147) empty -> .
+    (148) empty -> .
 
     COMMA           shift and go to state 162
-    RPAREN          reduce using rule 147 (empty -> .)
+    RPAREN          reduce using rule 148 (empty -> .)
 
     parameterCycle                 shift and go to state 161
     empty                          shift and go to state 163
@@ -1993,10 +1995,10 @@ state 125
     (22) simpleVarCycle -> COMMA ID punto_simple_var . simpleVarCycle
     (22) simpleVarCycle -> . COMMA ID punto_simple_var simpleVarCycle
     (23) simpleVarCycle -> . empty
-    (147) empty -> .
+    (148) empty -> .
 
     COMMA           shift and go to state 77
-    SEMICOLON       reduce using rule 147 (empty -> .)
+    SEMICOLON       reduce using rule 148 (empty -> .)
 
     simpleVarCycle                 shift and go to state 164
     empty                          shift and go to state 78
@@ -2055,7 +2057,7 @@ state 131
     (118) factor -> . variable
     (122) factor_constante -> . CTEI push_int
     (123) factor_constante -> . CTEF push_float
-    (135) llamada_func_return -> . ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
+    (135) llamada_func_return -> . ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
     (60) variable -> . ID push_id variable_aux
 
     LPAREN          shift and go to state 105
@@ -2131,7 +2133,7 @@ state 136
     (118) factor -> . variable
     (122) factor_constante -> . CTEI push_int
     (123) factor_constante -> . CTEF push_float
-    (135) llamada_func_return -> . ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
+    (135) llamada_func_return -> . ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
     (60) variable -> . ID push_id variable_aux
 
     LPAREN          shift and go to state 105
@@ -2228,26 +2230,26 @@ state 144
     (105) exp_aux -> . empty
     (106) push_op_exp_masmenos -> . PLUS
     (107) push_op_exp_masmenos -> . MINUS
-    (147) empty -> .
+    (148) empty -> .
 
     PLUS            shift and go to state 173
     MINUS           shift and go to state 174
-    GREATER         reduce using rule 147 (empty -> .)
-    LESS            reduce using rule 147 (empty -> .)
-    GREATEREQ       reduce using rule 147 (empty -> .)
-    LESSEQ          reduce using rule 147 (empty -> .)
-    NOTEQUAL        reduce using rule 147 (empty -> .)
-    EQUAL           reduce using rule 147 (empty -> .)
-    Y               reduce using rule 147 (empty -> .)
-    O               reduce using rule 147 (empty -> .)
-    LPAREN          reduce using rule 147 (empty -> .)
-    CTEI            reduce using rule 147 (empty -> .)
-    CTEF            reduce using rule 147 (empty -> .)
-    ID              reduce using rule 147 (empty -> .)
-    SEMICOLON       reduce using rule 147 (empty -> .)
-    RPAREN          reduce using rule 147 (empty -> .)
-    COMMA           reduce using rule 147 (empty -> .)
-    RBRACKET        reduce using rule 147 (empty -> .)
+    GREATER         reduce using rule 148 (empty -> .)
+    LESS            reduce using rule 148 (empty -> .)
+    GREATEREQ       reduce using rule 148 (empty -> .)
+    LESSEQ          reduce using rule 148 (empty -> .)
+    NOTEQUAL        reduce using rule 148 (empty -> .)
+    EQUAL           reduce using rule 148 (empty -> .)
+    Y               reduce using rule 148 (empty -> .)
+    O               reduce using rule 148 (empty -> .)
+    LPAREN          reduce using rule 148 (empty -> .)
+    CTEI            reduce using rule 148 (empty -> .)
+    CTEF            reduce using rule 148 (empty -> .)
+    ID              reduce using rule 148 (empty -> .)
+    SEMICOLON       reduce using rule 148 (empty -> .)
+    RPAREN          reduce using rule 148 (empty -> .)
+    COMMA           reduce using rule 148 (empty -> .)
+    RBRACKET        reduce using rule 148 (empty -> .)
 
     exp_aux                        shift and go to state 170
     push_op_exp_masmenos           shift and go to state 171
@@ -2260,28 +2262,28 @@ state 145
     (111) term_aux -> . empty
     (113) push_op_exp_pordiv -> . TIMES
     (114) push_op_exp_pordiv -> . DIVIDE
-    (147) empty -> .
+    (148) empty -> .
 
     TIMES           shift and go to state 178
     DIVIDE          shift and go to state 179
-    PLUS            reduce using rule 147 (empty -> .)
-    MINUS           reduce using rule 147 (empty -> .)
-    GREATER         reduce using rule 147 (empty -> .)
-    LESS            reduce using rule 147 (empty -> .)
-    GREATEREQ       reduce using rule 147 (empty -> .)
-    LESSEQ          reduce using rule 147 (empty -> .)
-    NOTEQUAL        reduce using rule 147 (empty -> .)
-    EQUAL           reduce using rule 147 (empty -> .)
-    Y               reduce using rule 147 (empty -> .)
-    O               reduce using rule 147 (empty -> .)
-    LPAREN          reduce using rule 147 (empty -> .)
-    CTEI            reduce using rule 147 (empty -> .)
-    CTEF            reduce using rule 147 (empty -> .)
-    ID              reduce using rule 147 (empty -> .)
-    SEMICOLON       reduce using rule 147 (empty -> .)
-    RPAREN          reduce using rule 147 (empty -> .)
-    COMMA           reduce using rule 147 (empty -> .)
-    RBRACKET        reduce using rule 147 (empty -> .)
+    PLUS            reduce using rule 148 (empty -> .)
+    MINUS           reduce using rule 148 (empty -> .)
+    GREATER         reduce using rule 148 (empty -> .)
+    LESS            reduce using rule 148 (empty -> .)
+    GREATEREQ       reduce using rule 148 (empty -> .)
+    LESSEQ          reduce using rule 148 (empty -> .)
+    NOTEQUAL        reduce using rule 148 (empty -> .)
+    EQUAL           reduce using rule 148 (empty -> .)
+    Y               reduce using rule 148 (empty -> .)
+    O               reduce using rule 148 (empty -> .)
+    LPAREN          reduce using rule 148 (empty -> .)
+    CTEI            reduce using rule 148 (empty -> .)
+    CTEF            reduce using rule 148 (empty -> .)
+    ID              reduce using rule 148 (empty -> .)
+    SEMICOLON       reduce using rule 148 (empty -> .)
+    RPAREN          reduce using rule 148 (empty -> .)
+    COMMA           reduce using rule 148 (empty -> .)
+    RBRACKET        reduce using rule 148 (empty -> .)
 
     term_aux                       shift and go to state 175
     push_op_exp_pordiv             shift and go to state 176
@@ -2300,7 +2302,7 @@ state 146
     (118) factor -> . variable
     (122) factor_constante -> . CTEI push_int
     (123) factor_constante -> . CTEF push_float
-    (135) llamada_func_return -> . ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
+    (135) llamada_func_return -> . ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
     (60) variable -> . ID push_id variable_aux
 
     LPAREN          shift and go to state 105
@@ -2371,7 +2373,7 @@ state 148
 
 state 149
 
-    (135) llamada_func_return -> ID LPAREN . punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
+    (135) llamada_func_return -> ID LPAREN . punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
     (136) punto_func_exists -> .
 
     LPAREN          reduce using rule 136 (punto_func_exists -> .)
@@ -2385,13 +2387,13 @@ state 149
 state 150
 
     (134) llamada_func_void -> ID LPAREN punto_func_exists punto_validate_isvoid . punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub SEMICOLON
-    (138) punto_create_era -> .
+    (139) punto_create_era -> .
 
-    LPAREN          reduce using rule 138 (punto_create_era -> .)
-    CTEI            reduce using rule 138 (punto_create_era -> .)
-    CTEF            reduce using rule 138 (punto_create_era -> .)
-    ID              reduce using rule 138 (punto_create_era -> .)
-    RPAREN          reduce using rule 138 (punto_create_era -> .)
+    LPAREN          reduce using rule 139 (punto_create_era -> .)
+    CTEI            reduce using rule 139 (punto_create_era -> .)
+    CTEF            reduce using rule 139 (punto_create_era -> .)
+    ID              reduce using rule 139 (punto_create_era -> .)
+    RPAREN          reduce using rule 139 (punto_create_era -> .)
 
     punto_create_era               shift and go to state 182
 
@@ -2433,33 +2435,33 @@ state 154
 
 state 155
 
-    (141) imprimir -> IMPRIMIR LPAREN imprimir_aux RPAREN . SEMICOLON
+    (142) imprimir -> IMPRIMIR LPAREN imprimir_aux RPAREN . SEMICOLON
 
     SEMICOLON       shift and go to state 187
 
 
 state 156
 
-    (142) imprimir_aux -> exp push_imprimir . imprimirCycle
-    (144) imprimirCycle -> . COMMA imprimir_aux
-    (145) imprimirCycle -> . empty
-    (147) empty -> .
+    (143) imprimir_aux -> exp push_imprimir . imprimirCycle
+    (145) imprimirCycle -> . COMMA imprimir_aux
+    (146) imprimirCycle -> . empty
+    (148) empty -> .
 
     COMMA           shift and go to state 189
-    RPAREN          reduce using rule 147 (empty -> .)
+    RPAREN          reduce using rule 148 (empty -> .)
 
     imprimirCycle                  shift and go to state 188
     empty                          shift and go to state 190
 
 state 157
 
-    (143) imprimir_aux -> CTESTRING push_imprimir . imprimirCycle
-    (144) imprimirCycle -> . COMMA imprimir_aux
-    (145) imprimirCycle -> . empty
-    (147) empty -> .
+    (144) imprimir_aux -> CTESTRING push_imprimir . imprimirCycle
+    (145) imprimirCycle -> . COMMA imprimir_aux
+    (146) imprimirCycle -> . empty
+    (148) empty -> .
 
     COMMA           shift and go to state 189
-    RPAREN          reduce using rule 147 (empty -> .)
+    RPAREN          reduce using rule 148 (empty -> .)
 
     imprimirCycle                  shift and go to state 191
     empty                          shift and go to state 190
@@ -2481,19 +2483,19 @@ state 159
     (16) dec_var -> . simple_var
     (17) dec_var -> . array
     (18) dec_var -> . matrix
-    (147) empty -> .
+    (148) empty -> .
     (21) simple_var -> . VARIABLE type ARROW ID punto_simple_var simpleVarCycle SEMICOLON
     (25) array -> . RENGLON type ARROW ID LBRACKET CTEI punto_array_size RBRACKET punto_save_array arrayCycle SEMICOLON
     (30) matrix -> . TABLA type ARROW ID LBRACKET CTEI punto_matrix_size RBRACKET LBRACKET CTEI punto_matrix_size RBRACKET punto_save_matrix matrixCycle SEMICOLON
 
-    REGRESAR        reduce using rule 147 (empty -> .)
-    ID              reduce using rule 147 (empty -> .)
-    DESDE           reduce using rule 147 (empty -> .)
-    MIENTRAS        reduce using rule 147 (empty -> .)
-    SI              reduce using rule 147 (empty -> .)
-    IMPRIMIR        reduce using rule 147 (empty -> .)
-    LEER            reduce using rule 147 (empty -> .)
-    RBRACE          reduce using rule 147 (empty -> .)
+    REGRESAR        reduce using rule 148 (empty -> .)
+    ID              reduce using rule 148 (empty -> .)
+    DESDE           reduce using rule 148 (empty -> .)
+    MIENTRAS        reduce using rule 148 (empty -> .)
+    SI              reduce using rule 148 (empty -> .)
+    IMPRIMIR        reduce using rule 148 (empty -> .)
+    LEER            reduce using rule 148 (empty -> .)
+    RBRACE          reduce using rule 148 (empty -> .)
     VARIABLE        shift and go to state 17
     RENGLON         shift and go to state 18
     TABLA           shift and go to state 19
@@ -2521,19 +2523,19 @@ state 160
     (54) estatutos_opciones -> . condicion
     (55) estatutos_opciones -> . imprimir
     (56) estatutos_opciones -> . leer
-    (147) empty -> .
+    (148) empty -> .
     (59) asignar -> . variable ASSIGN hyper_exp push_op_igual check_op_igual SEMICOLON
     (134) llamada_func_void -> . ID LPAREN punto_func_exists punto_validate_isvoid punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub SEMICOLON
     (76) ciclo_for -> . DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
     (72) ciclo_while -> . MIENTRAS punto_inicio_while LPAREN hyper_exp RPAREN punto_medio_while LBRACE estatutos RBRACE punto_fin_while SEMICOLON
     (81) condicion -> . SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE punto_fin_si SEMICOLON
     (82) condicion -> . SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE SINO punto_sino LBRACE estatutos RBRACE punto_fin_si SEMICOLON
-    (141) imprimir -> . IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON
+    (142) imprimir -> . IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON
     (69) leer -> . LEER LPAREN punto_push_leer ID punto_create_leer RPAREN SEMICOLON
     (60) variable -> . ID push_id variable_aux
 
     REGRESAR        shift and go to state 199
-    RBRACE          reduce using rule 147 (empty -> .)
+    RBRACE          reduce using rule 148 (empty -> .)
     ID              shift and go to state 66
     DESDE           shift and go to state 67
     MIENTRAS        shift and go to state 68
@@ -2592,10 +2594,10 @@ state 165
     (25) array -> RENGLON type ARROW ID LBRACKET CTEI punto_array_size RBRACKET punto_save_array . arrayCycle SEMICOLON
     (26) arrayCycle -> . COMMA ID LBRACKET CTEI punto_array_size RBRACKET punto_save_array arrayCycle
     (27) arrayCycle -> . empty
-    (147) empty -> .
+    (148) empty -> .
 
     COMMA           shift and go to state 202
-    SEMICOLON       reduce using rule 147 (empty -> .)
+    SEMICOLON       reduce using rule 148 (empty -> .)
 
     arrayCycle                     shift and go to state 201
     empty                          shift and go to state 203
@@ -2675,7 +2677,7 @@ state 171
     (118) factor -> . variable
     (122) factor_constante -> . CTEI push_int
     (123) factor_constante -> . CTEF push_float
-    (135) llamada_func_return -> . ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
+    (135) llamada_func_return -> . ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
     (60) variable -> . ID push_id variable_aux
 
     LPAREN          shift and go to state 105
@@ -2766,7 +2768,7 @@ state 176
     (118) factor -> . variable
     (122) factor_constante -> . CTEI push_int
     (123) factor_constante -> . CTEF push_float
-    (135) llamada_func_return -> . ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
+    (135) llamada_func_return -> . ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
     (60) variable -> . ID push_id variable_aux
 
     LPAREN          shift and go to state 105
@@ -2833,16 +2835,16 @@ state 180
 
 state 181
 
-    (135) llamada_func_return -> ID LPAREN punto_func_exists . meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
-    (124) meter_fondo_falso -> .
+    (135) llamada_func_return -> ID LPAREN punto_func_exists . punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
+    (137) punto_validate_isNotvoid -> .
 
-    LPAREN          reduce using rule 124 (meter_fondo_falso -> .)
-    CTEI            reduce using rule 124 (meter_fondo_falso -> .)
-    CTEF            reduce using rule 124 (meter_fondo_falso -> .)
-    ID              reduce using rule 124 (meter_fondo_falso -> .)
-    RPAREN          reduce using rule 124 (meter_fondo_falso -> .)
+    LPAREN          reduce using rule 137 (punto_validate_isNotvoid -> .)
+    CTEI            reduce using rule 137 (punto_validate_isNotvoid -> .)
+    CTEF            reduce using rule 137 (punto_validate_isNotvoid -> .)
+    ID              reduce using rule 137 (punto_validate_isNotvoid -> .)
+    RPAREN          reduce using rule 137 (punto_validate_isNotvoid -> .)
 
-    meter_fondo_falso              shift and go to state 211
+    punto_validate_isNotvoid       shift and go to state 211
 
 state 182
 
@@ -2850,7 +2852,7 @@ state 182
     (131) func_params -> . exp punto_check_param func_params_aux
     (132) func_params -> . empty
     (103) exp -> . term check_op_masmenos exp_aux
-    (147) empty -> .
+    (148) empty -> .
     (109) term -> . factor check_op_pordiv term_aux
     (115) factor -> . LPAREN meter_fondo_falso hyper_exp RPAREN quitar_fondo_falso
     (116) factor -> . factor_constante
@@ -2858,10 +2860,10 @@ state 182
     (118) factor -> . variable
     (122) factor_constante -> . CTEI push_int
     (123) factor_constante -> . CTEF push_float
-    (135) llamada_func_return -> . ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
+    (135) llamada_func_return -> . ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
     (60) variable -> . ID push_id variable_aux
 
-    RPAREN          reduce using rule 147 (empty -> .)
+    RPAREN          reduce using rule 148 (empty -> .)
     LPAREN          shift and go to state 105
     CTEI            shift and go to state 108
     CTEF            shift and go to state 109
@@ -2889,7 +2891,7 @@ state 183
     (118) factor -> . variable
     (122) factor_constante -> . CTEI push_int
     (123) factor_constante -> . CTEF push_float
-    (135) llamada_func_return -> . ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
+    (135) llamada_func_return -> . ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
     (60) variable -> . ID push_id variable_aux
 
     LPAREN          shift and go to state 105
@@ -2919,7 +2921,7 @@ state 184
     (118) factor -> . variable
     (122) factor_constante -> . CTEI push_int
     (123) factor_constante -> . CTEF push_float
-    (135) llamada_func_return -> . ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
+    (135) llamada_func_return -> . ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
     (60) variable -> . ID push_id variable_aux
 
     LPAREN          shift and go to state 105
@@ -2955,30 +2957,30 @@ state 186
 
 state 187
 
-    (141) imprimir -> IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON .
+    (142) imprimir -> IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON .
 
-    ID              reduce using rule 141 (imprimir -> IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON .)
-    DESDE           reduce using rule 141 (imprimir -> IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON .)
-    MIENTRAS        reduce using rule 141 (imprimir -> IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON .)
-    SI              reduce using rule 141 (imprimir -> IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON .)
-    IMPRIMIR        reduce using rule 141 (imprimir -> IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON .)
-    LEER            reduce using rule 141 (imprimir -> IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON .)
-    RBRACE          reduce using rule 141 (imprimir -> IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON .)
-    REGRESAR        reduce using rule 141 (imprimir -> IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON .)
+    ID              reduce using rule 142 (imprimir -> IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON .)
+    DESDE           reduce using rule 142 (imprimir -> IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON .)
+    MIENTRAS        reduce using rule 142 (imprimir -> IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON .)
+    SI              reduce using rule 142 (imprimir -> IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON .)
+    IMPRIMIR        reduce using rule 142 (imprimir -> IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON .)
+    LEER            reduce using rule 142 (imprimir -> IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON .)
+    RBRACE          reduce using rule 142 (imprimir -> IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON .)
+    REGRESAR        reduce using rule 142 (imprimir -> IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON .)
 
 
 state 188
 
-    (142) imprimir_aux -> exp push_imprimir imprimirCycle .
+    (143) imprimir_aux -> exp push_imprimir imprimirCycle .
 
-    RPAREN          reduce using rule 142 (imprimir_aux -> exp push_imprimir imprimirCycle .)
+    RPAREN          reduce using rule 143 (imprimir_aux -> exp push_imprimir imprimirCycle .)
 
 
 state 189
 
-    (144) imprimirCycle -> COMMA . imprimir_aux
-    (142) imprimir_aux -> . exp push_imprimir imprimirCycle
-    (143) imprimir_aux -> . CTESTRING push_imprimir imprimirCycle
+    (145) imprimirCycle -> COMMA . imprimir_aux
+    (143) imprimir_aux -> . exp push_imprimir imprimirCycle
+    (144) imprimir_aux -> . CTESTRING push_imprimir imprimirCycle
     (103) exp -> . term check_op_masmenos exp_aux
     (109) term -> . factor check_op_pordiv term_aux
     (115) factor -> . LPAREN meter_fondo_falso hyper_exp RPAREN quitar_fondo_falso
@@ -2987,7 +2989,7 @@ state 189
     (118) factor -> . variable
     (122) factor_constante -> . CTEI push_int
     (123) factor_constante -> . CTEF push_float
-    (135) llamada_func_return -> . ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
+    (135) llamada_func_return -> . ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
     (60) variable -> . ID push_id variable_aux
 
     CTESTRING       shift and go to state 120
@@ -3006,16 +3008,16 @@ state 189
 
 state 190
 
-    (145) imprimirCycle -> empty .
+    (146) imprimirCycle -> empty .
 
-    RPAREN          reduce using rule 145 (imprimirCycle -> empty .)
+    RPAREN          reduce using rule 146 (imprimirCycle -> empty .)
 
 
 state 191
 
-    (143) imprimir_aux -> CTESTRING push_imprimir imprimirCycle .
+    (144) imprimir_aux -> CTESTRING push_imprimir imprimirCycle .
 
-    RPAREN          reduce using rule 143 (imprimir_aux -> CTESTRING push_imprimir imprimirCycle .)
+    RPAREN          reduce using rule 144 (imprimir_aux -> CTESTRING push_imprimir imprimirCycle .)
 
 
 state 192
@@ -3041,19 +3043,19 @@ state 193
     (54) estatutos_opciones -> . condicion
     (55) estatutos_opciones -> . imprimir
     (56) estatutos_opciones -> . leer
-    (147) empty -> .
+    (148) empty -> .
     (59) asignar -> . variable ASSIGN hyper_exp push_op_igual check_op_igual SEMICOLON
     (134) llamada_func_void -> . ID LPAREN punto_func_exists punto_validate_isvoid punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub SEMICOLON
     (76) ciclo_for -> . DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
     (72) ciclo_while -> . MIENTRAS punto_inicio_while LPAREN hyper_exp RPAREN punto_medio_while LBRACE estatutos RBRACE punto_fin_while SEMICOLON
     (81) condicion -> . SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE punto_fin_si SEMICOLON
     (82) condicion -> . SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE SINO punto_sino LBRACE estatutos RBRACE punto_fin_si SEMICOLON
-    (141) imprimir -> . IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON
+    (142) imprimir -> . IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON
     (69) leer -> . LEER LPAREN punto_push_leer ID punto_create_leer RPAREN SEMICOLON
     (60) variable -> . ID push_id variable_aux
 
     REGRESAR        shift and go to state 199
-    RBRACE          reduce using rule 147 (empty -> .)
+    RBRACE          reduce using rule 148 (empty -> .)
     ID              shift and go to state 66
     DESDE           shift and go to state 67
     MIENTRAS        shift and go to state 68
@@ -3113,14 +3115,14 @@ state 197
     (54) estatutos_opciones -> . condicion
     (55) estatutos_opciones -> . imprimir
     (56) estatutos_opciones -> . leer
-    (147) empty -> .
+    (148) empty -> .
     (59) asignar -> . variable ASSIGN hyper_exp push_op_igual check_op_igual SEMICOLON
     (134) llamada_func_void -> . ID LPAREN punto_func_exists punto_validate_isvoid punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub SEMICOLON
     (76) ciclo_for -> . DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
     (72) ciclo_while -> . MIENTRAS punto_inicio_while LPAREN hyper_exp RPAREN punto_medio_while LBRACE estatutos RBRACE punto_fin_while SEMICOLON
     (81) condicion -> . SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE punto_fin_si SEMICOLON
     (82) condicion -> . SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE SINO punto_sino LBRACE estatutos RBRACE punto_fin_si SEMICOLON
-    (141) imprimir -> . IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON
+    (142) imprimir -> . IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON
     (69) leer -> . LEER LPAREN punto_push_leer ID punto_create_leer RPAREN SEMICOLON
     (60) variable -> . ID push_id variable_aux
 
@@ -3134,7 +3136,7 @@ state 197
     IMPRIMIR        shift and go to state 70
     LEER            shift and go to state 71
 
-  ! RBRACE          [ reduce using rule 147 (empty -> .) ]
+  ! RBRACE          [ reduce using rule 148 (empty -> .) ]
 
     estatutos_opciones             shift and go to state 197
     estatutos                      shift and go to state 223
@@ -3315,16 +3317,16 @@ state 210
 
 state 211
 
-    (135) llamada_func_return -> ID LPAREN punto_func_exists meter_fondo_falso . punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
-    (138) punto_create_era -> .
+    (135) llamada_func_return -> ID LPAREN punto_func_exists punto_validate_isNotvoid . meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
+    (124) meter_fondo_falso -> .
 
-    LPAREN          reduce using rule 138 (punto_create_era -> .)
-    CTEI            reduce using rule 138 (punto_create_era -> .)
-    CTEF            reduce using rule 138 (punto_create_era -> .)
-    ID              reduce using rule 138 (punto_create_era -> .)
-    RPAREN          reduce using rule 138 (punto_create_era -> .)
+    LPAREN          reduce using rule 124 (meter_fondo_falso -> .)
+    CTEI            reduce using rule 124 (meter_fondo_falso -> .)
+    CTEF            reduce using rule 124 (meter_fondo_falso -> .)
+    ID              reduce using rule 124 (meter_fondo_falso -> .)
+    RPAREN          reduce using rule 124 (meter_fondo_falso -> .)
 
-    punto_create_era               shift and go to state 230
+    meter_fondo_falso              shift and go to state 230
 
 state 212
 
@@ -3390,19 +3392,19 @@ state 218
     (54) estatutos_opciones -> . condicion
     (55) estatutos_opciones -> . imprimir
     (56) estatutos_opciones -> . leer
-    (147) empty -> .
+    (148) empty -> .
     (59) asignar -> . variable ASSIGN hyper_exp push_op_igual check_op_igual SEMICOLON
     (134) llamada_func_void -> . ID LPAREN punto_func_exists punto_validate_isvoid punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub SEMICOLON
     (76) ciclo_for -> . DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
     (72) ciclo_while -> . MIENTRAS punto_inicio_while LPAREN hyper_exp RPAREN punto_medio_while LBRACE estatutos RBRACE punto_fin_while SEMICOLON
     (81) condicion -> . SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE punto_fin_si SEMICOLON
     (82) condicion -> . SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE SINO punto_sino LBRACE estatutos RBRACE punto_fin_si SEMICOLON
-    (141) imprimir -> . IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON
+    (142) imprimir -> . IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON
     (69) leer -> . LEER LPAREN punto_push_leer ID punto_create_leer RPAREN SEMICOLON
     (60) variable -> . ID push_id variable_aux
 
     REGRESAR        shift and go to state 199
-    RBRACE          reduce using rule 147 (empty -> .)
+    RBRACE          reduce using rule 148 (empty -> .)
     ID              shift and go to state 66
     DESDE           shift and go to state 67
     MIENTRAS        shift and go to state 68
@@ -3426,9 +3428,9 @@ state 218
 
 state 219
 
-    (144) imprimirCycle -> COMMA imprimir_aux .
+    (145) imprimirCycle -> COMMA imprimir_aux .
 
-    RPAREN          reduce using rule 144 (imprimirCycle -> COMMA imprimir_aux .)
+    RPAREN          reduce using rule 145 (imprimirCycle -> COMMA imprimir_aux .)
 
 
 state 220
@@ -3470,7 +3472,7 @@ state 224
     (118) factor -> . variable
     (122) factor_constante -> . CTEI push_int
     (123) factor_constante -> . CTEF push_float
-    (135) llamada_func_return -> . ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
+    (135) llamada_func_return -> . ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
     (60) variable -> . ID push_id variable_aux
 
     LPAREN          shift and go to state 105
@@ -3556,42 +3558,23 @@ state 229
 
 state 230
 
-    (135) llamada_func_return -> ID LPAREN punto_func_exists meter_fondo_falso punto_create_era . func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
-    (131) func_params -> . exp punto_check_param func_params_aux
-    (132) func_params -> . empty
-    (103) exp -> . term check_op_masmenos exp_aux
-    (147) empty -> .
-    (109) term -> . factor check_op_pordiv term_aux
-    (115) factor -> . LPAREN meter_fondo_falso hyper_exp RPAREN quitar_fondo_falso
-    (116) factor -> . factor_constante
-    (117) factor -> . llamada_func_return
-    (118) factor -> . variable
-    (122) factor_constante -> . CTEI push_int
-    (123) factor_constante -> . CTEF push_float
-    (135) llamada_func_return -> . ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
-    (60) variable -> . ID push_id variable_aux
+    (135) llamada_func_return -> ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso . punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
+    (139) punto_create_era -> .
 
-    RPAREN          reduce using rule 147 (empty -> .)
-    LPAREN          shift and go to state 105
-    CTEI            shift and go to state 108
-    CTEF            shift and go to state 109
-    ID              shift and go to state 110
+    LPAREN          reduce using rule 139 (punto_create_era -> .)
+    CTEI            reduce using rule 139 (punto_create_era -> .)
+    CTEF            reduce using rule 139 (punto_create_era -> .)
+    ID              reduce using rule 139 (punto_create_era -> .)
+    RPAREN          reduce using rule 139 (punto_create_era -> .)
 
-    func_params                    shift and go to state 244
-    exp                            shift and go to state 213
-    empty                          shift and go to state 214
-    term                           shift and go to state 103
-    factor                         shift and go to state 104
-    factor_constante               shift and go to state 106
-    llamada_func_return            shift and go to state 107
-    variable                       shift and go to state 99
+    punto_create_era               shift and go to state 244
 
 state 231
 
     (134) llamada_func_void -> ID LPAREN punto_func_exists punto_validate_isvoid punto_create_era func_params RPAREN . punto_check_total_params punto_create_gosub SEMICOLON
-    (139) punto_check_total_params -> .
+    (140) punto_check_total_params -> .
 
-    SEMICOLON       reduce using rule 139 (punto_check_total_params -> .)
+    SEMICOLON       reduce using rule 140 (punto_check_total_params -> .)
 
     punto_check_total_params       shift and go to state 245
 
@@ -3600,10 +3583,10 @@ state 232
     (131) func_params -> exp punto_check_param . func_params_aux
     (129) func_params_aux -> . COMMA exp punto_check_param func_params_aux
     (130) func_params_aux -> . empty
-    (147) empty -> .
+    (148) empty -> .
 
     COMMA           shift and go to state 247
-    RPAREN          reduce using rule 147 (empty -> .)
+    RPAREN          reduce using rule 148 (empty -> .)
 
     func_params_aux                shift and go to state 246
     empty                          shift and go to state 248
@@ -3642,19 +3625,19 @@ state 235
     (54) estatutos_opciones -> . condicion
     (55) estatutos_opciones -> . imprimir
     (56) estatutos_opciones -> . leer
-    (147) empty -> .
+    (148) empty -> .
     (59) asignar -> . variable ASSIGN hyper_exp push_op_igual check_op_igual SEMICOLON
     (134) llamada_func_void -> . ID LPAREN punto_func_exists punto_validate_isvoid punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub SEMICOLON
     (76) ciclo_for -> . DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
     (72) ciclo_while -> . MIENTRAS punto_inicio_while LPAREN hyper_exp RPAREN punto_medio_while LBRACE estatutos RBRACE punto_fin_while SEMICOLON
     (81) condicion -> . SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE punto_fin_si SEMICOLON
     (82) condicion -> . SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE SINO punto_sino LBRACE estatutos RBRACE punto_fin_si SEMICOLON
-    (141) imprimir -> . IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON
+    (142) imprimir -> . IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON
     (69) leer -> . LEER LPAREN punto_push_leer ID punto_create_leer RPAREN SEMICOLON
     (60) variable -> . ID push_id variable_aux
 
     REGRESAR        shift and go to state 199
-    RBRACE          reduce using rule 147 (empty -> .)
+    RBRACE          reduce using rule 148 (empty -> .)
     ID              shift and go to state 66
     DESDE           shift and go to state 67
     MIENTRAS        shift and go to state 68
@@ -3727,10 +3710,10 @@ state 241
     (42) parameterCycle -> COMMA type ID punto_add_parameter . parameterCycle
     (42) parameterCycle -> . COMMA type ID punto_add_parameter parameterCycle
     (43) parameterCycle -> . empty
-    (147) empty -> .
+    (148) empty -> .
 
     COMMA           shift and go to state 162
-    RPAREN          reduce using rule 147 (empty -> .)
+    RPAREN          reduce using rule 148 (empty -> .)
 
     parameterCycle                 shift and go to state 256
     empty                          shift and go to state 163
@@ -3754,17 +3737,42 @@ state 243
 
 state 244
 
-    (135) llamada_func_return -> ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params . RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
+    (135) llamada_func_return -> ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era . func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
+    (131) func_params -> . exp punto_check_param func_params_aux
+    (132) func_params -> . empty
+    (103) exp -> . term check_op_masmenos exp_aux
+    (148) empty -> .
+    (109) term -> . factor check_op_pordiv term_aux
+    (115) factor -> . LPAREN meter_fondo_falso hyper_exp RPAREN quitar_fondo_falso
+    (116) factor -> . factor_constante
+    (117) factor -> . llamada_func_return
+    (118) factor -> . variable
+    (122) factor_constante -> . CTEI push_int
+    (123) factor_constante -> . CTEF push_float
+    (135) llamada_func_return -> . ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
+    (60) variable -> . ID push_id variable_aux
 
-    RPAREN          shift and go to state 259
+    RPAREN          reduce using rule 148 (empty -> .)
+    LPAREN          shift and go to state 105
+    CTEI            shift and go to state 108
+    CTEF            shift and go to state 109
+    ID              shift and go to state 110
 
+    func_params                    shift and go to state 259
+    exp                            shift and go to state 213
+    empty                          shift and go to state 214
+    term                           shift and go to state 103
+    factor                         shift and go to state 104
+    factor_constante               shift and go to state 106
+    llamada_func_return            shift and go to state 107
+    variable                       shift and go to state 99
 
 state 245
 
     (134) llamada_func_void -> ID LPAREN punto_func_exists punto_validate_isvoid punto_create_era func_params RPAREN punto_check_total_params . punto_create_gosub SEMICOLON
-    (140) punto_create_gosub -> .
+    (141) punto_create_gosub -> .
 
-    SEMICOLON       reduce using rule 140 (punto_create_gosub -> .)
+    SEMICOLON       reduce using rule 141 (punto_create_gosub -> .)
 
     punto_create_gosub             shift and go to state 260
 
@@ -3786,7 +3794,7 @@ state 247
     (118) factor -> . variable
     (122) factor_constante -> . CTEI push_int
     (123) factor_constante -> . CTEF push_float
-    (135) llamada_func_return -> . ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
+    (135) llamada_func_return -> . ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
     (60) variable -> . ID push_id variable_aux
 
     LPAREN          shift and go to state 105
@@ -3886,41 +3894,20 @@ state 258
     (30) matrix -> TABLA type ARROW ID LBRACKET CTEI punto_matrix_size RBRACKET LBRACKET CTEI punto_matrix_size RBRACKET punto_save_matrix . matrixCycle SEMICOLON
     (31) matrixCycle -> . COMMA ID LBRACKET CTEI punto_matrix_size RBRACKET LBRACKET CTEI punto_matrix_size RBRACKET punto_save_matrix matrixCycle
     (32) matrixCycle -> . empty
-    (147) empty -> .
+    (148) empty -> .
 
     COMMA           shift and go to state 271
-    SEMICOLON       reduce using rule 147 (empty -> .)
+    SEMICOLON       reduce using rule 148 (empty -> .)
 
     matrixCycle                    shift and go to state 270
     empty                          shift and go to state 272
 
 state 259
 
-    (135) llamada_func_return -> ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN . punto_check_total_params quitar_fondo_falso punto_create_gosub
-    (139) punto_check_total_params -> .
+    (135) llamada_func_return -> ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params . RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
 
-    TIMES           reduce using rule 139 (punto_check_total_params -> .)
-    DIVIDE          reduce using rule 139 (punto_check_total_params -> .)
-    PLUS            reduce using rule 139 (punto_check_total_params -> .)
-    MINUS           reduce using rule 139 (punto_check_total_params -> .)
-    GREATER         reduce using rule 139 (punto_check_total_params -> .)
-    LESS            reduce using rule 139 (punto_check_total_params -> .)
-    GREATEREQ       reduce using rule 139 (punto_check_total_params -> .)
-    LESSEQ          reduce using rule 139 (punto_check_total_params -> .)
-    NOTEQUAL        reduce using rule 139 (punto_check_total_params -> .)
-    EQUAL           reduce using rule 139 (punto_check_total_params -> .)
-    Y               reduce using rule 139 (punto_check_total_params -> .)
-    O               reduce using rule 139 (punto_check_total_params -> .)
-    LPAREN          reduce using rule 139 (punto_check_total_params -> .)
-    CTEI            reduce using rule 139 (punto_check_total_params -> .)
-    CTEF            reduce using rule 139 (punto_check_total_params -> .)
-    ID              reduce using rule 139 (punto_check_total_params -> .)
-    SEMICOLON       reduce using rule 139 (punto_check_total_params -> .)
-    RPAREN          reduce using rule 139 (punto_check_total_params -> .)
-    COMMA           reduce using rule 139 (punto_check_total_params -> .)
-    RBRACKET        reduce using rule 139 (punto_check_total_params -> .)
+    RPAREN          shift and go to state 273
 
-    punto_check_total_params       shift and go to state 273
 
 state 260
 
@@ -4048,31 +4035,31 @@ state 272
 
 state 273
 
-    (135) llamada_func_return -> ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params . quitar_fondo_falso punto_create_gosub
-    (125) quitar_fondo_falso -> .
+    (135) llamada_func_return -> ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN . punto_check_total_params quitar_fondo_falso punto_create_gosub
+    (140) punto_check_total_params -> .
 
-    TIMES           reduce using rule 125 (quitar_fondo_falso -> .)
-    DIVIDE          reduce using rule 125 (quitar_fondo_falso -> .)
-    PLUS            reduce using rule 125 (quitar_fondo_falso -> .)
-    MINUS           reduce using rule 125 (quitar_fondo_falso -> .)
-    GREATER         reduce using rule 125 (quitar_fondo_falso -> .)
-    LESS            reduce using rule 125 (quitar_fondo_falso -> .)
-    GREATEREQ       reduce using rule 125 (quitar_fondo_falso -> .)
-    LESSEQ          reduce using rule 125 (quitar_fondo_falso -> .)
-    NOTEQUAL        reduce using rule 125 (quitar_fondo_falso -> .)
-    EQUAL           reduce using rule 125 (quitar_fondo_falso -> .)
-    Y               reduce using rule 125 (quitar_fondo_falso -> .)
-    O               reduce using rule 125 (quitar_fondo_falso -> .)
-    LPAREN          reduce using rule 125 (quitar_fondo_falso -> .)
-    CTEI            reduce using rule 125 (quitar_fondo_falso -> .)
-    CTEF            reduce using rule 125 (quitar_fondo_falso -> .)
-    ID              reduce using rule 125 (quitar_fondo_falso -> .)
-    SEMICOLON       reduce using rule 125 (quitar_fondo_falso -> .)
-    RPAREN          reduce using rule 125 (quitar_fondo_falso -> .)
-    COMMA           reduce using rule 125 (quitar_fondo_falso -> .)
-    RBRACKET        reduce using rule 125 (quitar_fondo_falso -> .)
+    TIMES           reduce using rule 140 (punto_check_total_params -> .)
+    DIVIDE          reduce using rule 140 (punto_check_total_params -> .)
+    PLUS            reduce using rule 140 (punto_check_total_params -> .)
+    MINUS           reduce using rule 140 (punto_check_total_params -> .)
+    GREATER         reduce using rule 140 (punto_check_total_params -> .)
+    LESS            reduce using rule 140 (punto_check_total_params -> .)
+    GREATEREQ       reduce using rule 140 (punto_check_total_params -> .)
+    LESSEQ          reduce using rule 140 (punto_check_total_params -> .)
+    NOTEQUAL        reduce using rule 140 (punto_check_total_params -> .)
+    EQUAL           reduce using rule 140 (punto_check_total_params -> .)
+    Y               reduce using rule 140 (punto_check_total_params -> .)
+    O               reduce using rule 140 (punto_check_total_params -> .)
+    LPAREN          reduce using rule 140 (punto_check_total_params -> .)
+    CTEI            reduce using rule 140 (punto_check_total_params -> .)
+    CTEF            reduce using rule 140 (punto_check_total_params -> .)
+    ID              reduce using rule 140 (punto_check_total_params -> .)
+    SEMICOLON       reduce using rule 140 (punto_check_total_params -> .)
+    RPAREN          reduce using rule 140 (punto_check_total_params -> .)
+    COMMA           reduce using rule 140 (punto_check_total_params -> .)
+    RBRACKET        reduce using rule 140 (punto_check_total_params -> .)
 
-    quitar_fondo_falso             shift and go to state 285
+    punto_check_total_params       shift and go to state 285
 
 state 274
 
@@ -4093,10 +4080,10 @@ state 275
     (129) func_params_aux -> COMMA exp punto_check_param . func_params_aux
     (129) func_params_aux -> . COMMA exp punto_check_param func_params_aux
     (130) func_params_aux -> . empty
-    (147) empty -> .
+    (148) empty -> .
 
     COMMA           shift and go to state 247
-    RPAREN          reduce using rule 147 (empty -> .)
+    RPAREN          reduce using rule 148 (empty -> .)
 
     func_params_aux                shift and go to state 286
     empty                          shift and go to state 248
@@ -4106,30 +4093,30 @@ state 276
     (61) variable_aux -> LBRACKET punto_dimensioned meter_fondo_falso hyper_exp punto_create_ver_quad punto_termina_arr RBRACKET quitar_fondo_falso . variable_aux_dim
     (63) variable_aux_dim -> . LBRACKET meter_fondo_falso hyper_exp punto_create_lastDim_cuadruplo RBRACKET quitar_fondo_falso generate_address_quadruple
     (64) variable_aux_dim -> . empty
-    (147) empty -> .
+    (148) empty -> .
 
     LBRACKET        shift and go to state 287
-    ASSIGN          reduce using rule 147 (empty -> .)
-    TIMES           reduce using rule 147 (empty -> .)
-    DIVIDE          reduce using rule 147 (empty -> .)
-    PLUS            reduce using rule 147 (empty -> .)
-    MINUS           reduce using rule 147 (empty -> .)
-    GREATER         reduce using rule 147 (empty -> .)
-    LESS            reduce using rule 147 (empty -> .)
-    GREATEREQ       reduce using rule 147 (empty -> .)
-    LESSEQ          reduce using rule 147 (empty -> .)
-    NOTEQUAL        reduce using rule 147 (empty -> .)
-    EQUAL           reduce using rule 147 (empty -> .)
-    Y               reduce using rule 147 (empty -> .)
-    O               reduce using rule 147 (empty -> .)
-    LPAREN          reduce using rule 147 (empty -> .)
-    CTEI            reduce using rule 147 (empty -> .)
-    CTEF            reduce using rule 147 (empty -> .)
-    ID              reduce using rule 147 (empty -> .)
-    SEMICOLON       reduce using rule 147 (empty -> .)
-    RPAREN          reduce using rule 147 (empty -> .)
-    COMMA           reduce using rule 147 (empty -> .)
-    RBRACKET        reduce using rule 147 (empty -> .)
+    ASSIGN          reduce using rule 148 (empty -> .)
+    TIMES           reduce using rule 148 (empty -> .)
+    DIVIDE          reduce using rule 148 (empty -> .)
+    PLUS            reduce using rule 148 (empty -> .)
+    MINUS           reduce using rule 148 (empty -> .)
+    GREATER         reduce using rule 148 (empty -> .)
+    LESS            reduce using rule 148 (empty -> .)
+    GREATEREQ       reduce using rule 148 (empty -> .)
+    LESSEQ          reduce using rule 148 (empty -> .)
+    NOTEQUAL        reduce using rule 148 (empty -> .)
+    EQUAL           reduce using rule 148 (empty -> .)
+    Y               reduce using rule 148 (empty -> .)
+    O               reduce using rule 148 (empty -> .)
+    LPAREN          reduce using rule 148 (empty -> .)
+    CTEI            reduce using rule 148 (empty -> .)
+    CTEF            reduce using rule 148 (empty -> .)
+    ID              reduce using rule 148 (empty -> .)
+    SEMICOLON       reduce using rule 148 (empty -> .)
+    RPAREN          reduce using rule 148 (empty -> .)
+    COMMA           reduce using rule 148 (empty -> .)
+    RBRACKET        reduce using rule 148 (empty -> .)
 
     variable_aux_dim               shift and go to state 288
     empty                          shift and go to state 289
@@ -4147,7 +4134,7 @@ state 277
     (118) factor -> . variable
     (122) factor_constante -> . CTEI push_int
     (123) factor_constante -> . CTEF push_float
-    (135) llamada_func_return -> . ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
+    (135) llamada_func_return -> . ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
     (60) variable -> . ID push_id variable_aux
 
     LPAREN          shift and go to state 105
@@ -4237,31 +4224,31 @@ state 284
 
 state 285
 
-    (135) llamada_func_return -> ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso . punto_create_gosub
-    (140) punto_create_gosub -> .
+    (135) llamada_func_return -> ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params . quitar_fondo_falso punto_create_gosub
+    (125) quitar_fondo_falso -> .
 
-    TIMES           reduce using rule 140 (punto_create_gosub -> .)
-    DIVIDE          reduce using rule 140 (punto_create_gosub -> .)
-    PLUS            reduce using rule 140 (punto_create_gosub -> .)
-    MINUS           reduce using rule 140 (punto_create_gosub -> .)
-    GREATER         reduce using rule 140 (punto_create_gosub -> .)
-    LESS            reduce using rule 140 (punto_create_gosub -> .)
-    GREATEREQ       reduce using rule 140 (punto_create_gosub -> .)
-    LESSEQ          reduce using rule 140 (punto_create_gosub -> .)
-    NOTEQUAL        reduce using rule 140 (punto_create_gosub -> .)
-    EQUAL           reduce using rule 140 (punto_create_gosub -> .)
-    Y               reduce using rule 140 (punto_create_gosub -> .)
-    O               reduce using rule 140 (punto_create_gosub -> .)
-    LPAREN          reduce using rule 140 (punto_create_gosub -> .)
-    CTEI            reduce using rule 140 (punto_create_gosub -> .)
-    CTEF            reduce using rule 140 (punto_create_gosub -> .)
-    ID              reduce using rule 140 (punto_create_gosub -> .)
-    SEMICOLON       reduce using rule 140 (punto_create_gosub -> .)
-    RPAREN          reduce using rule 140 (punto_create_gosub -> .)
-    COMMA           reduce using rule 140 (punto_create_gosub -> .)
-    RBRACKET        reduce using rule 140 (punto_create_gosub -> .)
+    TIMES           reduce using rule 125 (quitar_fondo_falso -> .)
+    DIVIDE          reduce using rule 125 (quitar_fondo_falso -> .)
+    PLUS            reduce using rule 125 (quitar_fondo_falso -> .)
+    MINUS           reduce using rule 125 (quitar_fondo_falso -> .)
+    GREATER         reduce using rule 125 (quitar_fondo_falso -> .)
+    LESS            reduce using rule 125 (quitar_fondo_falso -> .)
+    GREATEREQ       reduce using rule 125 (quitar_fondo_falso -> .)
+    LESSEQ          reduce using rule 125 (quitar_fondo_falso -> .)
+    NOTEQUAL        reduce using rule 125 (quitar_fondo_falso -> .)
+    EQUAL           reduce using rule 125 (quitar_fondo_falso -> .)
+    Y               reduce using rule 125 (quitar_fondo_falso -> .)
+    O               reduce using rule 125 (quitar_fondo_falso -> .)
+    LPAREN          reduce using rule 125 (quitar_fondo_falso -> .)
+    CTEI            reduce using rule 125 (quitar_fondo_falso -> .)
+    CTEF            reduce using rule 125 (quitar_fondo_falso -> .)
+    ID              reduce using rule 125 (quitar_fondo_falso -> .)
+    SEMICOLON       reduce using rule 125 (quitar_fondo_falso -> .)
+    RPAREN          reduce using rule 125 (quitar_fondo_falso -> .)
+    COMMA           reduce using rule 125 (quitar_fondo_falso -> .)
+    RBRACKET        reduce using rule 125 (quitar_fondo_falso -> .)
 
-    punto_create_gosub             shift and go to state 295
+    quitar_fondo_falso             shift and go to state 295
 
 state 286
 
@@ -4373,19 +4360,19 @@ state 292
     (54) estatutos_opciones -> . condicion
     (55) estatutos_opciones -> . imprimir
     (56) estatutos_opciones -> . leer
-    (147) empty -> .
+    (148) empty -> .
     (59) asignar -> . variable ASSIGN hyper_exp push_op_igual check_op_igual SEMICOLON
     (134) llamada_func_void -> . ID LPAREN punto_func_exists punto_validate_isvoid punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub SEMICOLON
     (76) ciclo_for -> . DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
     (72) ciclo_while -> . MIENTRAS punto_inicio_while LPAREN hyper_exp RPAREN punto_medio_while LBRACE estatutos RBRACE punto_fin_while SEMICOLON
     (81) condicion -> . SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE punto_fin_si SEMICOLON
     (82) condicion -> . SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE SINO punto_sino LBRACE estatutos RBRACE punto_fin_si SEMICOLON
-    (141) imprimir -> . IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON
+    (142) imprimir -> . IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON
     (69) leer -> . LEER LPAREN punto_push_leer ID punto_create_leer RPAREN SEMICOLON
     (60) variable -> . ID push_id variable_aux
 
     REGRESAR        shift and go to state 199
-    RBRACE          reduce using rule 147 (empty -> .)
+    RBRACE          reduce using rule 148 (empty -> .)
     ID              shift and go to state 66
     DESDE           shift and go to state 67
     MIENTRAS        shift and go to state 68
@@ -4412,10 +4399,10 @@ state 293
     (26) arrayCycle -> COMMA ID LBRACKET CTEI punto_array_size RBRACKET punto_save_array . arrayCycle
     (26) arrayCycle -> . COMMA ID LBRACKET CTEI punto_array_size RBRACKET punto_save_array arrayCycle
     (27) arrayCycle -> . empty
-    (147) empty -> .
+    (148) empty -> .
 
     COMMA           shift and go to state 202
-    SEMICOLON       reduce using rule 147 (empty -> .)
+    SEMICOLON       reduce using rule 148 (empty -> .)
 
     arrayCycle                     shift and go to state 299
     empty                          shift and go to state 203
@@ -4429,29 +4416,31 @@ state 294
 
 state 295
 
-    (135) llamada_func_return -> ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .
+    (135) llamada_func_return -> ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso . punto_create_gosub
+    (141) punto_create_gosub -> .
 
-    TIMES           reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
-    DIVIDE          reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
-    PLUS            reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
-    MINUS           reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
-    GREATER         reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
-    LESS            reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
-    GREATEREQ       reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
-    LESSEQ          reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
-    NOTEQUAL        reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
-    EQUAL           reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
-    Y               reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
-    O               reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
-    LPAREN          reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
-    CTEI            reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
-    CTEF            reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
-    ID              reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
-    SEMICOLON       reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
-    RPAREN          reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
-    COMMA           reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
-    RBRACKET        reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
+    TIMES           reduce using rule 141 (punto_create_gosub -> .)
+    DIVIDE          reduce using rule 141 (punto_create_gosub -> .)
+    PLUS            reduce using rule 141 (punto_create_gosub -> .)
+    MINUS           reduce using rule 141 (punto_create_gosub -> .)
+    GREATER         reduce using rule 141 (punto_create_gosub -> .)
+    LESS            reduce using rule 141 (punto_create_gosub -> .)
+    GREATEREQ       reduce using rule 141 (punto_create_gosub -> .)
+    LESSEQ          reduce using rule 141 (punto_create_gosub -> .)
+    NOTEQUAL        reduce using rule 141 (punto_create_gosub -> .)
+    EQUAL           reduce using rule 141 (punto_create_gosub -> .)
+    Y               reduce using rule 141 (punto_create_gosub -> .)
+    O               reduce using rule 141 (punto_create_gosub -> .)
+    LPAREN          reduce using rule 141 (punto_create_gosub -> .)
+    CTEI            reduce using rule 141 (punto_create_gosub -> .)
+    CTEF            reduce using rule 141 (punto_create_gosub -> .)
+    ID              reduce using rule 141 (punto_create_gosub -> .)
+    SEMICOLON       reduce using rule 141 (punto_create_gosub -> .)
+    RPAREN          reduce using rule 141 (punto_create_gosub -> .)
+    COMMA           reduce using rule 141 (punto_create_gosub -> .)
+    RBRACKET        reduce using rule 141 (punto_create_gosub -> .)
 
+    punto_create_gosub             shift and go to state 301
 
 state 296
 
@@ -4466,7 +4455,7 @@ state 296
     (118) factor -> . variable
     (122) factor_constante -> . CTEI push_int
     (123) factor_constante -> . CTEF push_float
-    (135) llamada_func_return -> . ID LPAREN punto_func_exists meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
+    (135) llamada_func_return -> . ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub
     (60) variable -> . ID push_id variable_aux
 
     LPAREN          shift and go to state 105
@@ -4474,7 +4463,7 @@ state 296
     CTEF            shift and go to state 109
     ID              shift and go to state 110
 
-    hyper_exp                      shift and go to state 301
+    hyper_exp                      shift and go to state 302
     super_exp                      shift and go to state 101
     exp                            shift and go to state 102
     term                           shift and go to state 103
@@ -4490,13 +4479,13 @@ state 297
 
     LBRACE          reduce using rule 79 (punto_valida_exp -> .)
 
-    punto_valida_exp               shift and go to state 302
+    punto_valida_exp               shift and go to state 303
 
 state 298
 
     (82) condicion -> SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE SINO punto_sino LBRACE estatutos . RBRACE punto_fin_si SEMICOLON
 
-    RBRACE          shift and go to state 303
+    RBRACE          shift and go to state 304
 
 
 state 299
@@ -4513,48 +4502,74 @@ state 300
 
     RBRACKET        reduce using rule 33 (punto_matrix_size -> .)
 
-    punto_matrix_size              shift and go to state 304
+    punto_matrix_size              shift and go to state 305
 
 state 301
+
+    (135) llamada_func_return -> ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .
+
+    TIMES           reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
+    DIVIDE          reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
+    PLUS            reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
+    MINUS           reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
+    GREATER         reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
+    LESS            reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
+    GREATEREQ       reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
+    LESSEQ          reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
+    NOTEQUAL        reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
+    EQUAL           reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
+    Y               reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
+    O               reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
+    LPAREN          reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
+    CTEI            reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
+    CTEF            reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
+    ID              reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
+    SEMICOLON       reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
+    RPAREN          reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
+    COMMA           reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
+    RBRACKET        reduce using rule 135 (llamada_func_return -> ID LPAREN punto_func_exists punto_validate_isNotvoid meter_fondo_falso punto_create_era func_params RPAREN punto_check_total_params quitar_fondo_falso punto_create_gosub .)
+
+
+state 302
 
     (63) variable_aux_dim -> LBRACKET meter_fondo_falso hyper_exp . punto_create_lastDim_cuadruplo RBRACKET quitar_fondo_falso generate_address_quadruple
     (121) punto_create_lastDim_cuadruplo -> .
 
     RBRACKET        reduce using rule 121 (punto_create_lastDim_cuadruplo -> .)
 
-    punto_create_lastDim_cuadruplo shift and go to state 305
+    punto_create_lastDim_cuadruplo shift and go to state 306
 
-state 302
+state 303
 
     (76) ciclo_for -> DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp . LBRACE estatutos RBRACE punto_termina_for SEMICOLON
 
-    LBRACE          shift and go to state 306
+    LBRACE          shift and go to state 307
 
 
-state 303
+state 304
 
     (82) condicion -> SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE SINO punto_sino LBRACE estatutos RBRACE . punto_fin_si SEMICOLON
     (84) punto_fin_si -> .
 
     SEMICOLON       reduce using rule 84 (punto_fin_si -> .)
 
-    punto_fin_si                   shift and go to state 307
-
-state 304
-
-    (31) matrixCycle -> COMMA ID LBRACKET CTEI punto_matrix_size . RBRACKET LBRACKET CTEI punto_matrix_size RBRACKET punto_save_matrix matrixCycle
-
-    RBRACKET        shift and go to state 308
-
+    punto_fin_si                   shift and go to state 308
 
 state 305
 
-    (63) variable_aux_dim -> LBRACKET meter_fondo_falso hyper_exp punto_create_lastDim_cuadruplo . RBRACKET quitar_fondo_falso generate_address_quadruple
+    (31) matrixCycle -> COMMA ID LBRACKET CTEI punto_matrix_size . RBRACKET LBRACKET CTEI punto_matrix_size RBRACKET punto_save_matrix matrixCycle
 
     RBRACKET        shift and go to state 309
 
 
 state 306
+
+    (63) variable_aux_dim -> LBRACKET meter_fondo_falso hyper_exp punto_create_lastDim_cuadruplo . RBRACKET quitar_fondo_falso generate_address_quadruple
+
+    RBRACKET        shift and go to state 310
+
+
+state 307
 
     (76) ciclo_for -> DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE . estatutos RBRACE punto_termina_for SEMICOLON
     (45) estatutos -> . estatutosCycle
@@ -4570,19 +4585,19 @@ state 306
     (54) estatutos_opciones -> . condicion
     (55) estatutos_opciones -> . imprimir
     (56) estatutos_opciones -> . leer
-    (147) empty -> .
+    (148) empty -> .
     (59) asignar -> . variable ASSIGN hyper_exp push_op_igual check_op_igual SEMICOLON
     (134) llamada_func_void -> . ID LPAREN punto_func_exists punto_validate_isvoid punto_create_era func_params RPAREN punto_check_total_params punto_create_gosub SEMICOLON
     (76) ciclo_for -> . DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
     (72) ciclo_while -> . MIENTRAS punto_inicio_while LPAREN hyper_exp RPAREN punto_medio_while LBRACE estatutos RBRACE punto_fin_while SEMICOLON
     (81) condicion -> . SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE punto_fin_si SEMICOLON
     (82) condicion -> . SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE SINO punto_sino LBRACE estatutos RBRACE punto_fin_si SEMICOLON
-    (141) imprimir -> . IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON
+    (142) imprimir -> . IMPRIMIR LPAREN imprimir_aux RPAREN SEMICOLON
     (69) leer -> . LEER LPAREN punto_push_leer ID punto_create_leer RPAREN SEMICOLON
     (60) variable -> . ID push_id variable_aux
 
     REGRESAR        shift and go to state 199
-    RBRACE          reduce using rule 147 (empty -> .)
+    RBRACE          reduce using rule 148 (empty -> .)
     ID              shift and go to state 66
     DESDE           shift and go to state 67
     MIENTRAS        shift and go to state 68
@@ -4590,7 +4605,7 @@ state 306
     IMPRIMIR        shift and go to state 70
     LEER            shift and go to state 71
 
-    estatutos                      shift and go to state 310
+    estatutos                      shift and go to state 311
     estatutosCycle                 shift and go to state 195
     func_regresar                  shift and go to state 196
     estatutos_opciones             shift and go to state 197
@@ -4604,21 +4619,21 @@ state 306
     leer                           shift and go to state 64
     variable                       shift and go to state 65
 
-state 307
+state 308
 
     (82) condicion -> SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE SINO punto_sino LBRACE estatutos RBRACE punto_fin_si . SEMICOLON
 
-    SEMICOLON       shift and go to state 311
-
-
-state 308
-
-    (31) matrixCycle -> COMMA ID LBRACKET CTEI punto_matrix_size RBRACKET . LBRACKET CTEI punto_matrix_size RBRACKET punto_save_matrix matrixCycle
-
-    LBRACKET        shift and go to state 312
+    SEMICOLON       shift and go to state 312
 
 
 state 309
+
+    (31) matrixCycle -> COMMA ID LBRACKET CTEI punto_matrix_size RBRACKET . LBRACKET CTEI punto_matrix_size RBRACKET punto_save_matrix matrixCycle
+
+    LBRACKET        shift and go to state 313
+
+
+state 310
 
     (63) variable_aux_dim -> LBRACKET meter_fondo_falso hyper_exp punto_create_lastDim_cuadruplo RBRACKET . quitar_fondo_falso generate_address_quadruple
     (125) quitar_fondo_falso -> .
@@ -4645,16 +4660,16 @@ state 309
     COMMA           reduce using rule 125 (quitar_fondo_falso -> .)
     RBRACKET        reduce using rule 125 (quitar_fondo_falso -> .)
 
-    quitar_fondo_falso             shift and go to state 313
+    quitar_fondo_falso             shift and go to state 314
 
-state 310
+state 311
 
     (76) ciclo_for -> DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos . RBRACE punto_termina_for SEMICOLON
 
-    RBRACE          shift and go to state 314
+    RBRACE          shift and go to state 315
 
 
-state 311
+state 312
 
     (82) condicion -> SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE SINO punto_sino LBRACE estatutos RBRACE punto_fin_si SEMICOLON .
 
@@ -4668,14 +4683,14 @@ state 311
     REGRESAR        reduce using rule 82 (condicion -> SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE SINO punto_sino LBRACE estatutos RBRACE punto_fin_si SEMICOLON .)
 
 
-state 312
+state 313
 
     (31) matrixCycle -> COMMA ID LBRACKET CTEI punto_matrix_size RBRACKET LBRACKET . CTEI punto_matrix_size RBRACKET punto_save_matrix matrixCycle
 
-    CTEI            shift and go to state 315
+    CTEI            shift and go to state 316
 
 
-state 313
+state 314
 
     (63) variable_aux_dim -> LBRACKET meter_fondo_falso hyper_exp punto_create_lastDim_cuadruplo RBRACKET quitar_fondo_falso . generate_address_quadruple
     (119) generate_address_quadruple -> .
@@ -4702,27 +4717,27 @@ state 313
     COMMA           reduce using rule 119 (generate_address_quadruple -> .)
     RBRACKET        reduce using rule 119 (generate_address_quadruple -> .)
 
-    generate_address_quadruple     shift and go to state 316
+    generate_address_quadruple     shift and go to state 317
 
-state 314
+state 315
 
     (76) ciclo_for -> DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE . punto_termina_for SEMICOLON
     (80) punto_termina_for -> .
 
     SEMICOLON       reduce using rule 80 (punto_termina_for -> .)
 
-    punto_termina_for              shift and go to state 317
+    punto_termina_for              shift and go to state 318
 
-state 315
+state 316
 
     (31) matrixCycle -> COMMA ID LBRACKET CTEI punto_matrix_size RBRACKET LBRACKET CTEI . punto_matrix_size RBRACKET punto_save_matrix matrixCycle
     (33) punto_matrix_size -> .
 
     RBRACKET        reduce using rule 33 (punto_matrix_size -> .)
 
-    punto_matrix_size              shift and go to state 318
+    punto_matrix_size              shift and go to state 319
 
-state 316
+state 317
 
     (63) variable_aux_dim -> LBRACKET meter_fondo_falso hyper_exp punto_create_lastDim_cuadruplo RBRACKET quitar_fondo_falso generate_address_quadruple .
 
@@ -4749,21 +4764,21 @@ state 316
     RBRACKET        reduce using rule 63 (variable_aux_dim -> LBRACKET meter_fondo_falso hyper_exp punto_create_lastDim_cuadruplo RBRACKET quitar_fondo_falso generate_address_quadruple .)
 
 
-state 317
+state 318
 
     (76) ciclo_for -> DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for . SEMICOLON
 
-    SEMICOLON       shift and go to state 319
-
-
-state 318
-
-    (31) matrixCycle -> COMMA ID LBRACKET CTEI punto_matrix_size RBRACKET LBRACKET CTEI punto_matrix_size . RBRACKET punto_save_matrix matrixCycle
-
-    RBRACKET        shift and go to state 320
+    SEMICOLON       shift and go to state 320
 
 
 state 319
+
+    (31) matrixCycle -> COMMA ID LBRACKET CTEI punto_matrix_size RBRACKET LBRACKET CTEI punto_matrix_size . RBRACKET punto_save_matrix matrixCycle
+
+    RBRACKET        shift and go to state 321
+
+
+state 320
 
     (76) ciclo_for -> DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON .
 
@@ -4777,7 +4792,7 @@ state 319
     REGRESAR        reduce using rule 76 (ciclo_for -> DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON .)
 
 
-state 320
+state 321
 
     (31) matrixCycle -> COMMA ID LBRACKET CTEI punto_matrix_size RBRACKET LBRACKET CTEI punto_matrix_size RBRACKET . punto_save_matrix matrixCycle
     (34) punto_save_matrix -> .
@@ -4785,22 +4800,22 @@ state 320
     COMMA           reduce using rule 34 (punto_save_matrix -> .)
     SEMICOLON       reduce using rule 34 (punto_save_matrix -> .)
 
-    punto_save_matrix              shift and go to state 321
+    punto_save_matrix              shift and go to state 322
 
-state 321
+state 322
 
     (31) matrixCycle -> COMMA ID LBRACKET CTEI punto_matrix_size RBRACKET LBRACKET CTEI punto_matrix_size RBRACKET punto_save_matrix . matrixCycle
     (31) matrixCycle -> . COMMA ID LBRACKET CTEI punto_matrix_size RBRACKET LBRACKET CTEI punto_matrix_size RBRACKET punto_save_matrix matrixCycle
     (32) matrixCycle -> . empty
-    (147) empty -> .
+    (148) empty -> .
 
     COMMA           shift and go to state 271
-    SEMICOLON       reduce using rule 147 (empty -> .)
+    SEMICOLON       reduce using rule 148 (empty -> .)
 
-    matrixCycle                    shift and go to state 322
+    matrixCycle                    shift and go to state 323
     empty                          shift and go to state 272
 
-state 322
+state 323
 
     (31) matrixCycle -> COMMA ID LBRACKET CTEI punto_matrix_size RBRACKET LBRACKET CTEI punto_matrix_size RBRACKET punto_save_matrix matrixCycle .
 
