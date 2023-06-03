@@ -1,4 +1,4 @@
-programa caramelo:
+programa fibonacciCycle:
 // En el ciclo desde, hasta el num se le tiene que sumar 1
 variable entero -> num;
 renglon entero -> fibo[10];

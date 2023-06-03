@@ -198,7 +198,7 @@ def p_punto_matrix_size(p):
   '''
   global current_size, isArray, dimensiones
   if p[-1] < 1:
-    raise Exception(f"ERROR: Estás creando una conjunto de datos con un tamaño de {p[-1]}. Deben siempre tener un tamaño mayor que 1.")
+    raise Exception(f"ERROR: Estás creando un conjunto de datos con un tamaño de {p[-1]}. Deben siempre tener un tamaño mayor que 1.")
   current_size *= p[-1]
   dimensiones.append(p[-1])
 
@@ -533,7 +533,7 @@ def p_punto_valida_int(p):
   id_type = stack_de_tipos.pop()
 
   if result_type != 1 and id_type != 1:
-    raise Exception(f"ERROR: Type Mismatch. El ID y su valor deben ser enteros") 
+    raise Exception(f"ERROR: Type mismatch. El ID y su valor deben ser enteros") 
   else: 
     result_operando = stack_de_operandos.pop()
     vControl.append(stack_de_operandos.pop())
@@ -785,7 +785,7 @@ def p_check_op_masmenos(p):
       operation_type = cubo_semantico.get_type(tipo_operando_izq, tipo_operando_der, converted_operador)
       # Raise exception if the operation between the two types is not valid.
       if operation_type == 5:
-        raise Exception("ERROR: Type mismatch en suma y resta")
+        raise Exception("ERROR: Type mismatch en suma o resta")
       else:
         temporal_dir_address = assign_memory_temporal(operation_type, current_func)
         dir_func.add_cont_temp(operation_type, current_func)
@@ -829,7 +829,7 @@ def p_check_op_pordiv(p):
       operation_type = cubo_semantico.get_type(tipo_operando_izq, tipo_operando_der, converted_operador)
       # Raise exception if the operation between the two types is not valid.
       if operation_type == 5:
-        raise Exception("ERROR: Type mismatch multiplicacion y division")
+        raise Exception("ERROR: Type mismatch multiplicacion o division")
       else:
         temporal_dir_address = assign_memory_temporal(operation_type, current_func)
         dir_func.add_cont_temp(operation_type, current_func)
@@ -1043,7 +1043,7 @@ def p_punto_check_param(p):
     lista_de_cuadruplos.append(quadruple.transform_quadruple())
     contador_params+=1
   else:
-    raise Exception(f"ERROR: Los parámetros enviados no coinciden con la función {called_func}.")
+    raise Exception(f"ERROR: El tipo de los parámetros enviados no coinciden con la función {called_func}.")
 
 # Does not return a value
 def p_llamada_func_void(p):
@@ -1156,14 +1156,14 @@ def p_empty(p):
   pass
 
 def p_error(p):
-  raise Exception("ERROR: Hay un error de syntaxis en la linea %d" % (p.lineno))
+  raise Exception("ERROR: Hay un error de sintaxis en la linea %d" % (p.lineno))
 
 parser = yacc.yacc()
   
 def readFile():
   #Testear el parser y léxico juntos
   try:
-    file = open("./tests/llenarMatrix.txt", "r")
+    file = open("./tests/subIndexDim.txt", "r")
     archivo = file.read()
     file.close()
     parser.parse(archivo)

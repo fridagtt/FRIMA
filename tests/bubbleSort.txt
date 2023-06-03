@@ -1,4 +1,4 @@
-programa caramelo:
+programa bubbleSort:
 variable entero -> i,j,temp,n;
 renglon entero -> arr[10];
 

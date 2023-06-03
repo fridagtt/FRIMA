@@ -1,4 +1,4 @@
-programa caramelo:
+programa multiplyMat:
 tabla entero -> mat1[2][3];
 tabla entero -> mat2[3][4];
 tabla entero -> matRes[2][4];

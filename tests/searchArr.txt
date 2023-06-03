@@ -1,4 +1,4 @@
-programa patito:
+programa searchArr:
 renglon entero -> arr[10];
 variable entero -> j,i,x;
 

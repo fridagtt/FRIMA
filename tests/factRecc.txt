@@ -1,4 +1,4 @@
-programa caramelo:
+programa factRecc:
 variable entero -> num,n;
 variable entero -> factorial;
 variable entero -> i;
