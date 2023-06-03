@@ -99,6 +99,8 @@ class VirtualMachine:
     self.local_memory = None
     self.execution_stack = deque()
     self.stack_pointers = deque()
+    self.output_array = []
+    self.input_array = []
 
   def get_function_global_var_address(self, func_name):
     list_of_variables = self.global_memory.func_info["variables"]['vars_info']
@@ -157,6 +159,7 @@ class VirtualMachine:
   def read_quadruples(self):
     instruction_pointer = 0
     params_list = []
+    counter = 0
     while (instruction_pointer < len(self.list_quadruples)):
       operator, left_operand, right_operand, quad_res = self.get_quadruple_values(self.list_quadruples[instruction_pointer])
       if operator == 10: # Add
@@ -429,6 +432,7 @@ class VirtualMachine:
             value_memory = self.get_memory_value(quad_res)
           value_memory = self.get_memory_value(quad_res)
           print("Imprimir:", value_memory)
+          self.output_array.append(value_memory)
           instruction_pointer += 1
         except:
           raise Exception("ERROR: Variable sin valor")
@@ -460,6 +464,15 @@ class VirtualMachine:
         if(len(self.execution_stack)!=0):
           self.local_memory = self.execution_stack.pop()
           instruction_pointer = self.stack_pointers.pop()
+      elif operator == 115: # LEER
+        try:
+          print("read, -> ", self.input_array[counter])
+          input_value = self.input_array[counter]
+          self.get_memory(quad_res).set_value(quad_res, input_value)
+          counter += 1
+          instruction_pointer += 1
+        except:
+          raise Exception("ERROR: Variable sin valor")
       elif operator == 85: # END FUNC
         if(len(self.execution_stack)!=0):
           self.local_memory = self.execution_stack.pop()
@@ -487,6 +500,7 @@ class VirtualMachine:
         
   def execute(self):
     print("------MAQUINA VIRTUAL------")
+    print(self.input_array)
     self.constant_memory.init_constant_memory()
     self.global_memory.init_global_memory()
     self.read_quadruples()

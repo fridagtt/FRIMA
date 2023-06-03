@@ -26,6 +26,9 @@ current_func = current_var_type = called_func = current_var = None
 contador_params = 0
 dimensiones = []
 current_size = 1
+input_array = []
+output_array = []
+error = False
 
 #__________PARSER____________
 
@@ -69,10 +72,16 @@ def p_punto_generar_vm(p):
   '''
   punto_generar_vm :
   '''
-  global lista_de_cuadruplos, dir_func
+  global lista_de_cuadruplos, dir_func, output_array
   virtual_machine = VirtualMachine(lista_de_cuadruplos, dir_func.symbol_table)
 
+  if len(input_array) != 0:
+    virtual_machine.input_array = input_array
+
   virtual_machine.execute()
+  output_array = virtual_machine.output_array
+
+  lista_de_cuadruplos = []
 
 # Body for inicio (without the return option)
 def p_inicio_estatutos(p):
@@ -1160,15 +1169,27 @@ def p_error(p):
 
 parser = yacc.yacc()
   
-def readFile():
+def parser(filePath, user_input=None):
   #Testear el parser y léxico juntos
   try:
-    file = open("./tests/subIndexDim.txt", "r")
+    file = open(filePath, "r")
     archivo = file.read()
     file.close()
-    parser.parse(archivo)
+    global input_array
+    if user_input != None:
+      input_array = user_input.split()
+
+    yacc.parse(archivo)
+
+    if error: 
+      return "hay errores de sintaxis"
+    else:
+      global current_func, output_array
+      current_func = 'inicio'
+      return {'data': output_array, 'status': 200}
+
   except EOFError:
     print('ERROR', EOFError)
 
 if __name__ == '__main__':
-	readFile()
+	parser()
