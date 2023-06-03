@@ -162,7 +162,7 @@ def p_punto_array_size(p):
   '''
   global dimensiones
   if p[-1] < 1:
-    raise Exception(f"ERROR: Estás creando una conjunto de datos con un tamaño de {p[-1]}. Deben siempre tener un tamaño mayor que 1.")
+    raise Exception(f"ERROR: Estás creando un conjunto de datos con un tamaño de {p[-1]}. Deben siempre tener un tamaño mayor que 1.")
 
 # Adds array to the variable table of the current function.
 # It sends additional values such as its dimension and size. 
