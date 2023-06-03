@@ -18,18 +18,18 @@ stack_de_operandos = deque()
 stack_de_tipos = deque()
 stack_de_saltos = deque()
 stack_de_dimensiones = deque()
+vControl = deque()
 
 lista_de_cuadruplos = []
-vControl = []
-current_func = current_var_type = called_func = current_var = None
-
-contador_params = 0
 dimensiones = []
-current_size = 1
 input_array = []
 output_array = []
+
+current_func = current_var_type = called_func = current_var = errorMessage = None
+
+contador_params = 0
+current_size = 1
 error = False
-errorMessage = None
 
 #__________PARSER____________
 
@@ -44,14 +44,13 @@ def p_programa(p):
           | PROGRAMA ID punto_programa COLON dec_var_cycle dec_func_cycle inicio
           | PROGRAMA ID punto_programa COLON dec_func_cycle inicio
   '''
-  p[0] = None
 
 # Creates the symbol table with its default structure and adds the function "inicio" to the set of functions.
 def p_punto_programa(p):
-  '''
-  punto_programa : 
-  '''
+  '''punto_programa : '''
+
   global dir_func, current_func, lista_de_cuadruplos
+
   dir_func = SymbolTable() # Create symbol table
   current_func = "inicio" # Sets global scope
   dir_func.symbol_table['dir_functions']['dir_func_names'].add("inicio")
@@ -63,17 +62,17 @@ def p_inicio(p):
   '''
   inicio : INICIO LPAREN RPAREN LBRACE punto_update_goto inicio_estatutos RBRACE SEMICOLON punto_generar_vm
   '''
-  p[0] = None
+
   # Segment for testing dir_func and quadruples
   print("TABLA DE VARIABLES", dir_func.symbol_table)
   for index, quadruple in enumerate(lista_de_cuadruplos): 
     print(index, " -> ", quadruple)
 
 def p_punto_generar_vm(p):
-  '''
-  punto_generar_vm :
-  '''
+  '''punto_generar_vm :'''
+
   global lista_de_cuadruplos, dir_func, output_array
+
   virtual_machine = VirtualMachine(lista_de_cuadruplos, dir_func.symbol_table)
 
   if len(input_array) != 0:
@@ -93,9 +92,8 @@ def p_inicio_estatutos(p):
   p[0] = p[1]
 
 def p_punto_update_goto(p):
-  '''
-  punto_update_goto :
-  '''
+  '''punto_update_goto :'''
+
   global current_func, lista_de_cuadruplos
   current_func = 'inicio'
   lista_de_cuadruplos[0]=(80,None,None,len(lista_de_cuadruplos))
@@ -147,13 +145,11 @@ def p_simple_var(p):
   simpleVarCycle : COMMA ID punto_simple_var simpleVarCycle
                   | empty
   '''
-  p[0] = None
 
 # Adds variables to the variable table of the corresponding and current function.
 def p_punto_simple_var(p):
-  '''
-  punto_simple_var :
-  '''
+  '''punto_simple_var :'''
+
   var_dir_address = assign_memory_global_local(current_var_type, current_func, 1)
   dir_func.add_variable(current_var_type, p[-1], current_func, var_dir_address, [1], 0)
 
@@ -164,12 +160,10 @@ def p_array(p):
   arrayCycle : COMMA ID LBRACKET CTEI punto_array_size RBRACKET punto_save_array arrayCycle
               | empty
   '''
-  p[0] = None
 
 def p_punto_array_size(p):
-  '''
-  punto_array_size :
-  '''
+  '''punto_array_size :'''
+
   global dimensiones
   if p[-1] < 1:
     raise Exception(f"ERROR: Estás creando un conjunto de datos con un tamaño de {p[-1]}. Deben siempre tener un tamaño mayor que 1.")
@@ -177,9 +171,8 @@ def p_punto_array_size(p):
 # Adds array to the variable table of the current function.
 # It sends additional values such as its dimension and size. 
 def p_punto_save_array(p):
-  '''
-  punto_save_array :
-  '''
+  '''punto_save_array :'''
+
   # Add size of array to constant table to only work with addresses
   var_dir_address = assign_memory_global_local(current_var_type, current_func, p[-3])
   dir_func.add_variable(current_var_type, p[-5], current_func, var_dir_address, [p[-3]], 1)
@@ -200,13 +193,12 @@ def p_matrix(p):
   matrixCycle : COMMA ID LBRACKET CTEI punto_matrix_size RBRACKET LBRACKET CTEI punto_matrix_size RBRACKET punto_save_matrix matrixCycle
               | empty
   '''
-  p[0] = None
 
 def p_punto_matrix_size(p):
-  '''
-  punto_matrix_size :
-  '''
+  '''punto_matrix_size :'''
+
   global current_size, isArray, dimensiones
+
   if p[-1] < 1:
     raise Exception(f"ERROR: Estás creando un conjunto de datos con un tamaño de {p[-1]}. Deben siempre tener un tamaño mayor que 1.")
   current_size *= p[-1]
@@ -246,9 +238,8 @@ def p_dec_func(p):
 
 # Creates global var with the same name as the declared function
 def p_punto_global_func_var(p):
-  '''
-  punto_global_func_var : 
-  '''
+  '''punto_global_func_var : '''
+
   current_func_type = convert_type(p[-3])
   global_func_var_address = assign_memory_global_local(current_func_type, 'inicio', 1)
   dir_func.add_variable(current_func_type, p[-2], 'inicio', global_func_var_address, [1], 0)
@@ -256,9 +247,8 @@ def p_punto_global_func_var(p):
 # Deletes the local variables of the function and its variable table.
 # Sets back the scope to be global.
 def p_punto_end_function(p):
-  '''
-  punto_end_function :
-  '''
+  '''punto_end_function :'''
+
   global dir_func, current_func, lista_de_cuadruplos
 
   quadruple = Quadruple(85, None, None , None)
@@ -272,12 +262,11 @@ def p_punto_end_function(p):
 # Adds function and its return type to the global function's directory.
 # Updates "current_func" pointer as we are accessing a new function.
 def p_punto_add_func(p):
-    '''
-    punto_add_func :
-    '''
-    global current_func, lista_de_cuadruplos
-    current_func = p[-1]
-    dir_func.add_function(p[-1], convert_type(p[-2]), len(lista_de_cuadruplos))
+  '''punto_add_func :'''
+  
+  global current_func, lista_de_cuadruplos
+  current_func = p[-1]
+  dir_func.add_function(p[-1], convert_type(p[-2]), len(lista_de_cuadruplos))
 
 # Declares function's parameters (if any)
 def p_parameter(p):
@@ -285,7 +274,6 @@ def p_parameter(p):
   parameter : type ID punto_add_parameter parameterCycle
             | empty
   '''
-  p[0] = None
 
 # Allows multiple declaration of parameters
 def p_parameterCycle(p):
@@ -293,13 +281,11 @@ def p_parameterCycle(p):
   parameterCycle : COMMA type ID punto_add_parameter parameterCycle
                   | empty 
   '''
-  p[0] = None
 
 # Adds parameter (and its type) to the variable table of the current function.
 def p_punto_add_parameter(p):
-  '''
-  punto_add_parameter :
-  '''
+  '''punto_add_parameter :'''
+
   param_type = convert_type(p[-2])
   parameter_dir_address = assign_memory_global_local(param_type, current_func, 1)
   dir_func.add_function_params(current_func, param_type, p[-1], parameter_dir_address)
@@ -336,15 +322,14 @@ def p_func_regresar(p):
   '''
   func_regresar : REGRESAR LPAREN exp RPAREN SEMICOLON punto_check_types
   '''
-  p[0] = None
 
 # Validates that the type of return is the same as the type that was used when function was declared,
 # If types match it created the RETURN quadruple.
 def p_punto_check_types(p):
-  '''
-  punto_check_types :
-  '''
+  '''punto_check_types :'''
+
   global stack_de_tipos, stack_de_operandos, lista_de_cuadruplos
+
   func_return_type = dir_func.symbol_table['dir_functions'][current_func]['return_type']
   if(func_return_type == 0):
     raise Exception(f"ERROR: La función {current_func} es de tipo sinregresar.")
@@ -420,6 +405,7 @@ def p_check_op_igual(p):
   '''check_op_igual :'''
 
   global stack_de_operadores, stack_de_operandos, stack_de_tipos, lista_de_cuadruplos, dir_func
+  
   top_operador = stack_de_operadores.pop()
 
   operando_der = stack_de_operandos.pop()
@@ -447,18 +433,18 @@ def p_leer(p):
   '''
 
 def p_punto_push_leer(p):
-  '''
-  punto_push_leer :
-  ''' 
+  '''punto_push_leer :''' 
+  
   global stack_de_operadores
+
   converted_operador = convert_type(p[-2])
   stack_de_operadores.append(converted_operador)
 
 def p_punto_create_leer(p):
-  '''
-  punto_create_leer :
-  '''
+  '''punto_create_leer :'''
+
   global stack_de_operadores, stack_de_tipos
+
   if(p[-1] != None):
     if not dir_func.is_variable_declared(current_func, p[-1]):
       raise Exception(f"ERROR: La variable {p[-1]} no está declarada.")
@@ -474,13 +460,11 @@ def p_ciclo_while(p):
   '''
   ciclo_while : MIENTRAS punto_inicio_while LPAREN hyper_exp RPAREN punto_medio_while LBRACE estatutos RBRACE punto_fin_while SEMICOLON
   '''
-  p[0] = None
 
 # Save the starting point of the comparison to come back and re-evaluate.
 def p_punto_inicio_while(p):
-  '''
-  punto_inicio_while :
-  '''
+  '''punto_inicio_while :'''
+
   global stack_de_saltos, lista_de_cuadruplos
   stack_de_saltos.append(len(lista_de_cuadruplos))
 
@@ -488,10 +472,10 @@ def p_punto_inicio_while(p):
 # It if is a boolean create a GOTOF quadruple with its 4th position empty, and add
 # its position within the array to the stack of jumps.
 def p_punto_medio_while(p):
-  '''
-  punto_medio_while :
-  '''
+  '''punto_medio_while :'''
+
   global stack_de_tipos, stack_de_saltos, lista_de_cuadruplos
+
   top_tipos = stack_de_tipos.pop()
   if(top_tipos != 4):
     raise Exception("ERROR: Type mismatch. Se espera una condición.")
@@ -503,10 +487,10 @@ def p_punto_medio_while(p):
 
 # Complete the missing GOTOF qudadruple, generate a GOTO quadruple with the return position as ts 4th position.
 def p_punto_fin_while(p):
-  '''
-  punto_fin_while :
-  '''
+  '''punto_fin_while :'''
+
   global stack_de_saltos, lista_de_cuadruplos
+
   false = stack_de_saltos.pop()
   retorno = stack_de_saltos.pop()
   quadruple = Quadruple(80, None, None, retorno)
@@ -517,15 +501,14 @@ def p_ciclo_for(p):
   '''
   ciclo_for : DESDE LPAREN ID punto_existe_id ASSIGN hyper_exp RPAREN punto_valida_int HASTA LPAREN hyper_exp RPAREN punto_valida_exp LBRACE estatutos RBRACE punto_termina_for SEMICOLON
   '''
-  p[0] = None
 
 # Validate if the id exists either locally or globally.
 # If it does add its virtual address to the stack of operands.
 def p_punto_existe_id(p):
-  '''
-  punto_existe_id : 
-  '''
+  '''punto_existe_id : '''
+
   global stack_de_operandos, stack_de_tipos
+
   if not dir_func.is_variable_declared(current_func, p[-1]):
     raise Exception(f"ERROR: La variable {p[-1]} no está declarada.")
   else:
@@ -535,11 +518,11 @@ def p_punto_existe_id(p):
     stack_de_tipos.append(id_type)
 
 def p_punto_valida_int(p):
-  '''
-  punto_valida_int : 
-  '''
+  '''punto_valida_int : '''
+
   #Validate if the hyper_exp is equal to an integer number
   global stack_de_operadores, stack_de_operandos, stack_de_tipos, lista_de_cuadruplos, vControl
+
   result_type = stack_de_tipos.pop()
   id_type = stack_de_tipos.pop()
 
@@ -602,7 +585,6 @@ def p_condicion(p):
   condicion : SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE punto_fin_si SEMICOLON
             | SI LPAREN hyper_exp RPAREN punto_si LBRACE estatutos RBRACE SINO punto_sino LBRACE estatutos RBRACE punto_fin_si SEMICOLON
   '''
-  p[0] = None
 
 # Validate if the result of the expression is a boolean. If it's not raise an exception.
 # It if is a boolean create a GOTOF quadruple with its 4th position empty, and add
@@ -812,7 +794,6 @@ def p_term(p):
   '''
   term : factor check_op_pordiv term_aux
   '''
-  p[0] = None
 
 def p_term_aux(p):
   '''
@@ -979,7 +960,9 @@ def p_quitar_fondo_falso(p) :
 # and push it to the stack of operands.
 def p_push_int(p) : 
   '''push_int :'''
+
   global stack_de_operandos, stack_de_tipos, dir_func
+
   if p[-1] != None:
     constant = p[-1]
     constant_address = dir_func.get_constant_address(constant)
@@ -993,7 +976,9 @@ def p_push_int(p) :
 # and push it to the stack of operands.
 def p_push_float(p) : 
   '''push_float :'''
+
   global stack_de_operandos, stack_de_tipos, dir_func
+
   if p[-1] != None:
     constant = p[-1]
     constant_address = dir_func.get_constant_address(constant)
@@ -1008,11 +993,11 @@ def p_push_float(p) :
 def p_push_id(p) : 
   '''push_id :'''
 
+  global stack_de_operandos, stack_de_tipos, current_var
+
   # Validate if the ID exists either locally or globally
   if not dir_func.is_variable_declared(current_func, p[-1]):
     raise Exception(f"ERROR: La variable {p[-1]} no está declarada.")
-
-  global stack_de_operandos, stack_de_tipos, current_var
 
   current_var = p[-1]
   if p[-1] != None:
@@ -1039,7 +1024,9 @@ def p_func_params(p):
 # updates the param's global counter.
 def p_punto_check_param(p):
   ''' punto_check_param :'''
+
   global contador_params, stack_de_tipos, stack_de_operandos, lista_de_cuadruplos, called_func
+
   function_param_signature = dir_func.get_param_types(called_func)
   try:
     param_type = function_param_signature[contador_params]
@@ -1070,9 +1057,8 @@ def p_llamada_func_return(p):
 
 # Validates called function exists and updates name of called_func to keep track
 def p_punto_func_exists(p):
-  '''
-  punto_func_exists :
-  '''
+  '''punto_func_exists :'''
+
   global dir_func, called_func
   if not dir_func.is_function_declared(p[-2]):
     raise Exception(f"ERROR: La función {p[-2]} no está definida.")
@@ -1088,28 +1074,27 @@ def p_punto_validate_isNotvoid(p):
 
 # Validate if function is void
 def p_punto_validate_isvoid(p):
-  '''
-  punto_validate_isvoid :
-  '''
+  '''punto_validate_isvoid :'''
+
   func_return_type = dir_func.symbol_table['dir_functions'][called_func]['return_type']
   if (func_return_type != 0):
     raise Exception(f"ERROR: La función {called_func} debe ser de tipo sinregresar.")
 
 # Creates ERA quadruple and only if function is not void it stores in stack of operands its global variable
 def p_punto_create_era(p):
-  '''
-  punto_create_era : 
-  ''' 
+  '''punto_create_era : ''' 
+
   global lista_de_cuadruplos, stack_de_operandos, stack_de_tipos
+
   func_quadruple_pos = dir_func.get_func_quadruple_init(called_func)
   quadruple = Quadruple(100, called_func, None, func_quadruple_pos)
   lista_de_cuadruplos.append(quadruple.transform_quadruple())
 
 def p_punto_check_total_params(p):
-  '''
-  punto_check_total_params :
-  '''
+  '''punto_check_total_params :'''
+
   global dir_func, contador_params
+
   function_param_signature = dir_func.get_param_types(called_func)
   if (len(function_param_signature) != contador_params):
     raise Exception(f"ERROR: La cantidad de parámetros no concuerda con {called_func}.")
@@ -1118,10 +1103,10 @@ def p_punto_check_total_params(p):
 
 # Creates GOSUB quadruple and only if function is not void
 def p_punto_create_gosub(p):
-  '''
-  punto_create_gosub :
-  '''
+  '''punto_create_gosub :'''
+
   global lista_de_cuadruplos, stack_de_operandos, stack_de_tipos
+
   func_quadruple_pos = dir_func.get_func_quadruple_init(called_func)
   quadruple = Quadruple(95, called_func, None, func_quadruple_pos)
   lista_de_cuadruplos.append(quadruple.transform_quadruple())
