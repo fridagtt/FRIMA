@@ -465,14 +465,24 @@ class VirtualMachine:
           self.local_memory = self.execution_stack.pop()
           instruction_pointer = self.stack_pointers.pop()
       elif operator == 115: # LEER
-        try:
-          print("read, -> ", self.input_array[counter])
-          input_value = self.input_array[counter]
-          self.get_memory(quad_res).set_value(quad_res, input_value)
-          counter += 1
-          instruction_pointer += 1
-        except:
-          raise Exception("ERROR: Variable sin valor")
+        print("read, -> ", self.input_array[counter])
+        input_value = self.input_array[counter].strip()
+        input_type = right_operand
+        if(input_value == ''):
+          raise Exception("ERROR: Ingresa un valor.")
+        elif input_type == 1:
+          try:
+            input_value = int(input_value)
+          except:
+            raise Exception("ERROR: Type Mismatch. \nDigita otra vez. Se espera un valor entero.")
+        elif input_type == 2:
+          try:
+            input_value = float(input_value)
+          except:
+            raise Exception("ERROR: Type Mismatch. \nDigita otra vez. Se espera un valor entero.")
+        self.get_memory(quad_res).set_value(quad_res, input_value)
+        counter += 1
+        instruction_pointer += 1
       elif operator == 85: # END FUNC
         if(len(self.execution_stack)!=0):
           self.local_memory = self.execution_stack.pop()

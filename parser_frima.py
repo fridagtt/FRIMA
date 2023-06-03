@@ -29,6 +29,7 @@ current_size = 1
 input_array = []
 output_array = []
 error = False
+errorMessage = None
 
 #__________PARSER____________
 
@@ -463,9 +464,10 @@ def p_punto_create_leer(p):
       raise Exception(f"ERROR: La variable {p[-1]} no está declarada.")
 
     id_address = dir_func.get_variable_address(current_func, p[-1])
+    id_type = dir_func.get_variable_type(current_func, p[-1])
 
     converted_operador = stack_de_operadores.pop()
-    quadruple = Quadruple(converted_operador, None, None, id_address)
+    quadruple = Quadruple(converted_operador, None, id_type, id_address)
     lista_de_cuadruplos.append(quadruple.transform_quadruple())
 
 def p_ciclo_while(p):
@@ -1165,11 +1167,15 @@ def p_empty(p):
   pass
 
 def p_error(p):
+  global error, errorMessage
+  error = True
+  errorMessage = "ERROR: Hay un error de sintaxis en la linea %d" % (p.lineno)
+
   raise Exception("ERROR: Hay un error de sintaxis en la linea %d" % (p.lineno))
 
 parser = yacc.yacc()
   
-def parser(filePath, user_input=None):
+def parser(filePath="tests/fibonacciRec.txt", user_input=None):
   #Testear el parser y léxico juntos
   try:
     file = open(filePath, "r")
@@ -1182,7 +1188,7 @@ def parser(filePath, user_input=None):
     yacc.parse(archivo)
 
     if error: 
-      return "hay errores de sintaxis"
+      return errorMessage
     else:
       global current_func, output_array
       current_func = 'inicio'

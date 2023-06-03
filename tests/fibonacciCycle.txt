@@ -5,27 +5,26 @@ renglon entero -> fibo[10];
 variable entero -> i,a,b,c;
 
 funcion entero fiboCycle(entero num) {
-num = num + 1;
-a = 0;
-b = 1;
-c = 0;
+  num = num + 1;
+  a = 0;
+  b = 1;
+  c = 0;
 
-si (num == 0) {
+  si (num == 0) {
     regresar (a);
-};
+  };
 
-desde (i = 2) hasta (num) {
+  desde (i = 2) hasta (num) {
     c = a + b;
     a = b;
     b = c;
-};
+  };
 
-regresar (c);
-
+  regresar (c);
 };
 
 inicio(){
-  num = 10;
+  num = 9;
   imprimir(fiboCycle(num));
-	
 };
+

@@ -83,5 +83,20 @@ def delete_file():
     print(p_json, file=open("files.json", "w"))
   return 'deleted'
 
+'''Endpoint para guardar contenido de un archivo'''
+@app.route('/saveFile', methods=['POST'])
+def save_file():
+    try:
+        req_data = request.get_json()
+        file_content = req_data['fileContent']
+        file_path = req_data['filePath']
+
+        print(file_content, file=open(file_path, "w"))
+        
+        print(file_path, file_content)
+        return 'Archivo guardado!', 200
+    except:
+        return 'Error: No se pudo guardar el archivo', 400
+
 if __name__ == "__main__":
   app.run(debug=True)
