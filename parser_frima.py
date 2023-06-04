@@ -415,6 +415,7 @@ def p_check_op_igual(p):
   tipo_operando_izq = stack_de_tipos.pop()
 
   converted_operador = convert_type(top_operador)
+
   # Validate if the variable to assign exists either locally or globally
   if not dir_func.is_variable_declared(current_func, p[-4]):
     raise Exception(f"ERROR: La variable {p[-4]} no está declarada.")
@@ -867,10 +868,10 @@ def p_generate_address_quadruple(p):
   dirBase_type = dir_func.get_variable_type(current_func, current_var)
   dim_pointer = get_dim_pointer()
 
+  stack_de_tipos.pop() # s1m1+s2
   quadruple = Quadruple(125, top_operando, dirBase, dim_pointer)
   lista_de_cuadruplos.append(quadruple.transform_quadruple())
   stack_de_operandos.append(dim_pointer)
-  stack_de_tipos.append(dirBase_type)
 
 # Validates if the evaluated expression for indexing a dimensioned variable is of type int.
 # It generates the quadruple to validate if the value of the expression is between the bounds.
@@ -893,7 +894,6 @@ def p_punto_create_ver_quad(p):
  
   if var_dimension == 2:
     result_exp = stack_de_operandos.pop()
-    stack_de_tipos.pop()
   
     temp_var = assign_memory_temporal(1, current_func)
     constant_address_columns = dir_func.get_constant_address(stack_de_dimensiones[-1][1][1])
@@ -931,7 +931,7 @@ def p_punto_create_lastDim_cuadruplo(p):
 
   quadruple = Quadruple(10, sm, res_exp, temp_var)
   lista_de_cuadruplos.append(quadruple.transform_quadruple())
-  stack_de_tipos.append(2)
+  stack_de_tipos.append(1)
   stack_de_operandos.append(temp_var)
 
 # Constant values

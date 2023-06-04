@@ -1,0 +1,9 @@
+programa patito:
+renglon decimal -> arr[3];
+tabla decimal -> mat[2][4];
+variable decimal -> i,j;
+
+inicio () {
+  arr[0] = 1.4;
+  i = 2 * arr[0];
+};

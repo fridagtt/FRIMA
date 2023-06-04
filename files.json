@@ -1,40 +1,48 @@
 {
-    "files":[
-       {
-          "name":"Bubble Sort",
-          "path":"tests/bubbleSort.txt"
-       },
-       {
-          "name":"Factorial Iterativo",
-          "path":"tests/factCycle.txt"
-       },
-       {
-          "name":"Factorial Recursivo",
-          "path":"tests/factRecc.txt"
-       },
-       {
-          "name":"Fibonacci Iterativo",
-          "path":"tests/fibonacciCycle.txt"
-       },
-       {
-          "name":"Fibonacci Recursivo",
-          "path":"tests/fibonacciRec.txt"
-       },
-       {
-          "name":"Find Value in Position",
-          "path":"tests/findValueinPos.txt"
-       },
-       {
-          "name":"Llenar Matriz",
-          "path":"tests/llenarMatrix.txt"
-       },
-       {
-          "name":"Multiplicar Matriz",
-          "path":"tests/multiplyMat.txt"
-       },
-       {
-          "name":"Buscar Valor",
-          "path":"tests/searchArr.txt"
-       }
-    ]
- }
+  "files":[
+    {
+      "name":"Bubble Sort",
+      "path":"tests/bubbleSort.txt"
+    },
+    {
+      "name":"Factorial Iterativo",
+      "path":"tests/factCycle.txt"
+    },
+    {
+      "name":"Factorial Recursivo",
+      "path":"tests/factRecc.txt"
+    },
+    {
+      "name":"Fibonacci Iterativo",
+      "path":"tests/fibonacciCycle.txt"
+    },
+    {
+      "name":"Fibonacci Recursivo",
+      "path":"tests/fibonacciRec.txt"
+    },
+    {
+      "name":"Find Value in Position",
+      "path":"tests/findValueinPos.txt"
+    },
+    {
+      "name":"Llenar Matriz",
+      "path":"tests/llenarMatrix.txt"
+    },
+    {
+      "name":"Multiplicar Matriz",
+      "path":"tests/multiplyMat.txt"
+    },
+    {
+      "name":"Buscar Valor",
+      "path":"tests/searchArr.txt"
+    },
+    {
+      "name":"Sub Indexing",
+      "path":"tests/subIndexDim.txt"
+    },
+    {
+      "name":"Different types in Dim",
+      "path":"tests/matTypes.txt"
+    }
+  ]
+}

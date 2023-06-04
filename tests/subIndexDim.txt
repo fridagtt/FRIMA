@@ -15,4 +15,5 @@ inicio () {
   arr[2] = 3;
 
   imprimir(mat[arr[arr[1]]][0]);
+  imprimir(arr[mat[1][0]]);
 };

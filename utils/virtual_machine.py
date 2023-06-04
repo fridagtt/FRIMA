@@ -419,7 +419,6 @@ class VirtualMachine:
         
   def execute(self):
     print("------MAQUINA VIRTUAL------")
-    print(self.input_array)
     self.constant_memory.init_constant_memory()
     self.global_memory.init_global_memory()
     self.read_quadruples()
