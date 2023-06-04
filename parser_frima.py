@@ -64,7 +64,7 @@ def p_inicio(p):
   '''
 
   # Segment for testing dir_func and quadruples
-  print("TABLA DE VARIABLES", dir_func.symbol_table)
+  # print("TABLA DE VARIABLES", dir_func.symbol_table)
   for index, quadruple in enumerate(lista_de_cuadruplos): 
     print(index, " -> ", quadruple)
 
@@ -81,7 +81,7 @@ def p_punto_generar_vm(p):
   virtual_machine.execute()
   output_array = virtual_machine.output_array
   
-  lista_de_cuadruplos = []
+  dir_func.delete_symbol_table()
 
 # Body for inicio (without the return option)
 def p_inicio_estatutos(p):

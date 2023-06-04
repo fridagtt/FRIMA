@@ -183,8 +183,6 @@ def reset_dir_global():
   global_int = 2000 
   global_float = 4000
 
-  print("reset_dir_global", global_int, global_float)
-
 #Borra las direcciones globales
 def reset_global_temp():
   global global_temp_int, global_temp_float, global_temp_bool
@@ -203,7 +201,6 @@ def reset_local_temp():
   global local_temp_int, local_temp_float, local_temp_bool
   local_temp_int = 22000
   local_temp_float = 24000
-
   local_temp_bool = 28000
 
 def assign_memory_constant(var_type):
