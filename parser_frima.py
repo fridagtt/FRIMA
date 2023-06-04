@@ -80,7 +80,7 @@ def p_punto_generar_vm(p):
 
   virtual_machine.execute()
   output_array = virtual_machine.output_array
-
+  
   lista_de_cuadruplos = []
 
 # Body for inicio (without the return option)
@@ -209,8 +209,7 @@ def p_punto_matrix_size(p):
 def p_punto_save_matrix(p):
   '''punto_save_matrix : '''
 
-  global dimensiones
-
+  global dimensiones, current_size
   var_dir_address = assign_memory_global_local(current_var_type, current_func, current_size)
   dir_func.add_variable(current_var_type, p[-9], current_func, var_dir_address, dimensiones, 2)
 
@@ -228,6 +227,7 @@ def p_punto_save_matrix(p):
     dir_func.add_constant_variable(1, 0, constant_address)
   
   dimensiones = [] # Empty list of dimensions for new matrix
+  current_size = 1
 
 # Declares a function
 def p_dec_func(p):
@@ -1159,9 +1159,8 @@ def p_empty(p):
   pass
 
 def p_error(p):
-  global error, errorMessage
+  global error
   error = True
-  errorMessage = "ERROR: Hay un error de sintaxis en la linea %d" % (p.lineno)
 
   raise Exception("ERROR: Hay un error de sintaxis en la linea %d" % (p.lineno))
 
@@ -1180,7 +1179,7 @@ def parser(filePath, user_input=None):
     yacc.parse(archivo)
 
     if error: 
-      return errorMessage
+      return "Hay errores de sintaxis."
     else:
       global current_func, output_array
       current_func = 'inicio'

@@ -46,27 +46,27 @@ def read_file():
 '''Endpoint para crear un nuevo archivo'''   
 @app.route('/createFile')
 def create_File():
-    param_name = request.args.get("file", "")
-    name = param_name.replace(" ", "")
-    file_name = "tests/"+ name + ".txt"
-    open(file_name, "w+")
-        
-    new_file = {
-         "name": param_name,
-         "createdAt": str(datetime.datetime.now().strftime("%x")),
-         "path": file_name            
-    }
-    n = None
-    data = None
-    
-    with open('files.json') as f:
-        data = json.load(f)
-        data['files'].append(new_file)
-        n = data
-        p_json = json.dumps(n)
-        print(p_json, file=open("files.json", "w"))
-        
-    return {"data": n}
+  param_name = request.args.get("file", "")
+  name = param_name.replace(" ", "")
+  file_name = "tests/"+ name + ".txt"
+  open(file_name, "w+")
+      
+  new_file = {
+    "name": param_name,
+    "createdAt": str(datetime.datetime.now().strftime("%x")),
+    "path": file_name            
+  }
+  n = None
+  data = None
+  
+  with open('files.json') as f:
+    data = json.load(f)
+    data['files'].append(new_file)
+    n = data
+    p_json = json.dumps(n)
+    print(p_json, file=open("files.json", "w"))
+      
+  return {"data": n}
 
 '''Endpoint para eliminar un archivo'''   
 @app.route('/deleteFile')
@@ -86,17 +86,17 @@ def delete_file():
 '''Endpoint para guardar contenido de un archivo'''
 @app.route('/saveFile', methods=['POST'])
 def save_file():
-    try:
-        req_data = request.get_json()
-        file_content = req_data['fileContent']
-        file_path = req_data['filePath']
+  try:
+    req_data = request.get_json()
+    file_content = req_data['fileContent']
+    file_path = req_data['filePath']
 
-        print(file_content, file=open(file_path, "w"))
-        
-        print(file_path, file_content)
-        return 'Archivo guardado!', 200
-    except:
-        return 'Error: No se pudo guardar el archivo', 400
+    with open(file_path, 'w') as file:
+      file.write(file_content)
+      
+    return 'Archivo guardado!', 200
+  except:
+    return 'Error: No se pudo guardar el archivo', 400
 
 if __name__ == "__main__":
   app.run(debug=True)

@@ -321,4 +321,14 @@ class SymbolTable:
 
     """
     del self.symbol_table['dir_functions'][current_func]['variables']
+
+  def delete_symbol_table(self):
+    """Deletes symboll table of the whole program
+
+    Returns:
+    void: modified symbol table
+
+    """
+    del self.symbol_table['dir_functions']
+    del self.symbol_table['constant_table']
   

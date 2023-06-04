@@ -33,12 +33,11 @@ funcion sinregresar multiplyMat(){
   // Imprimir resultado de multiplicacion de matriz
   desde (i=0) hasta (2){
     desde (j = 0) hasta (4) {
-      imprimir("Matriz respuesta:");
       imprimir(matRes[i][j]);
     };  
   };
 };
 
 inicio(){
-  imprimir(multiplyMat());
+  multiplyMat();
 };

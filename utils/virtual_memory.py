@@ -19,7 +19,7 @@ const_float = 34000
 # memory for dimensional variables
 dim_pointer = 38000
 
-#Add global_int
+#Add dim pointer
 def get_dim_pointer():
   global dim_pointer
   if dim_pointer < 40000:
@@ -49,7 +49,6 @@ def add_global_float(size):
     return prev_cont
   else: 
     raise Exception("ERROR: No hay memoria disponible para Decimales Globales")
-    
     
 #Add local_int
 def add_local_int(size):
@@ -96,7 +95,6 @@ def add_global_temp_float():
   else: 
     raise Exception("ERROR: No hay memoria disponible para Decimales Temporales Globales") 
     
-
 #Add global temp bool
 def add_global_temp_bool():
   global global_temp_bool 
@@ -130,7 +128,6 @@ def add_local_temp_float():
   else: 
     raise Exception("ERROR: No hay memoria disponible para Decimales Temporales Locales") 
     
-
 #Add local temp bool
 def add_local_temp_bool():
   global local_temp_bool
@@ -174,14 +171,32 @@ def add_const_float():
     return prev_cont
   else: 
     raise Exception("ERROR: No hay memoria disponible para Decimales Constantes")  
-    
+
+#Borra los pointers
+def reset_dim_pointer():
+  global dim_pointer
+  dim_pointer = 38000
+
+#Borra las direcciones globales
+def reset_dir_global():
+  global global_int, global_float
+  global_int = 2000 
+  global_float = 4000
+
+  print("reset_dir_global", global_int, global_float)
+
+#Borra las direcciones globales
+def reset_global_temp():
+  global global_temp_int, global_temp_float, global_temp_bool
+  global_temp_int = 14000
+  global_temp_float = 16000
+  global_temp_bool = 20000  
 
 #Borra las direcciones locales
 def reset_dir_local():
   global local_int, local_float
   local_int = 8000
   local_float = 10000
-  
 
 #Borra las direcciones locales temporales
 def reset_local_temp():

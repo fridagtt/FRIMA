@@ -19,5 +19,5 @@ funcion entero encontrarNum(entero m){
 };
 
 inicio () {
-  imprimir(encontrarNum(20));
+  imprimir(encontrarNum(3));
 };
