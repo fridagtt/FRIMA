@@ -11,8 +11,8 @@ class SymbolTable:
             'vars_info' : [],
           },
           'initial_quadruple': 0,
-          'cont_temp': [0,0,0,0],
-          'cont_var': [0,0,0],
+          'cont_temp': [0,0,0],
+          'cont_var': [0,0],
         },
       },
       'constant_table': {},
@@ -34,7 +34,7 @@ class SymbolTable:
     elif type == 2:
       self.symbol_table["dir_functions"][func_name]['cont_temp'][1] += 1 # flotantes
     elif type == 4:
-      self.symbol_table["dir_functions"][func_name]['cont_temp'][3] += 1 # booleans
+      self.symbol_table["dir_functions"][func_name]['cont_temp'][2] += 1 # booleans
 
   def add_cont_var(self, type, func_name):
     """Adds 1 to the counter of variables of the type received
@@ -51,8 +51,6 @@ class SymbolTable:
       self.symbol_table["dir_functions"][func_name]['cont_var'][0] += 1 # enteros
     elif type == 2:
       self.symbol_table["dir_functions"][func_name]['cont_var'][1] += 1 # flotantes
-    elif type == 3:
-      self.symbol_table["dir_functions"][func_name]['cont_var'][2] += 1 # chars
     
   def add_variable(self, type, name, func_name, memory_dir, size, dimension):
     """Adds the variable to the variable table of the corresponding function
@@ -101,8 +99,8 @@ class SymbolTable:
           'vars_info' : [],
         },
         'initial_quadruple': position,
-        'cont_temp': [0,0,0,0],
-        'cont_var': [0,0,0],
+        'cont_temp': [0,0,0],
+        'cont_var': [0,0],
       }
     else:
       raise Exception(f"ERROR: La función {func_name} ya está declarada.")
